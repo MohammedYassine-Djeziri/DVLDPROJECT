@@ -7,3 +7,4 @@
 /home/user/Downloads/DVLD/DVLDBusinessLayer/obj/Debug/DVLD_BusinessLayer.csproj.CopyComplete
 /home/user/Downloads/DVLD/DVLDBusinessLayer/obj/Debug/DVLDBusinessLayer.dll
 /home/user/Downloads/DVLD/DVLDBusinessLayer/obj/Debug/DVLDBusinessLayer.pdb
+/home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/Npgsql.dll

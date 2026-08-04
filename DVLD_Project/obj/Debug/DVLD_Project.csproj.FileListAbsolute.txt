@@ -64,3 +64,4 @@
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.csproj.CopyComplete
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.exe
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.pdb
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/Npgsql.dll

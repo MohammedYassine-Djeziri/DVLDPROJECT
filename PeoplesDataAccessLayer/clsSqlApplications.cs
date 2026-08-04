@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Security.AccessControl;
@@ -12,126 +11,131 @@ namespace DataAccessLayer
 {
     public class clsSqlApplications
     {
-        public static string DVLD_Connection_Info => clsConnectionSettings.ConnectionString;
-
-        public static int AddNewApplication(int PerID ,DateTime AppDate , int AppType , int AppStatus , DateTime LastDate , 
-            float Fees , int UserID)
+        public static int AddNewApplication(int PerID, DateTime AppDate, int AppType, int AppStatus, DateTime LastDate,
+            float Fees, int UserID)
         {
             int ID = -1;
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
-            string q = " INSERT INTO [dbo].[Applications] ([ApplicantPersonID],[ApplicationDate],[ApplicationTypeID]," +
+            var connection = clsDatabaseFactory.CreateConnection();
+
+            // INSERT with SCOPE_IDENTITY → provides explicit PG RETURNING version
+            string q = clsDatabaseFactory.GetQuery(
+                " INSERT INTO [dbo].[Applications] ([ApplicantPersonID],[ApplicationDate],[ApplicationTypeID]," +
                 "[ApplicationStatus],[LastStatusDate],[PaidFees],[CreatedByUserID]) VALUES(@PerID,@AppDate,@AppType,@AppStatus" +
-                ",@LastDate,@Fees,@UserID) ; SELECT SCOPE_IDENTITY() ;";
+                ",@LastDate,@Fees,@UserID) ; SELECT SCOPE_IDENTITY() ;",
+
+                " INSERT INTO \"Applications\" (\"ApplicantPersonID\",\"ApplicationDate\",\"ApplicationTypeID\"," +
+                "\"ApplicationStatus\",\"LastStatusDate\",\"PaidFees\",\"CreatedByUserID\") VALUES(@PerID,@AppDate,@AppType,@AppStatus" +
+                ",@LastDate,@Fees,@UserID) RETURNING \"ApplicationID\" ;");
+
             connection.Open();
-            SqlCommand command = new SqlCommand(q, connection);
-            command.Parameters.AddWithValue("@PerID", PerID);
-            command.Parameters.AddWithValue("@AppDate", AppDate);
-            command.Parameters.AddWithValue("@AppType", AppType);
-            command.Parameters.AddWithValue("@AppStatus", AppStatus);
-            command.Parameters.AddWithValue("@LastDate", LastDate);
-            command.Parameters.AddWithValue("@Fees", Fees);
-            command.Parameters.AddWithValue("@UserID", UserID);
+            var command = clsDatabaseFactory.CreateCommand(q, connection);
+            clsDatabaseFactory.AddParam(command, "@PerID", PerID);
+            clsDatabaseFactory.AddParam(command, "@AppDate", AppDate);
+            clsDatabaseFactory.AddParam(command, "@AppType", AppType);
+            clsDatabaseFactory.AddParam(command, "@AppStatus", AppStatus);
+            clsDatabaseFactory.AddParam(command, "@LastDate", LastDate);
+            clsDatabaseFactory.AddParam(command, "@Fees", Fees);
+            clsDatabaseFactory.AddParam(command, "@UserID", UserID);
 
             try
             {
-
                 object result = command.ExecuteScalar();
                 if (result != null)
                 {
                     ID = Convert.ToInt32(result);
                 }
-
             }
-
             catch (Exception ex)
             {
-
             }
             finally
             {
                 connection.Close();
-
             }
             return ID;
         }
 
-        public static bool UpdateApplication(int AppID , int PerID, DateTime AppDate, int AppType, int AppStatus, DateTime LastDate,
+        public static bool UpdateApplication(int AppID, int PerID, DateTime AppDate, int AppType, int AppStatus, DateTime LastDate,
             float Fees, int UserID)
         {
             int r = 0;
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
-            string q = " Update INTO [dbo].[Applications] set ([ApplicantPersonID],[ApplicationDate],[ApplicationTypeID]," +
+            var connection = clsDatabaseFactory.CreateConnection();
+
+            // Simple UPDATE – auto-convert handles brackets
+            // Note: original SQL used "Update INTO" (bug) – preserved as-is
+            string q = clsDatabaseFactory.GetQuery(
+                " Update INTO [dbo].[Applications] set ([ApplicantPersonID],[ApplicationDate],[ApplicationTypeID]," +
                 "[ApplicationStatus],[LastStatusDate],[PaidFees],[CreatedByUserID]) VALUES(@PerID,@AppDate,@AppType,@AppStatus" +
-                ",@LastDate,@Fees,@UserID ) where ApplicationID = @AppID";
+                ",@LastDate,@Fees,@UserID ) where ApplicationID = @AppID");
+
             connection.Open();
-            SqlCommand command = new SqlCommand(q, connection);
-            command.Parameters.AddWithValue("@AppID", AppID);
-            command.Parameters.AddWithValue("@PerID", PerID);
-            command.Parameters.AddWithValue("@AppDate", AppDate);
-            command.Parameters.AddWithValue("@AppType", AppType);
-            command.Parameters.AddWithValue("@AppStatus", AppStatus);
-            command.Parameters.AddWithValue("@dLastDate", LastDate);
-            command.Parameters.AddWithValue("@Fees", Fees);
-            command.Parameters.AddWithValue("@UserID", UserID);
+            var command = clsDatabaseFactory.CreateCommand(q, connection);
+            clsDatabaseFactory.AddParam(command, "@AppID", AppID);
+            clsDatabaseFactory.AddParam(command, "@PerID", PerID);
+            clsDatabaseFactory.AddParam(command, "@AppDate", AppDate);
+            clsDatabaseFactory.AddParam(command, "@AppType", AppType);
+            clsDatabaseFactory.AddParam(command, "@AppStatus", AppStatus);
+            clsDatabaseFactory.AddParam(command, "@dLastDate", LastDate); // preserved original param name
+            clsDatabaseFactory.AddParam(command, "@Fees", Fees);
+            clsDatabaseFactory.AddParam(command, "@UserID", UserID);
 
             try
             {
                 int result = command.ExecuteNonQuery();
                 r = result;
             }
-
             catch (Exception ex)
             {
-
             }
             finally
             {
                 connection.Close();
-
             }
-            return r>=1;
+            return r >= 1;
         }
 
-        public static bool IsLicenseClassAlreadyUsed(int PerID , int LicenseClassID  )
+        public static bool IsLicenseClassAlreadyUsed(int PerID, int LicenseClassID)
         {
             bool IsActive = false;
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
-            string q = "select 1 from Applications inner join LocalDrivingLicenseApplications on  " +
-            "LocalDrivingLicenseApplications.ApplicationID=Applications.ApplicationID where ApplicantPersonID=@PerID and " +
-            "LocalDrivingLicenseApplications.LicenseClassID= @LicenseClassID and ApplicationStatus != 2;";
+            var connection = clsDatabaseFactory.CreateConnection();
+
+            // Simple SELECT – auto-convert
+            string q = clsDatabaseFactory.GetQuery(
+                "select 1 from Applications inner join LocalDrivingLicenseApplications on  " +
+                "LocalDrivingLicenseApplications.ApplicationID=Applications.ApplicationID where ApplicantPersonID=@PerID and " +
+                "LocalDrivingLicenseApplications.LicenseClassID= @LicenseClassID and ApplicationStatus != 2;");
+
             connection.Open();
-            SqlCommand command = new SqlCommand(q, connection);
-            command.Parameters.AddWithValue("@PerID", PerID);
-            command.Parameters.AddWithValue("@LicenseClassID", LicenseClassID);
+            var command = clsDatabaseFactory.CreateCommand(q, connection);
+            clsDatabaseFactory.AddParam(command, "@PerID", PerID);
+            clsDatabaseFactory.AddParam(command, "@LicenseClassID", LicenseClassID);
             try
             {
-
-                SqlDataReader result = command.ExecuteReader();
-                if (result.HasRows)
+                IDataReader result = command.ExecuteReader();
+                if (result.Read())
                 {
                     IsActive = true;
                 }
-
             }
-
             catch (Exception ex)
             {
-
             }
             finally
             {
                 connection.Close();
-
             }
 
             return IsActive;
         }
+
         public static DataTable ListLDLApplication()
         {
             DataTable Table = new DataTable();
+            var connection = clsDatabaseFactory.CreateConnection();
 
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
-            string q = "select 'LDLAppID'=LocalDrivingLicenseApplications.LocalDrivingLicenseApplicationID , " +
+            // SQL-level '+' concatenation → needs explicit PG version with ||
+            string q = clsDatabaseFactory.GetQuery(
+                "select 'LDLAppID'=LocalDrivingLicenseApplications.LocalDrivingLicenseApplicationID , " +
                 "'Driving Class'= ( select LicenseClasses.ClassName from LicenseClasses where" +
                 " LicenseClassID= LocalDrivingLicenseApplications.LicenseClassID) , " +
                 "People.NationalNo, 'FullName'= CASE  WHEN People.FirstName  IS NULL THEN '' else " +
@@ -139,111 +143,123 @@ namespace DataAccessLayer
                 "else People.SecondName+' ' END +CASE  WHEN People.ThirdName  IS NULL THEN ''  else " +
                 "People.ThirdName+' 'END  +CASE  WHEN People.LastName  IS NULL THEN '' else People.LastName " +
                 " END ,ApplicationDate, 'Passed Test'=  (select  count(TestAppointments.TestTypeID ) " +
-                "from Tests join TestAppointments  on Tests.TestAppointmentID = TestAppointments.TestAppointmentID where             TestAppointments.LocalDrivingLicenseApplicationID=LocalDrivingLicenseApplications.LocalDrivingLicenseApplicationID \r\n            and Tests.TestResult=1) , 'Status'= case  when Applications.ApplicationStatus = 1 then 'New' \r\n            when ApplicationStatus  = 2 then 'Cancelled' else 'Completed' end \r\n             from Applications inner join People on  Applications.ApplicantPersonID=People.PersonID \r\n            inner join LocalDrivingLicenseApplications on LocalDrivingLicenseApplications.ApplicationID= Applications.ApplicationID;";            
+                "from Tests join TestAppointments  on Tests.TestAppointmentID = TestAppointments.TestAppointmentID where " +
+                "TestAppointments.LocalDrivingLicenseApplicationID=LocalDrivingLicenseApplications.LocalDrivingLicenseApplicationID " +
+                "and Tests.TestResult=1) , 'Status'= case  when Applications.ApplicationStatus = 1 then 'New' " +
+                "when ApplicationStatus  = 2 then 'Cancelled' else 'Completed' end " +
+                " from Applications inner join People on  Applications.ApplicantPersonID=People.PersonID " +
+                "inner join LocalDrivingLicenseApplications on LocalDrivingLicenseApplications.ApplicationID= Applications.ApplicationID;",
+
+                "select 'LDLAppID'=\"LocalDrivingLicenseApplications\".\"LocalDrivingLicenseApplicationID\" , " +
+                "'Driving Class'= ( select \"LicenseClasses\".\"ClassName\" from \"LicenseClasses\" where" +
+                " \"LicenseClassID\"= \"LocalDrivingLicenseApplications\".\"LicenseClassID\") , " +
+                "\"People\".\"NationalNo\", 'FullName'= CASE  WHEN \"People\".\"FirstName\"  IS NULL THEN '' else " +
+                "\"People\".\"FirstName\"||' '  END ||CASE  WHEN \"People\".\"SecondName\"  IS NULL THEN '' " +
+                "else \"People\".\"SecondName\"||' ' END ||CASE  WHEN \"People\".\"ThirdName\"  IS NULL THEN ''  else " +
+                "\"People\".\"ThirdName\"||' 'END  ||CASE  WHEN \"People\".\"LastName\"  IS NULL THEN '' else \"People\".\"LastName\" " +
+                " END ,\"ApplicationDate\", 'Passed Test'=  (select  count(\"TestAppointments\".\"TestTypeID\" ) " +
+                "from \"Tests\" join \"TestAppointments\"  on \"Tests\".\"TestAppointmentID\" = \"TestAppointments\".\"TestAppointmentID\" where " +
+                "\"TestAppointments\".\"LocalDrivingLicenseApplicationID\"=\"LocalDrivingLicenseApplications\".\"LocalDrivingLicenseApplicationID\" " +
+                "and \"Tests\".\"TestResult\"=1) , 'Status'= case  when \"Applications\".\"ApplicationStatus\" = 1 then 'New' " +
+                "when \"ApplicationStatus\"  = 2 then 'Cancelled' else 'Completed' end " +
+                " from \"Applications\" inner join \"People\" on  \"Applications\".\"ApplicantPersonID\"=\"People\".\"PersonID\" " +
+                "inner join \"LocalDrivingLicenseApplications\" on \"LocalDrivingLicenseApplications\".\"ApplicationID\"= \"Applications\".\"ApplicationID\";");
+
             connection.Open();
-            SqlCommand command = new SqlCommand(q, connection);
+            var command = clsDatabaseFactory.CreateCommand(q, connection);
 
             try
             {
-
-                SqlDataReader result = command.ExecuteReader();
-                if (result.HasRows)
-                {
-                    Table.Load(result);
-                }
-
+                IDataReader result = command.ExecuteReader();
+                Table.Load(result);
             }
-
             catch (Exception ex)
             {
-
             }
             finally
             {
                 connection.Close();
-
             }
-
 
             return Table;
         }
 
 
-        public static bool ChangeStatus(int AppID , int NewAppStatus)
+        public static bool ChangeStatus(int AppID, int NewAppStatus)
         {
             bool IsChanged = false;
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
-            string q = "UPDATE [dbo].[Applications] SET [ApplicationStatus] = @AppStatus WHERE Applications.ApplicationID=@AppID;";
+            var connection = clsDatabaseFactory.CreateConnection();
+
+            // Simple UPDATE – auto-convert
+            string q = clsDatabaseFactory.GetQuery(
+                "UPDATE [dbo].[Applications] SET [ApplicationStatus] = @AppStatus WHERE Applications.ApplicationID=@AppID;");
+
             connection.Open();
-            SqlCommand command = new SqlCommand(q, connection);
-            command.Parameters.AddWithValue("@AppID", AppID);
-            command.Parameters.AddWithValue("@AppStatus", NewAppStatus);
+            var command = clsDatabaseFactory.CreateCommand(q, connection);
+            clsDatabaseFactory.AddParam(command, "@AppID", AppID);
+            clsDatabaseFactory.AddParam(command, "@AppStatus", NewAppStatus);
             try
             {
-
                 int result = command.ExecuteNonQuery();
                 if (result >= 1)
                 {
                     IsChanged = true;
                 }
-
             }
-
             catch (Exception ex)
             {
-
             }
             finally
             {
                 connection.Close();
-
             }
             return IsChanged;
         }
 
-        public static bool FindApplicationByLDLID( int LDLID, ref int AppID , ref int personID, ref DateTime applicationDate, 
-            ref int applicationType,ref int applicationStatus , ref float applicationFees, 
-            ref  int userId, ref DateTime lastStatusDate)
+        public static bool FindApplicationByLDLID(int LDLID, ref int AppID, ref int personID, ref DateTime applicationDate,
+            ref int applicationType, ref int applicationStatus, ref float applicationFees,
+            ref int userId, ref DateTime lastStatusDate)
         {
             bool IsExist = false;
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
-            string q = "select Applications.ApplicationID ,Applications.ApplicantPersonID , Applications.ApplicationDate, " +
+            var connection = clsDatabaseFactory.CreateConnection();
+
+            // C# string concatenation only, no SQL '+' → auto-convert
+            string q = clsDatabaseFactory.GetQuery(
+                "select Applications.ApplicationID ,Applications.ApplicantPersonID , Applications.ApplicationDate, " +
                 "Applications.ApplicationTypeID , Applications.ApplicationStatus\r\n, Applications.PaidFees , " +
                 "Applications.CreatedByUserID, " +
                 "Applications.LastStatusDate from Applications join LocalDrivingLicenseApplications on Applications.ApplicationID="
             + "LocalDrivingLicenseApplications.ApplicationID where LocalDrivingLicenseApplications.LocalDrivingLicenseApplicationID" +
-            "=@LDLID;";
+            "=@LDLID;");
+
             connection.Open();
-            SqlCommand cmd = new SqlCommand(q, connection);
-           cmd.Parameters.AddWithValue("@LDLID", LDLID);
+            var cmd = clsDatabaseFactory.CreateCommand(q, connection);
+            clsDatabaseFactory.AddParam(cmd, "@LDLID", LDLID);
 
             try
             {
-                SqlDataReader r = cmd.ExecuteReader();
+                IDataReader r = cmd.ExecuteReader();
                 if (r.Read())
                 {
                     AppID = Convert.ToInt32(r[0]);
                     personID = Convert.ToInt32(r[1]);
                     applicationDate = Convert.ToDateTime(r[2]);
-                    applicationType= Convert.ToInt32(r[3]);
-                    applicationStatus= Convert.ToInt32(r[4]);
-                    applicationFees= Convert.ToSingle(r[5]);
+                    applicationType = Convert.ToInt32(r[3]);
+                    applicationStatus = Convert.ToInt32(r[4]);
+                    applicationFees = Convert.ToSingle(r[5]);
                     userId = Convert.ToInt32(r[6]);
                     lastStatusDate = Convert.ToDateTime(r[7]);
 
                     IsExist = true;
-
                 }
             }
             catch (Exception ex)
             {
-
             }
             finally
             {
                 connection.Close();
             }
-
 
             return IsExist;
         }
@@ -253,50 +269,52 @@ namespace DataAccessLayer
         {
             bool IsDeleted = false;
             int AppID = clsSqlLocalDrivingLicenseApp.GetAppIDByLDLID(LDLAppID);
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
-            string q = "delete from LocalDrivingLicenseApplications  where LocalDrivingLicenseApplications.ApplicationID=@AppID;" +
-                "delete from Applications  where Applications.ApplicationID=@AppID;";
+            var connection = clsDatabaseFactory.CreateConnection();
+
+            // Simple DELETE – auto-convert
+            string q = clsDatabaseFactory.GetQuery(
+                "delete from LocalDrivingLicenseApplications  where LocalDrivingLicenseApplications.ApplicationID=@AppID;" +
+                "delete from Applications  where Applications.ApplicationID=@AppID;");
+
             connection.Open();
-            SqlCommand command = new SqlCommand(q, connection);
-            command.Parameters.AddWithValue("@AppID", AppID);
+            var command = clsDatabaseFactory.CreateCommand(q, connection);
+            clsDatabaseFactory.AddParam(command, "@AppID", AppID);
             try
             {
-
                 int result = command.ExecuteNonQuery();
                 if (result >= 1)
                 {
                     IsDeleted = true;
                 }
-
             }
-
             catch (Exception ex)
             {
-
             }
             finally
             {
                 connection.Close();
-
             }
             return IsDeleted;
         }
 
 
-        public static bool FindApplicationByAppID( int AppID, ref int personID, ref DateTime applicationDate,
+        public static bool FindApplicationByAppID(int AppID, ref int personID, ref DateTime applicationDate,
            ref int applicationType, ref int applicationStatus, ref float applicationFees,
            ref int userId, ref DateTime lastStatusDate)
         {
             bool IsExist = false;
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
-            string q = "select * from Applications where Applications.ApplicationID=@AppID";
+            var connection = clsDatabaseFactory.CreateConnection();
+
+            // Simple SELECT – auto-convert
+            string q = clsDatabaseFactory.GetQuery("select * from Applications where Applications.ApplicationID=@AppID");
+
             connection.Open();
-            SqlCommand cmd = new SqlCommand(q, connection);
-            cmd.Parameters.AddWithValue("@AppID", AppID);
+            var cmd = clsDatabaseFactory.CreateCommand(q, connection);
+            clsDatabaseFactory.AddParam(cmd, "@AppID", AppID);
 
             try
             {
-                SqlDataReader r = cmd.ExecuteReader();
+                IDataReader r = cmd.ExecuteReader();
                 if (r.Read())
                 {
                     AppID = Convert.ToInt32(r[0]);
@@ -309,21 +327,17 @@ namespace DataAccessLayer
                     userId = Convert.ToInt32(r[7]);
 
                     IsExist = true;
-
                 }
             }
             catch (Exception ex)
             {
-
             }
             finally
             {
                 connection.Close();
             }
 
-
             return IsExist;
         }
-
     }
 }

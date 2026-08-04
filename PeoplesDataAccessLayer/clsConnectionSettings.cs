@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 
 namespace DataAccessLayer
 {
@@ -9,6 +8,10 @@ namespace DataAccessLayer
     {
         private static string _connectionString;
         private static readonly object _lock = new object();
+
+        public static string Provider { get; private set; }
+
+        public static bool IsPostgreSQL => Provider == "postgresql";
 
         public static string ConnectionString
         {
@@ -20,7 +23,9 @@ namespace DataAccessLayer
                     {
                         if (_connectionString == null)
                         {
-                            _connectionString = BuildConnectionString();
+                            var (connStr, provider) = BuildConnectionString();
+                            _connectionString = connStr;
+                            Provider = provider;
                         }
                     }
                 }
@@ -32,7 +37,7 @@ namespace DataAccessLayer
             }
         }
 
-        private static string BuildConnectionString()
+        private static (string connStr, string provider) BuildConnectionString()
         {
             var env = LoadEnvFile();
 
@@ -47,12 +52,14 @@ namespace DataAccessLayer
                 case "postgresql":
                 case "postgres":
                 case "pg":
-                    return $"Host={server};Database={dbName};Username={user};Password={password};";
+                    provider = "postgresql";
+                    return ($"Host={server};Database={dbName};Username={user};Password={password};", provider);
 
                 case "mssql":
                 case "sqlserver":
                 default:
-                    return $"Server={server};Database={dbName};User Id={user};Password={password};";
+                    provider = "mssql";
+                    return ($"Server={server};Database={dbName};User Id={user};Password={password};", provider);
             }
         }
 
@@ -68,7 +75,6 @@ namespace DataAccessLayer
                     foreach (string line in File.ReadAllLines(envPath))
                     {
                         string trimmed = line.Trim();
-                        // Skip comments and empty lines
                         if (string.IsNullOrEmpty(trimmed) || trimmed.StartsWith("#"))
                             continue;
 
@@ -84,7 +90,6 @@ namespace DataAccessLayer
             }
             catch
             {
-                // If .env can't be read, fall back to defaults
             }
 
             return env;
@@ -92,7 +97,6 @@ namespace DataAccessLayer
 
         private static string FindEnvFile()
         {
-            // Start from the assembly location and walk up to find .env
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
 
             for (int i = 0; i < 6; i++)

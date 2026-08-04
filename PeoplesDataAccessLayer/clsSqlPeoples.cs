@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,14 +11,11 @@ namespace DataAccessLayer
 {
     public class clsSqlPeoples
     {
-        public static string DVLD_Connection_Info => clsConnectionSettings.ConnectionString;
-
-
         public static int AddPerson(string NatNub, string FN, string SN, string TN, string LN, string Phn, string Em
             , int Nat, DateTime date, int gender, string Addr, string Img)
         {
             int ID = -1;
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
+            var connection = clsDatabaseFactory.CreateConnection();
             if (Img != "")
             {
                 Guid guid = Guid.NewGuid();
@@ -27,68 +23,70 @@ namespace DataAccessLayer
                 File.Copy(Img, path);
                 Img = path;
             }
-            string q = "INSERT INTO [dbo].[People] ([NationalNo] ,[FirstName] ,[SecondName],[ThirdName]"
-               + " ,[LastName] ,[DateOfBirth] ,[Gender] ,[Address] ,[Phone] ,[Email] ,[NationalityCountryID]" +
-               " ,[ImagePath]) VALUES(@NatNub,@FN,@SN,@TN,@LN,@date, @gender ,@Addr," +
-               " @Phn,@Em , @Nat, @Img) ;  SELECT SCOPE_IDENTITY() ;";
+
+            // MSSQL: INSERT … SCOPE_IDENTITY(). PG: INSERT … RETURNING "PersonID"
+            string q = clsDatabaseFactory.GetQuery(
+                "INSERT INTO [dbo].[People] ([NationalNo] ,[FirstName] ,[SecondName],[ThirdName]"
+               + " ,[LastName] ,[DateOfBirth] ,[Gender] ,[Address] ,[Phone] ,[Email] ,[NationalityCountryID]"
+               + " ,[ImagePath]) VALUES(@NatNub,@FN,@SN,@TN,@LN,@date, @gender ,@Addr,"
+               + " @Phn,@Em , @Nat, @Img) ;  SELECT SCOPE_IDENTITY() ;",
+
+                "INSERT INTO \"People\" (\"NationalNo\" ,\"FirstName\" ,\"SecondName\",\"ThirdName\""
+               + " ,\"LastName\" ,\"DateOfBirth\" ,\"Gender\" ,\"Address\" ,\"Phone\" ,\"Email\" ,\"NationalityCountryID\""
+               + " ,\"ImagePath\") VALUES(@NatNub,@FN,@SN,@TN,@LN,@date, @gender ,@Addr,"
+               + " @Phn,@Em , @Nat, @Img) RETURNING \"PersonID\" ;");
+
             connection.Open();
-            SqlCommand command = new SqlCommand(q, connection);
-            command.Parameters.AddWithValue("@NatNub", NatNub);
-            command.Parameters.AddWithValue("@FN", FN);
-            command.Parameters.AddWithValue("@SN", SN);
-            command.Parameters.AddWithValue("@LN", LN);
-            command.Parameters.AddWithValue("@date", date);
-            command.Parameters.AddWithValue("@gender", gender);
-            command.Parameters.AddWithValue("@Addr", Addr);
-            command.Parameters.AddWithValue("@Phn", Phn);
-            command.Parameters.AddWithValue("@Nat", Nat);
+            var command = clsDatabaseFactory.CreateCommand(q, connection);
+            clsDatabaseFactory.AddParam(command, "@NatNub", NatNub);
+            clsDatabaseFactory.AddParam(command, "@FN", FN);
+            clsDatabaseFactory.AddParam(command, "@SN", SN);
+            clsDatabaseFactory.AddParam(command, "@LN", LN);
+            clsDatabaseFactory.AddParam(command, "@date", date);
+            clsDatabaseFactory.AddParam(command, "@gender", gender);
+            clsDatabaseFactory.AddParam(command, "@Addr", Addr);
+            clsDatabaseFactory.AddParam(command, "@Phn", Phn);
+            clsDatabaseFactory.AddParam(command, "@Nat", Nat);
 
             if (Em != "")
             {
-                command.Parameters.AddWithValue("@Em", Em);
+                clsDatabaseFactory.AddParam(command, "@Em", Em);
             }
             else
             {
-                command.Parameters.AddWithValue("@Em", DBNull.Value);
+                clsDatabaseFactory.AddParam(command, "@Em", DBNull.Value);
             }
             if (TN == "")
             {
-                command.Parameters.AddWithValue("@TN", DBNull.Value);
+                clsDatabaseFactory.AddParam(command, "@TN", DBNull.Value);
             }
             else
             {
-                command.Parameters.AddWithValue("@TN", TN);
+                clsDatabaseFactory.AddParam(command, "@TN", TN);
             }
             if (Img == "")
             {
-                command.Parameters.AddWithValue("@Img", DBNull.Value);
+                clsDatabaseFactory.AddParam(command, "@Img", DBNull.Value);
             }
             else
             {
-                command.Parameters.AddWithValue("@Img", Img);
+                clsDatabaseFactory.AddParam(command, "@Img", Img);
             }
 
             try
             {
-
-
-
                 object result = command.ExecuteScalar();
                 if (result != null)
                 {
                     ID = Convert.ToInt32(result);
                 }
-
             }
-
             catch (Exception ex)
             {
-
             }
             finally
             {
                 connection.Close();
-
             }
             return ID;
         }
@@ -98,7 +96,7 @@ namespace DataAccessLayer
            , int Nat, DateTime date, int gender, string Addr, ref string Img, ref string LastImg)
         {
             bool IsUpdated = false;
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
+            var connection = clsDatabaseFactory.CreateConnection();
             Guid guid = Guid.NewGuid();
             string path = "";
             if (Img != "")
@@ -108,67 +106,63 @@ namespace DataAccessLayer
             }
             Img = path;
 
-            string q = "update [dbo].[People] set  [NationalNo]=@NatNub ,[FirstName]=@FN ,[SecondName]=@SN,[ThirdName]=@TN"
-               + " ,[LastName]=@LN ,[DateOfBirth]=@date ,[Gender]=@gender ,[Address]=@Addr ,[Phone]=@Phn ,[Email]=@Em " +
-               ",[NationalityCountryID]=@Nat , [ImagePath]=@Img where PersonID=@ID";
+            // Simple UPDATE – auto-convert handles brackets
+            string q = clsDatabaseFactory.GetQuery(
+                "update [dbo].[People] set  [NationalNo]=@NatNub ,[FirstName]=@FN ,[SecondName]=@SN,[ThirdName]=@TN"
+               + " ,[LastName]=@LN ,[DateOfBirth]=@date ,[Gender]=@gender ,[Address]=@Addr ,[Phone]=@Phn ,[Email]=@Em "
+               + ",[NationalityCountryID]=@Nat , [ImagePath]=@Img where PersonID=@ID");
+
             connection.Open();
-            SqlCommand command = new SqlCommand(q, connection);
-            command.Parameters.AddWithValue("@ID", ID);
-            command.Parameters.AddWithValue("@NatNub", NatNub);
-            command.Parameters.AddWithValue("@FN", FN);
-            command.Parameters.AddWithValue("@SN", SN);
-            command.Parameters.AddWithValue("@LN", LN);
-            command.Parameters.AddWithValue("@date", date);
-            command.Parameters.AddWithValue("@gender", gender);
-            command.Parameters.AddWithValue("@Addr", Addr);
-            command.Parameters.AddWithValue("@Phn", Phn);
-            command.Parameters.AddWithValue("@Nat", Nat);
+            var command = clsDatabaseFactory.CreateCommand(q, connection);
+            clsDatabaseFactory.AddParam(command, "@ID", ID);
+            clsDatabaseFactory.AddParam(command, "@NatNub", NatNub);
+            clsDatabaseFactory.AddParam(command, "@FN", FN);
+            clsDatabaseFactory.AddParam(command, "@SN", SN);
+            clsDatabaseFactory.AddParam(command, "@LN", LN);
+            clsDatabaseFactory.AddParam(command, "@date", date);
+            clsDatabaseFactory.AddParam(command, "@gender", gender);
+            clsDatabaseFactory.AddParam(command, "@Addr", Addr);
+            clsDatabaseFactory.AddParam(command, "@Phn", Phn);
+            clsDatabaseFactory.AddParam(command, "@Nat", Nat);
             if (Em != "")
             {
-                command.Parameters.AddWithValue("@Em", Em);
+                clsDatabaseFactory.AddParam(command, "@Em", Em);
             }
             else
             {
-                command.Parameters.AddWithValue("@Em", DBNull.Value);
+                clsDatabaseFactory.AddParam(command, "@Em", DBNull.Value);
             }
             if (TN == "")
             {
-                command.Parameters.AddWithValue("@TN", DBNull.Value);
+                clsDatabaseFactory.AddParam(command, "@TN", DBNull.Value);
             }
             else
             {
-                command.Parameters.AddWithValue("@TN", TN);
+                clsDatabaseFactory.AddParam(command, "@TN", TN);
             }
             if (Img == "")
             {
-                command.Parameters.AddWithValue("@Img", DBNull.Value);
+                clsDatabaseFactory.AddParam(command, "@Img", DBNull.Value);
             }
             else
             {
-                command.Parameters.AddWithValue("@Img", Img);
+                clsDatabaseFactory.AddParam(command, "@Img", Img);
             }
 
             try
             {
-
-
-
                 int result = command.ExecuteNonQuery();
                 if (result >= 1)
                 {
                     IsUpdated = true;
                 }
-
             }
-
             catch (Exception ex)
             {
-
             }
             finally
             {
                 connection.Close();
-
             }
             if (LastImg != "")
             {
@@ -178,9 +172,7 @@ namespace DataAccessLayer
                 }
                 catch
                 {
-
                 }
-
             }
             LastImg = Img;
             return IsUpdated;
@@ -190,33 +182,27 @@ namespace DataAccessLayer
         public static bool DeletePerson(int ID)
         {
             bool IsDeleted = false;
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
-            string q = "delete from People where PersonID=@ID";
+            var connection = clsDatabaseFactory.CreateConnection();
+            // Simple DELETE – auto-convert
+            string q = clsDatabaseFactory.GetQuery("delete from People where PersonID=@ID");
             connection.Open();
-            SqlCommand command = new SqlCommand(q, connection);
-            command.Parameters.AddWithValue("@ID", ID);
+            var command = clsDatabaseFactory.CreateCommand(q, connection);
+            clsDatabaseFactory.AddParam(command, "@ID", ID);
 
             try
             {
-
-
-
                 int result = command.ExecuteNonQuery();
                 if (result >= 1)
                 {
                     IsDeleted = true;
                 }
-
             }
-
             catch (Exception ex)
             {
-
             }
             finally
             {
                 connection.Close();
-
             }
             return IsDeleted;
         }
@@ -224,75 +210,63 @@ namespace DataAccessLayer
 
         public static DataTable ListPeoples()
         {
-
             Stopwatch stopwatch1 = Stopwatch.StartNew();
-           
-
             DataTable table = new DataTable();
-            //table.Columns.Add("ID", typeof(int));
-            //table.Columns.Add("Name", typeof(string));
-            //table.Rows.Add(1, "One Piece");
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
-            string q = "select People.PersonID , People.NationalNo , People.FirstName , People.SecondName , People.ThirdName, " +
+            var connection = clsDatabaseFactory.CreateConnection();
+
+            // SQL-level '+' concatenation → needs explicit PG version with ||
+            string q = clsDatabaseFactory.GetQuery(
+                "select People.PersonID , People.NationalNo , People.FirstName , People.SecondName , People.ThirdName, " +
                 "People.LastName , People.DateOfBirth , Gender=\r\ncase \r\nwhen (People.Gender = 0) then 'Male'\r\nwhen " +
                 "(People.Gender = 1) then 'Female'\r\nelse 'Croissant'\r\nend\r\n, People.Phone, People.Email , " +
                 "Nationality= Countries.CountryName \r\nfrom People  inner join Countries on " +
-                "People.NationalityCountryID = Countries.CountryID;";
+                "People.NationalityCountryID = Countries.CountryID;",
+
+                "select \"People\".\"PersonID\" , \"People\".\"NationalNo\" , \"People\".\"FirstName\" , \"People\".\"SecondName\" , \"People\".\"ThirdName\", " +
+                "\"People\".\"LastName\" , \"People\".\"DateOfBirth\" , Gender=\r\ncase \r\nwhen (\"People\".\"Gender\" = 0) then 'Male'\r\nwhen " +
+                "(\"People\".\"Gender\" = 1) then 'Female'\r\nelse 'Croissant'\r\nend\r\n, \"People\".\"Phone\", \"People\".\"Email\" , " +
+                "Nationality= \"Countries\".\"CountryName\" \r\nfrom \"People\"  inner join \"Countries\" on " +
+                "\"People\".\"NationalityCountryID\" = \"Countries\".\"CountryID\";");
+
             connection.Open();
-            SqlCommand command = new SqlCommand(q, connection);
+            var command = clsDatabaseFactory.CreateCommand(q, connection);
             try
             {
-                SqlDataReader result = command.ExecuteReader();
-
-                if (result.HasRows)
-                {
-                    table.Load(result);
-                }
-
+                IDataReader result = command.ExecuteReader();
+                table.Load(result);
             }
-
             catch (Exception ex)
             {
-
             }
             finally
             {
                 connection.Close();
                 stopwatch1.Stop();
-                File.WriteAllText(@"C:\Users\mohya\OneDrive\Bureau\Untitled.txt" , stopwatch1.ElapsedMilliseconds.ToString());
-
+                File.WriteAllText(@"C:\Users\mohya\OneDrive\Bureau\Untitled.txt", stopwatch1.ElapsedMilliseconds.ToString());
             }
             return table;
         }
 
 
-
         public static DataTable ListCountries()
         {
             DataTable table = new DataTable();
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
-            string q = "select * from Countries";
+            var connection = clsDatabaseFactory.CreateConnection();
+            // Simple SELECT – auto-convert
+            string q = clsDatabaseFactory.GetQuery("select * from Countries");
             connection.Open();
-            SqlCommand command = new SqlCommand(q, connection);
+            var command = clsDatabaseFactory.CreateCommand(q, connection);
             try
             {
-                SqlDataReader result = command.ExecuteReader();
-
-                if (result.HasRows)
-                {
-                    table.Load(result);
-                }
-
+                IDataReader result = command.ExecuteReader();
+                table.Load(result);
             }
-
             catch (Exception ex)
             {
-
             }
             finally
             {
                 connection.Close();
-
             }
             return table;
         }
@@ -303,15 +277,15 @@ namespace DataAccessLayer
             ref string Addr, ref string Img)
         {
             bool IsExists = false;
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
-            string q = "select * from People where PersonID=@PerID";
+            var connection = clsDatabaseFactory.CreateConnection();
+            // Simple SELECT – auto-convert
+            string q = clsDatabaseFactory.GetQuery("select * from People where PersonID=@PerID");
             connection.Open();
-            SqlCommand command = new SqlCommand(q, connection);
-            command.Parameters.AddWithValue("@PerID", PerID);
+            var command = clsDatabaseFactory.CreateCommand(q, connection);
+            clsDatabaseFactory.AddParam(command, "@PerID", PerID);
             try
             {
-                SqlDataReader result = command.ExecuteReader();
-
+                IDataReader result = command.ExecuteReader();
                 if (result.Read())
                 {
                     IsExists = true;
@@ -328,17 +302,13 @@ namespace DataAccessLayer
                     Addr = result[8].ToString();
                     Img = result[12].ToString();
                 }
-
             }
-
             catch (Exception ex)
             {
-
             }
             finally
             {
                 connection.Close();
-
             }
             return IsExists;
         }
@@ -346,55 +316,58 @@ namespace DataAccessLayer
 
         public static bool IsNationalNumberExists(string NatNub)
         {
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
-            string q = "select * from People where NationalNo = @NatNub";
-            SqlCommand cmd = new SqlCommand(q, connection);
-            cmd.Parameters.AddWithValue("@NatNub", NatNub);
+            var connection = clsDatabaseFactory.CreateConnection();
+            // Simple SELECT – auto-convert
+            string q = clsDatabaseFactory.GetQuery("select * from People where NationalNo = @NatNub");
+            var command = clsDatabaseFactory.CreateCommand(q, connection);
+            clsDatabaseFactory.AddParam(command, "@NatNub", NatNub);
 
             bool ISExists = false;
-
             connection.Open();
             try
             {
-                SqlDataReader Result = cmd.ExecuteReader();
-                if (Result.HasRows)
+                IDataReader Result = command.ExecuteReader();
+                if (Result.Read())
                 {
                     ISExists = true;
                 }
-
             }
             catch (Exception ex)
             {
-
             }
             finally
             { connection.Close(); }
 
-
             return ISExists;
-
-
         }
-
-
 
 
         public static string GetPersonFullNameByPersonID(int person_id)
         {
             string Full_Name = "";
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
-            string q = "select CASE  WHEN People.FirstName  IS NULL THEN '' else People.FirstName+' '  " +
+            var connection = clsDatabaseFactory.CreateConnection();
+
+            // SQL-level '+' concatenation → needs explicit PG version with ||
+            string q = clsDatabaseFactory.GetQuery(
+                "select CASE  WHEN People.FirstName  IS NULL THEN '' else People.FirstName+' '  " +
                 "END +CASE  WHEN People.SecondName  IS NULL THEN '' else People.SecondName+' ' " +
                 "END +CASE  WHEN People.ThirdName IS NULL THEN ''  else People.ThirdName+' 'END  " +
                 "+CASE  WHEN People.LastName  IS NULL THEN '' else People.LastName  END from " +
-                "People where PersonID =@person_id;";
-            SqlCommand command = new SqlCommand(q, connection);
-            command.Parameters.AddWithValue("@person_id", person_id);
+                "People where PersonID =@person_id;",
+
+                "select CASE  WHEN \"People\".\"FirstName\"  IS NULL THEN '' else \"People\".\"FirstName\"||' '  " +
+                "END ||CASE  WHEN \"People\".\"SecondName\"  IS NULL THEN '' else \"People\".\"SecondName\"||' ' " +
+                "END ||CASE  WHEN \"People\".\"ThirdName\" IS NULL THEN ''  else \"People\".\"ThirdName\"||' 'END  " +
+                "||CASE  WHEN \"People\".\"LastName\"  IS NULL THEN '' else \"People\".\"LastName\"  END from " +
+                "\"People\" where \"PersonID\" =@person_id;");
+
+            var command = clsDatabaseFactory.CreateCommand(q, connection);
+            clsDatabaseFactory.AddParam(command, "@person_id", person_id);
 
             connection.Open();
             try
             {
-                SqlDataReader Result = command.ExecuteReader();
+                IDataReader Result = command.ExecuteReader();
                 if (Result.Read())
                 {
                     Full_Name = Result[0].ToString();
@@ -403,25 +376,24 @@ namespace DataAccessLayer
             catch { }
             finally { connection.Close(); }
             return Full_Name;
-
         }
 
 
-
-        public static bool FindByNationalNumber(string NatNub , ref int PerID,  ref string FN, ref string SN, ref string TN,
+        public static bool FindByNationalNumber(string NatNub, ref int PerID, ref string FN, ref string SN, ref string TN,
             ref string LN, ref string Phn, ref string Em, ref int Nat, ref DateTime date, ref int gender,
             ref string Addr, ref string Img)
         {
-            SqlConnection connection = new SqlConnection(DVLD_Connection_Info);
-            string q = "select * from People where NationalNo = @NatNub";
-            SqlCommand cmd = new SqlCommand(q, connection);
-            cmd.Parameters.AddWithValue("@NatNub", NatNub);
+            var connection = clsDatabaseFactory.CreateConnection();
+            // Simple SELECT – auto-convert
+            string q = clsDatabaseFactory.GetQuery("select * from People where NationalNo = @NatNub");
+            var command = clsDatabaseFactory.CreateCommand(q, connection);
+            clsDatabaseFactory.AddParam(command, "@NatNub", NatNub);
             bool IsExists = false;
 
             connection.Open();
             try
             {
-                SqlDataReader result = cmd.ExecuteReader();
+                IDataReader result = command.ExecuteReader();
                 if (result.Read())
                 {
                     IsExists = true;
@@ -438,20 +410,16 @@ namespace DataAccessLayer
                     Addr = result[8].ToString();
                     Img = result[12].ToString();
                 }
-
             }
             catch (Exception ex)
             {
-
             }
             finally
-            { 
-                connection.Close(); 
+            {
+                connection.Close();
             }
 
             return IsExists;
-
         }
     }
-
 }

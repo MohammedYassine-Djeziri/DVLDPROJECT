@@ -39,8 +39,12 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Npgsql">
+      <HintPath>..\lib\Npgsql.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clsDatabaseFactory.cs" />
     <Compile Include="clsConnectionSettings.cs" />
     <Compile Include="clsSqlApplicationTypes.cs" />
     <Compile Include="clsSqlDetainedLicense.cs" />

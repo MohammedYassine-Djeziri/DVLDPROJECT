@@ -3,3 +3,6 @@
 /home/user/Downloads/DVLD/PeoplesDataAccessLayer/obj/Debug/DVLD_DataAccessLayer.csproj.CoreCompileInputs.cache
 /home/user/Downloads/DVLD/PeoplesDataAccessLayer/obj/Debug/PeoplesDataAccessLayer.dll
 /home/user/Downloads/DVLD/PeoplesDataAccessLayer/obj/Debug/PeoplesDataAccessLayer.pdb
+/home/user/Downloads/DVLD/PeoplesDataAccessLayer/bin/Debug/Npgsql.dll
+/home/user/Downloads/DVLD/PeoplesDataAccessLayer/obj/Debug/DVLD_DataAccessLayer.csproj.AssemblyReference.cache
+/home/user/Downloads/DVLD/PeoplesDataAccessLayer/obj/Debug/DVLD_DataAccessLayer.csproj.CopyComplete
