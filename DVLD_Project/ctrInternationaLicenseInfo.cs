@@ -1,0 +1,105 @@
+﻿using DVLD_Project.Properties;
+using DVLDBusinessLayer;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace DVLD_Project
+{
+    public partial class ctrInternationaLicenseInfo : UserControl
+    {
+
+        public int InterLicenseID = -1;
+        clsInternationalLicense MyInternationalLicense = clsInternationalLicense.GetEmptyInternationalLicense();
+        clsPeoples Person = clsPeoples.GetEmptyPerson();
+        public ctrInternationaLicenseInfo()
+        {
+            InitializeComponent();
+        }
+
+        public void RefreshInfo()
+        {
+            //MessageBox.Show(LicenseID.ToString());
+            MyInternationalLicense = clsInternationalLicense.FindLicenseByInterLicenseID(InterLicenseID);
+            if (MyInternationalLicense.InternationalLicenseID != -1)
+            {
+                //MessageBox.Show("I am in IF");
+                Person = clsPeoples.FindByPersonalID(clsDriver.FindDriverByDriverID(MyInternationalLicense.DriverID).PersonID);
+
+                lblInterLicID.Text = MyInternationalLicense.InternationalLicenseID.ToString();
+                lblBirthDay.Text = Person.DateOfBirth.ToShortDateString();
+                lbldriverID.Text = MyInternationalLicense.DriverID.ToString();
+                lblGender.Text = clsPeoples.GetGenderFromCode(Person.PerID);
+                lblIsActive.Text = "No";
+                if (MyInternationalLicense.IsActive)
+                {
+                    lblIsActive.Text = "Yes";
+                }
+                lblExpDate.Text = MyInternationalLicense.ExpirationDate.ToShortDateString();
+                lblname.Text = clsPeoples.GetPersonFullNameByPersonID(Person.PerID);
+                lblNatno.Text = Person.NationalNub;
+
+                lblIssueDate.Text = MyInternationalLicense.IssueDate.ToShortDateString();
+                lblLicense.Text = MyInternationalLicense.LicenseID.ToString();
+                if (Person.ImagePath != "")
+                {
+                    if (File.Exists(Person.ImagePath))
+                    {
+                        PctBoxImg.ImageLocation = @Person.ImagePath;
+                    }
+                }
+                else
+                {
+                    if (Person.Gender == 1)
+                    {
+                        PctBoxImg.Image = Resources.Female_512;
+
+                    }
+
+                    else if (Person.Gender == 0)
+                    {
+                        PctBoxImg.Image = Resources.Male_512;
+                    }
+                    else
+                    {
+                        PctBoxImg.Image = Resources._19477_1;
+                    }
+                }
+            }
+            else
+            {
+                //MessageBox.Show("I am in ELSE");
+                lblInterLicID.Text = "[???]";
+                lblBirthDay.Text = "[???]";
+                lbldriverID.Text = "[???]";
+                lblGender.Text = "[???]";
+                lblIsActive.Text = "[???]";
+                lblIsActive.Text = "[???]";
+                lblExpDate.Text = "[???]";
+                lblname.Text = "[???]";
+                lblNatno.Text = "[???]";
+                lblIssueDate.Text = "[???]";
+                lblLicense.Text = "[???]";
+                PctBoxImg.Image = Resources.Male_512;
+                
+            }
+
+        }
+        private void ctrInternationaLicenseInfo_Load(object sender, EventArgs e)
+        {
+            RefreshInfo();
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+    }
+}

@@ -1,0 +1,9 @@
+/home/user/Downloads/DVLD/DVLDBusinessLayer/obj/Debug/DVLD_BusinessLayer.csproj.AssemblyReference.cache
+/home/user/Downloads/DVLD/DVLDBusinessLayer/obj/Debug/DVLD_BusinessLayer.csproj.CoreCompileInputs.cache
+/home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/DVLDBusinessLayer.dll
+/home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/DVLDBusinessLayer.pdb
+/home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/PeoplesDataAccessLayer.dll
+/home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/PeoplesDataAccessLayer.pdb
+/home/user/Downloads/DVLD/DVLDBusinessLayer/obj/Debug/DVLD_BusinessLayer.csproj.CopyComplete
+/home/user/Downloads/DVLD/DVLDBusinessLayer/obj/Debug/DVLDBusinessLayer.dll
+/home/user/Downloads/DVLD/DVLDBusinessLayer/obj/Debug/DVLDBusinessLayer.pdb
