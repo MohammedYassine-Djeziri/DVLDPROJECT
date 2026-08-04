@@ -50,6 +50,22 @@ namespace DataAccessLayer
             return param;
         }
 
+        /// <summary>
+        /// Adds a named parameter with explicit DbType to the command.
+        /// DBNull is substituted automatically for null values.
+        /// Use this overload when the provider requires precise type information
+        /// (e.g. Npgsql is stricter about implicit type mapping).
+        /// </summary>
+        public static IDbDataParameter AddParam(IDbCommand cmd, string name, object value, DbType dbType)
+        {
+            IDbDataParameter param = cmd.CreateParameter();
+            param.ParameterName = name;
+            param.Value = value ?? DBNull.Value;
+            param.DbType = dbType;
+            cmd.Parameters.Add(param);
+            return param;
+        }
+
         // -----------------------------------------------------------------
         //  Query selection
         // -----------------------------------------------------------------
@@ -84,10 +100,19 @@ namespace DataAccessLayer
         // -----------------------------------------------------------------
         private static string AutoConvertToPg(string mssql)
         {
-            // Remove [dbo]. schema prefix (PG uses public schema by default)
+            // 1. Remove [dbo]. schema prefix (PG uses public schema by default)
             string result = Regex.Replace(mssql, @"\[dbo\]\.", "", RegexOptions.IgnoreCase);
-            // Replace remaining [...] identifiers with quoted "..."
+
+            // 2. Replace remaining [...] identifiers with quoted "..."
             result = Regex.Replace(result, @"\[([^\]]+)\]", @"""$1""");
+
+            // 3. Convert 'Alias'=column → column AS "Alias" (SQL Server → PG column alias)
+            //    Pattern: 'string literal'=identifier[.identifier]
+            //    Handles: 'Int.Lic ID'=InternationalLicenses.InternationalLicenseID
+            //             'Lic.ID'=Licenses.LicenseID
+            //             'Appointment ID'=TestAppointmentID
+            result = Regex.Replace(result, @"'([^']+)'=(\w+(?:\.\w+)?)", @"$2 AS ""$1""");
+
             return result;
         }
     }

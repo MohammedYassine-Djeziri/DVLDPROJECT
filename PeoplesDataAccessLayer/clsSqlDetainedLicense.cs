@@ -140,19 +140,22 @@ namespace DataAccessLayer
                 if (r.Read())
                 {
                     detain_ID = Convert.ToInt32(r[0]);
+                    // r[0]=DetainID, r[1]=LicenseID, r[2]=DetainDate, r[3]=FineFees,
+                    // r[4]=CreatedByUserID, r[5]=IsReleased, r[6]=ReleaseDate,
+                    // r[7]=ReleasedByUserID, r[8]=ReleaseApplicationID
                     if (r[8] != DBNull.Value)
                     {
                         app_ID = Convert.ToInt32(r[8]);
                     }
                     else { app_ID = -1; }
-                    if (r[8] != DBNull.Value)
+                    if (r[7] != DBNull.Value)
                     {
                         rel_user_id = Convert.ToInt32(r[7]);
                     }
                     else { rel_user_id = -1; }
                     det_user_id = Convert.ToInt32(r[4]);
                     date_det = Convert.ToDateTime(r[2]);
-                    if (r[8] != DBNull.Value)
+                    if (r[6] != DBNull.Value)
                     {
                         date_rel = Convert.ToDateTime(r[6]);
                     }
@@ -190,12 +193,12 @@ namespace DataAccessLayer
             bool IsExist = false;
             var connection = clsDatabaseFactory.CreateConnection();
 
-            // Note: original query uses LicenseID in WHERE – preserved as-is
-            string q = clsDatabaseFactory.GetQuery("select * from DetainedLicenses where LicenseID =@license_ID;");
+            // Simple SELECT – auto-convert
+            string q = clsDatabaseFactory.GetQuery("select * from DetainedLicenses where DetainID =@detain_ID;");
 
             connection.Open();
             var cmd = clsDatabaseFactory.CreateCommand(q, connection);
-            clsDatabaseFactory.AddParam(cmd, "@license_ID", license_ID);
+            clsDatabaseFactory.AddParam(cmd, "@detain_ID", detain_ID);
 
             try
             {
@@ -203,11 +206,27 @@ namespace DataAccessLayer
                 if (r.Read())
                 {
                     license_ID = Convert.ToInt32(r[1]);
-                    app_ID = Convert.ToInt32(r[8]);
-                    rel_user_id = Convert.ToInt32(r[7]);
-                    det_user_id = Convert.ToInt16(r[4]);
+                    // r[0]=DetainID, r[1]=LicenseID, r[2]=DetainDate, r[3]=FineFees,
+                    // r[4]=CreatedByUserID, r[5]=IsReleased, r[6]=ReleaseDate,
+                    // r[7]=ReleasedByUserID, r[8]=ReleaseApplicationID
+                    if (r[8] != DBNull.Value)
+                    {
+                        app_ID = Convert.ToInt32(r[8]);
+                    }
+                    else { app_ID = -1; }
+                    if (r[7] != DBNull.Value)
+                    {
+                        rel_user_id = Convert.ToInt32(r[7]);
+                    }
+                    else { rel_user_id = -1; }
+                    det_user_id = Convert.ToInt32(r[4]);
                     date_det = Convert.ToDateTime(r[2]);
-                    date_rel = Convert.ToDateTime(r[6]);
+                    if (r[6] != DBNull.Value)
+                    {
+                        date_rel = Convert.ToDateTime(r[6]);
+                    }
+                    else
+                    { date_rel = DateTime.MinValue; }
                     fees = Convert.ToSingle(r[3]);
                     if (Convert.ToInt32(r[5]) == 1)
                     {

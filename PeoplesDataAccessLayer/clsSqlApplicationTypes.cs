@@ -50,7 +50,7 @@ namespace DataAccessLayer
 
         public static float FindAppFeesByAppTitle(string Type)
         {
-            int Fees = 0;
+            float Fees = 0;
             var connection = clsDatabaseFactory.CreateConnection();
             string q = clsDatabaseFactory.GetQuery("select ApplicationFees from ApplicationTypes where ApplicationTypeTitle=@type;");
             var command = clsDatabaseFactory.CreateCommand(q, connection);
@@ -61,7 +61,7 @@ namespace DataAccessLayer
                 IDataReader Result = command.ExecuteReader();
                 if (Result.Read())
                 {
-                    Fees = Convert.ToInt32(Result[0]);
+                    Fees = Convert.ToSingle(Result[0]);
                 }
             }
             catch
@@ -74,7 +74,7 @@ namespace DataAccessLayer
 
         public static float FindAppFeesByAppTypeID(int Type)
         {
-            int Fees = 0;
+            float Fees = 0;
             var connection = clsDatabaseFactory.CreateConnection();
             string q = clsDatabaseFactory.GetQuery("select ApplicationFees from ApplicationTypes where ApplicationTypeID=@type;");
             var command = clsDatabaseFactory.CreateCommand(q, connection);
@@ -85,7 +85,7 @@ namespace DataAccessLayer
                 IDataReader Result = command.ExecuteReader();
                 if (Result.Read())
                 {
-                    Fees = Convert.ToInt32(Result[0]);
+                    Fees = Convert.ToSingle(Result[0]);
                 }
             }
             catch
@@ -100,7 +100,7 @@ namespace DataAccessLayer
         {
             string Class_Name = "";
             var connection = clsDatabaseFactory.CreateConnection();
-            string q = clsDatabaseFactory.GetQuery("select ApplicationTypeTitle from ApplicationTypes where ApplicationTypeID=@tAppType_id;");
+            string q = clsDatabaseFactory.GetQuery("select ApplicationTypeTitle from ApplicationTypes where ApplicationTypeID=@AppType_id;");
             var command = clsDatabaseFactory.CreateCommand(q, connection);
             clsDatabaseFactory.AddParam(command, "@AppType_id", AppType_id);
             connection.Open();

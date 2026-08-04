@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -62,11 +60,11 @@ namespace DataAccessLayer
             var connection = clsDatabaseFactory.CreateConnection();
 
             // Simple UPDATE – auto-convert handles brackets
-            // Note: original SQL used "Update INTO" (bug) – preserved as-is
             string q = clsDatabaseFactory.GetQuery(
-                " Update INTO [dbo].[Applications] set ([ApplicantPersonID],[ApplicationDate],[ApplicationTypeID]," +
-                "[ApplicationStatus],[LastStatusDate],[PaidFees],[CreatedByUserID]) VALUES(@PerID,@AppDate,@AppType,@AppStatus" +
-                ",@LastDate,@Fees,@UserID ) where ApplicationID = @AppID");
+                "UPDATE [dbo].[Applications] SET [ApplicantPersonID] = @PerID, [ApplicationDate] = @AppDate, " +
+                "[ApplicationTypeID] = @AppType, [ApplicationStatus] = @AppStatus, " +
+                "[LastStatusDate] = @LastDate, [PaidFees] = @Fees, [CreatedByUserID] = @UserID " +
+                "WHERE ApplicationID = @AppID");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);
@@ -75,7 +73,7 @@ namespace DataAccessLayer
             clsDatabaseFactory.AddParam(command, "@AppDate", AppDate);
             clsDatabaseFactory.AddParam(command, "@AppType", AppType);
             clsDatabaseFactory.AddParam(command, "@AppStatus", AppStatus);
-            clsDatabaseFactory.AddParam(command, "@dLastDate", LastDate); // preserved original param name
+            clsDatabaseFactory.AddParam(command, "@LastDate", LastDate);
             clsDatabaseFactory.AddParam(command, "@Fees", Fees);
             clsDatabaseFactory.AddParam(command, "@UserID", UserID);
 

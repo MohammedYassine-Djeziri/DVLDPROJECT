@@ -89,7 +89,7 @@ namespace DataAccessLayer
                 IDataReader Result = command.ExecuteReader();
                 if (Result.Read())
                 {
-                    Fees = Convert.ToInt32(Result[0]);
+                    Fees = Convert.ToSingle(Result[0]);
                 }
             }
             catch
@@ -114,7 +114,7 @@ namespace DataAccessLayer
                 IDataReader Result = command.ExecuteReader();
                 if (Result.Read())
                 {
-                    Fees = Convert.ToInt32(Result[0]);
+                    Fees = Convert.ToSingle(Result[0]);
                 }
             }
             catch

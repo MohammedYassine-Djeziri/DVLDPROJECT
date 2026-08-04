@@ -232,9 +232,11 @@ namespace DataAccessLayer
             bool IsExist = false;
             var connection = clsDatabaseFactory.CreateConnection();
 
-            // Simple SELECT – auto-convert
+            // !=null is SQL Server syntax; PG requires IS NOT NULL
             string q = clsDatabaseFactory.GetQuery(
-                "select 1 from TestAppointments where TestAppointmentID=@TAppoint_ID and RetakeTestApplicationID !=null");
+                "select 1 from TestAppointments where TestAppointmentID=@TAppoint_ID and RetakeTestApplicationID IS NOT NULL",
+
+                "select 1 from \"TestAppointments\" where \"TestAppointmentID\"=@TAppoint_ID and \"RetakeTestApplicationID\" IS NOT NULL");
 
             connection.Open();
             var cmd = clsDatabaseFactory.CreateCommand(q, connection);
