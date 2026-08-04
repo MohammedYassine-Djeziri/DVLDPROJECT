@@ -28,18 +28,12 @@ DVLD/
 
 ```bash
 git clone <repo-url>
-cd DVLD
 ```
 
-### 2. Set the remote address
 
+### 2. open the folder
 ```bash
-git remote add origin <your-repository-url>
-```
-
-Example:
-```bash
-git remote add origin https://github.com/your-username/DVLD.git
+cd DVLDPROJECT
 ```
 
 ### 3. Configure the database connection
