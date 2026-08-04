@@ -1,0 +1,46 @@
+# .NET Build Artifacts
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.vs/
+*.DotSettings
+*.sln.docstates
+
+# NuGet packages
+packages/
+*.nupkg
+
+# Environment files (contains sensitive credentials)
+.env
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Rider / IDE
+.idea/
+*.sln.ide/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Build output
+*.exe
+*.dll
+*.pdb
+*.mdb
+
+# Test results
+TestResults/
+*.trx
+
+# Image copies (runtime generated)
+DVLD_Project/ImageCopy/
+
+# Logs
+*.log
