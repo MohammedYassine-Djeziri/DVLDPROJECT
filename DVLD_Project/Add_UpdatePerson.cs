@@ -150,10 +150,7 @@ namespace DVLD_Project
                 TBPHONE.Text != ""&& CB_COUNTRY.SelectedItem.ToString() != "" && CB_GENDER.SelectedItem.ToString() != "" &&
                     TB_ADDRESS.Text != "" )
             {
-                //if (Person == null)
-                //{
-                //    Person = clsPeoples.GetEmptyPerson();
-                //}
+
                 Person.NationalNub = TBNATNUB.Text;
                 Person.FirstName=  TB_FN.Text;
                 Person.SecondName = TB_SN.Text;
@@ -165,14 +162,7 @@ namespace DVLD_Project
                 Person.DateOfBirth =  dateTimePicker1.Value;
                 Person.Gender =  CB_GENDER.SelectedIndex;
                 Person.Address =  TB_ADDRESS.Text;
-                //if (/*openFileDialog1.FileName != "" &&*/ openFileDialog1.FileName != "openFileDialog1")
-                //{
-                //    Person.ImagePath = openFileDialog1.FileName.ToString();
-
-
-
-                    
-                //}
+ 
 
                 if(Person.Mode==clsPeoples.EnMode.New)
                 {
@@ -190,8 +180,7 @@ namespace DVLD_Project
 
 
                 Lbl_Add_Edit.Text = "Update Person";
-                //MessageBox.Show(openFileDialog1.FileName);
-                //File.Copy(openFileDialog1.FileName, @"C:\ImageCopy\New Text Document.txt");
+                
             }
 
             else
@@ -206,6 +195,7 @@ namespace DVLD_Project
         {
             if (clsPeoples.IsNationalNumberExists(TBNATNUB.Text))
             {
+                
                 e.Cancel=true;
                 TBNATNUB.Focus();
                 errorProvider1.SetError(TBNATNUB, "National Number already exists");
