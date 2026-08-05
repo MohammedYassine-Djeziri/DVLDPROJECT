@@ -200,9 +200,9 @@ namespace DataAccessLayer
                 "People.NationalityCountryID = Countries.CountryID;",
 
                 "select \"People\".\"PersonID\" , \"People\".\"NationalNo\" , \"People\".\"FirstName\" , \"People\".\"SecondName\" , \"People\".\"ThirdName\", " +
-                "\"People\".\"LastName\" , \"People\".\"DateOfBirth\" , Gender=\r\ncase \r\nwhen (\"People\".\"Gender\" = 0) then 'Male'\r\nwhen " +
-                "(\"People\".\"Gender\" = 1) then 'Female'\r\nelse 'Croissant'\r\nend\r\n, \"People\".\"Phone\", \"People\".\"Email\" , " +
-                "Nationality= \"Countries\".\"CountryName\" \r\nfrom \"People\"  inner join \"Countries\" on " +
+                "\"People\".\"LastName\" , \"People\".\"DateOfBirth\" , \r\ncase \r\nwhen (\"People\".\"Gender\" = 0) then 'Male'\r\nwhen " +
+                "(\"People\".\"Gender\" = 1) then 'Female'\r\nelse 'Croissant'\r\nend AS \"Gender\"\r\n, \"People\".\"Phone\", \"People\".\"Email\" , " +
+                "\"Countries\".\"CountryName\" AS \"Nationality\" \r\nfrom \"People\"  inner join \"Countries\" on " +
                 "\"People\".\"NationalityCountryID\" = \"Countries\".\"CountryID\";");
 
             connection.Open();

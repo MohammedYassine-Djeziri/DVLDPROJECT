@@ -269,13 +269,13 @@ namespace DataAccessLayer
                 " Licenses on DetainedLicenses.LicenseID = Licenses.LicenseID inner join Drivers on " +
                 "Licenses.DriverID = Drivers.DriverID inner join People on Drivers.PersonID = People.PersonID;",
 
-                "select 'D.ID' = \"DetainedLicenses\".\"DetainID\" , 'L.ID' =\"DetainedLicenses\".\"LicenseID\" , " +
-                "'D.Date' =\"DetainedLicenses\".\"DetainDate\" , \"DetainedLicenses\".\"IsReleased\" , \"DetainedLicenses\".\"FineFees\" " +
-                ", \"DetainedLicenses\".\"ReleaseDate\"  , 'N.No' =\"People\".\"NationalNo\"  ,  'Full Name'=  case WHEN " +
+                "select \"DetainedLicenses\".\"DetainID\" AS \"D.ID\" , \"DetainedLicenses\".\"LicenseID\" AS \"L.ID\" , " +
+                "\"DetainedLicenses\".\"DetainDate\" AS \"D.Date\" , \"DetainedLicenses\".\"IsReleased\" , \"DetainedLicenses\".\"FineFees\" " +
+                ", \"DetainedLicenses\".\"ReleaseDate\"  , \"People\".\"NationalNo\" AS \"N.No\"  ,  case WHEN " +
                 "\"People\".\"FirstName\"  IS NULL THEN '' else \"People\".\"FirstName\"||' ' END ||CASE  WHEN \"People\".\"SecondName\"  " +
                 "IS NULL THEN '' else \"People\".\"SecondName\"||' '  END ||CASE  WHEN \"People\".\"ThirdName\" IS NULL THEN ''  " +
                 "else \"People\".\"ThirdName\"||' 'END  ||CASE  WHEN \"People\".\"LastName\"  IS NULL THEN '' else \"People\".\"LastName\" " +
-                " END ,'Release App.ID' = \"DetainedLicenses\".\"ReleaseApplicationID\"   from \"DetainedLicenses\" inner join" +
+                " END AS \"Full Name\", \"DetainedLicenses\".\"ReleaseApplicationID\" AS \"Release App.ID\"   from \"DetainedLicenses\" inner join" +
                 " \"Licenses\" on \"DetainedLicenses\".\"LicenseID\" = \"Licenses\".\"LicenseID\" inner join \"Drivers\" on " +
                 "\"Licenses\".\"DriverID\" = \"Drivers\".\"DriverID\" inner join \"People\" on \"Drivers\".\"PersonID\" = \"People\".\"PersonID\";");
 

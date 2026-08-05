@@ -148,18 +148,18 @@ namespace DataAccessLayer
                 " from Applications inner join People on  Applications.ApplicantPersonID=People.PersonID " +
                 "inner join LocalDrivingLicenseApplications on LocalDrivingLicenseApplications.ApplicationID= Applications.ApplicationID;",
 
-                "select 'LDLAppID'=\"LocalDrivingLicenseApplications\".\"LocalDrivingLicenseApplicationID\" , " +
-                "'Driving Class'= ( select \"LicenseClasses\".\"ClassName\" from \"LicenseClasses\" where" +
-                " \"LicenseClassID\"= \"LocalDrivingLicenseApplications\".\"LicenseClassID\") , " +
-                "\"People\".\"NationalNo\", 'FullName'= CASE  WHEN \"People\".\"FirstName\"  IS NULL THEN '' else " +
+                "select \"LocalDrivingLicenseApplications\".\"LocalDrivingLicenseApplicationID\" AS \"LDLAppID\" , " +
+                "( select \"LicenseClasses\".\"ClassName\" from \"LicenseClasses\" where" +
+                " \"LicenseClassID\"= \"LocalDrivingLicenseApplications\".\"LicenseClassID\") AS \"Driving Class\" , " +
+                "\"People\".\"NationalNo\", CASE  WHEN \"People\".\"FirstName\"  IS NULL THEN '' else " +
                 "\"People\".\"FirstName\"||' '  END ||CASE  WHEN \"People\".\"SecondName\"  IS NULL THEN '' " +
                 "else \"People\".\"SecondName\"||' ' END ||CASE  WHEN \"People\".\"ThirdName\"  IS NULL THEN ''  else " +
                 "\"People\".\"ThirdName\"||' 'END  ||CASE  WHEN \"People\".\"LastName\"  IS NULL THEN '' else \"People\".\"LastName\" " +
-                " END ,\"ApplicationDate\", 'Passed Test'=  (select  count(\"TestAppointments\".\"TestTypeID\" ) " +
+                " END AS \"FullName\",\"ApplicationDate\",  (select  count(\"TestAppointments\".\"TestTypeID\" ) " +
                 "from \"Tests\" join \"TestAppointments\"  on \"Tests\".\"TestAppointmentID\" = \"TestAppointments\".\"TestAppointmentID\" where " +
                 "\"TestAppointments\".\"LocalDrivingLicenseApplicationID\"=\"LocalDrivingLicenseApplications\".\"LocalDrivingLicenseApplicationID\" " +
-                "and \"Tests\".\"TestResult\"=1) , 'Status'= case  when \"Applications\".\"ApplicationStatus\" = 1 then 'New' " +
-                "when \"ApplicationStatus\"  = 2 then 'Cancelled' else 'Completed' end " +
+                "and \"Tests\".\"TestResult\"=1) AS \"Passed Test\" , case  when \"Applications\".\"ApplicationStatus\" = 1 then 'New' " +
+                "when \"ApplicationStatus\"  = 2 then 'Cancelled' else 'Completed' end AS \"Status\" " +
                 " from \"Applications\" inner join \"People\" on  \"Applications\".\"ApplicantPersonID\"=\"People\".\"PersonID\" " +
                 "inner join \"LocalDrivingLicenseApplications\" on \"LocalDrivingLicenseApplications\".\"ApplicationID\"= \"Applications\".\"ApplicationID\";");
 

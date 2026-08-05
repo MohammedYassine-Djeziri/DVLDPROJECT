@@ -103,8 +103,12 @@ namespace DataAccessLayer
             bool IsActive = false;
             var connection = clsDatabaseFactory.CreateConnection();
 
-            // Simple SELECT – auto-convert
-            string q = clsDatabaseFactory.GetQuery("select 1 from Licenses where LicenseID=@licenseID  and IsActive=1 ;");
+            // Dual version: Licenses.IsActive is a PostgreSQL boolean (AddNewLicense binds
+            // @is_active as a .NET bool -> NpgsqlDbType.Boolean). 'boolean = integer' is
+            // invalid in PostgreSQL, so the PG branch must use = TRUE. SQL Server bit uses = 1.
+            string q = clsDatabaseFactory.GetQuery(
+                "select 1 from Licenses where LicenseID=@licenseID  and IsActive=1 ;",
+                "select 1 from \"Licenses\" where \"LicenseID\"=@licenseID  and \"IsActive\" = TRUE ;");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);
@@ -332,8 +336,12 @@ namespace DataAccessLayer
             bool IsExist = false;
             var connection = clsDatabaseFactory.CreateConnection();
 
-            // Simple SELECT – auto-convert
-            string q = clsDatabaseFactory.GetQuery(" select 1 from DetainedLicenses where DetainedLicenses.LicenseID = @LicID  and DetainedLicenses.IsReleased = 0 ; ");
+            // Dual version: DetainedLicenses.IsReleased is a PostgreSQL boolean (AddNewDetainedLicense
+            // binds @is_released as a .NET bool). 'boolean = 0' is invalid in PostgreSQL -> use = FALSE.
+            // SQL Server bit uses = 0.
+            string q = clsDatabaseFactory.GetQuery(
+                " select 1 from DetainedLicenses where DetainedLicenses.LicenseID = @LicID  and DetainedLicenses.IsReleased = 0 ; ",
+                " select 1 from \"DetainedLicenses\" where \"DetainedLicenses\".\"LicenseID\" = @LicID  and \"DetainedLicenses\".\"IsReleased\" = FALSE ; ");
 
             connection.Open();
             var cmd = clsDatabaseFactory.CreateCommand(q, connection);

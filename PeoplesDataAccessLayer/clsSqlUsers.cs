@@ -13,7 +13,12 @@ namespace DataAccessLayer
         {
             bool IsExist = false;
             var connection = clsDatabaseFactory.CreateConnection();
-            string q = clsDatabaseFactory.GetQuery("select * from Users where Users.IsActive = true and Users.Password=@pass  and Users.UserName=@UserName;");
+            // Dual version: SQL Server bit needs = 1; PostgreSQL boolean needs = TRUE.
+            // (T-SQL has no 'true' literal -> 'Users.IsActive = true' fails on SQL Server;
+            //  PostgreSQL does not support 'boolean = integer' -> '= 1' fails on PG.)
+            string q = clsDatabaseFactory.GetQuery(
+                "select * from Users where Users.IsActive = 1 and Users.Password=@pass  and Users.UserName=@UserName;",
+                "select * from \"Users\" where \"Users\".\"IsActive\" = TRUE and \"Users\".\"Password\"=@pass  and \"Users\".\"UserName\"=@UserName;");
             connection.Open();
             var cmd = clsDatabaseFactory.CreateCommand(q, connection);
             clsDatabaseFactory.AddParam(cmd, "@UserName", username);
@@ -38,7 +43,10 @@ namespace DataAccessLayer
         {
             bool IsExist = false;
             var connection = clsDatabaseFactory.CreateConnection();
-            string q = clsDatabaseFactory.GetQuery("select * from Users where Users.IsActive = true and Users.Password=@pass  and Users.UserName=@UserName;");
+            // Dual version: SQL Server bit needs = 1; PostgreSQL boolean needs = TRUE.
+            string q = clsDatabaseFactory.GetQuery(
+                "select * from Users where Users.IsActive = 1 and Users.Password=@pass  and Users.UserName=@UserName;",
+                "select * from \"Users\" where \"Users\".\"IsActive\" = TRUE and \"Users\".\"Password\"=@pass  and \"Users\".\"UserName\"=@UserName;");
             connection.Open();
             var cmd = clsDatabaseFactory.CreateCommand(q, connection);
             clsDatabaseFactory.AddParam(cmd, "@UserName", username);

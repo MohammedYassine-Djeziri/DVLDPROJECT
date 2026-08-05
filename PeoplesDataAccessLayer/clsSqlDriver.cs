@@ -92,10 +92,10 @@ namespace DataAccessLayer
                 "IS NULL THEN '' else People.LastName  END \r\n, Drivers.CreatedDate , Licenses.IsActive from Drivers inner join " +
                 "People on Drivers.PersonID = People.PersonID  join Licenses on Drivers.DriverID = Licenses.DriverID ; ",
 
-                "select distinct \"Drivers\".\"DriverID\" , \"People\".\"PersonID\" , \"People\".\"NationalNo\" , 'FullName'= CASE  WHEN \"People\".\"FirstName\"  " +
+                "select distinct \"Drivers\".\"DriverID\" , \"People\".\"PersonID\" , \"People\".\"NationalNo\" , CASE  WHEN \"People\".\"FirstName\"  " +
                 "IS NULL THEN '' else \"People\".\"FirstName\"||' ' END ||CASE  WHEN \"People\".\"SecondName\"  IS NULL THEN '' else \"People\".\"SecondName\"||" +
                 "' ' END ||CASE  WHEN \"People\".\"ThirdName\"  IS NULL THEN ''else \"People\".\"ThirdName\"||' 'END  ||CASE  WHEN \"People\".\"LastName\"  " +
-                "IS NULL THEN '' else \"People\".\"LastName\"  END \r\n, \"Drivers\".\"CreatedDate\" , \"Licenses\".\"IsActive\" from \"Drivers\" inner join " +
+                "IS NULL THEN '' else \"People\".\"LastName\"  END AS \"FullName\"\r\n, \"Drivers\".\"CreatedDate\" , \"Licenses\".\"IsActive\" from \"Drivers\" inner join " +
                 "\"People\" on \"Drivers\".\"PersonID\" = \"People\".\"PersonID\"  join \"Licenses\" on \"Drivers\".\"DriverID\" = \"Licenses\".\"DriverID\" ; ");
 
             connection.Open();
