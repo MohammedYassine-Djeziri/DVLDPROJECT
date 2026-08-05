@@ -19,8 +19,8 @@ namespace DataAccessLayer
                 " INSERT INTO [dbo].[Drivers] ([PersonID] ,[CreatedByUserID] ,[CreatedDate] ) " +
                 "VALUES ( @person_ID, @user_ID, @date ) ; SELECT SCOPE_IDENTITY() ; ",
 
-                " INSERT INTO \"Drivers\" (\"PersonID\" ,\"CreatedByUserID\" ,\"CreatedDate\" ) " +
-                "VALUES ( @person_ID, @user_ID, @date ) RETURNING \"DriverID\" ; ");
+                " INSERT INTO drivers (personid ,createdbyuserid ,createddate ) " +
+                "VALUES ( @person_ID, @user_ID, @date ) RETURNING driverid ; ");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);
@@ -92,11 +92,11 @@ namespace DataAccessLayer
                 "IS NULL THEN '' else People.LastName  END \r\n, Drivers.CreatedDate , Licenses.IsActive from Drivers inner join " +
                 "People on Drivers.PersonID = People.PersonID  join Licenses on Drivers.DriverID = Licenses.DriverID ; ",
 
-                "select distinct \"Drivers\".\"DriverID\" , \"People\".\"PersonID\" , \"People\".\"NationalNo\" , CASE  WHEN \"People\".\"FirstName\"  " +
-                "IS NULL THEN '' else \"People\".\"FirstName\"||' ' END ||CASE  WHEN \"People\".\"SecondName\"  IS NULL THEN '' else \"People\".\"SecondName\"||" +
-                "' ' END ||CASE  WHEN \"People\".\"ThirdName\"  IS NULL THEN ''else \"People\".\"ThirdName\"||' 'END  ||CASE  WHEN \"People\".\"LastName\"  " +
-                "IS NULL THEN '' else \"People\".\"LastName\"  END AS \"FullName\"\r\n, \"Drivers\".\"CreatedDate\" , \"Licenses\".\"IsActive\" from \"Drivers\" inner join " +
-                "\"People\" on \"Drivers\".\"PersonID\" = \"People\".\"PersonID\"  join \"Licenses\" on \"Drivers\".\"DriverID\" = \"Licenses\".\"DriverID\" ; ");
+                "select distinct drivers.driverid , people.personid , people.nationalno , CASE  WHEN people.firstname  " +
+                "IS NULL THEN '' else people.firstname||' ' END ||CASE  WHEN people.secondname  IS NULL THEN '' else people.secondname||" +
+                "' ' END ||CASE  WHEN people.thirdname  IS NULL THEN ''else people.thirdname||' 'END  ||CASE  WHEN people.lastname  " +
+                "IS NULL THEN '' else people.lastname  END AS \"FullName\"\r\n, drivers.createddate , licenses.isactive from drivers inner join " +
+                "people on drivers.personid = people.personid  join licenses on drivers.driverid = licenses.driverid ; ");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);

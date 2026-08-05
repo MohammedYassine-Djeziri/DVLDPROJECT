@@ -18,7 +18,7 @@ namespace DataAccessLayer
             //  PostgreSQL does not support 'boolean = integer' -> '= 1' fails on PG.)
             string q = clsDatabaseFactory.GetQuery(
                 "select * from Users where Users.IsActive = 1 and Users.Password=@pass  and Users.UserName=@UserName;",
-                "select * from \"Users\" where \"Users\".\"IsActive\" = TRUE and \"Users\".\"Password\"=@pass  and \"Users\".\"UserName\"=@UserName;");
+                "select * from users where users.isactive = TRUE and users.password=@pass  and users.username=@UserName;");
             connection.Open();
             var cmd = clsDatabaseFactory.CreateCommand(q, connection);
             clsDatabaseFactory.AddParam(cmd, "@UserName", username);
@@ -46,7 +46,7 @@ namespace DataAccessLayer
             // Dual version: SQL Server bit needs = 1; PostgreSQL boolean needs = TRUE.
             string q = clsDatabaseFactory.GetQuery(
                 "select * from Users where Users.IsActive = 1 and Users.Password=@pass  and Users.UserName=@UserName;",
-                "select * from \"Users\" where \"Users\".\"IsActive\" = TRUE and \"Users\".\"Password\"=@pass  and \"Users\".\"UserName\"=@UserName;");
+                "select * from users where users.isactive = TRUE and users.password=@pass  and users.username=@UserName;");
             connection.Open();
             var cmd = clsDatabaseFactory.CreateCommand(q, connection);
             clsDatabaseFactory.AddParam(cmd, "@UserName", username);
@@ -162,8 +162,8 @@ namespace DataAccessLayer
                 "INSERT INTO [dbo].[Users] ([PersonID],[UserName],[Password],[IsActive])VALUES(@perID,@UserName,@Pass,@Active)"
                 + ";  SELECT SCOPE_IDENTITY() ;",
 
-                "INSERT INTO \"Users\" (\"PersonID\",\"UserName\",\"Password\",\"IsActive\")VALUES(@perID,@UserName,@Pass,@Active)"
-                + " RETURNING \"UserID\" ;");
+                "INSERT INTO users (personid,username,password,isactive)VALUES(@perID,@UserName,@Pass,@Active)"
+                + " RETURNING userid ;");
 
             connection.Open();
             var cmd = clsDatabaseFactory.CreateCommand(q, connection);

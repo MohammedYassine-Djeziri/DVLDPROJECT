@@ -26,8 +26,8 @@ namespace DataAccessLayer
                 "INSERT INTO [dbo].[Tests] ([TestAppointmentID] ,[TestResult] ,[Notes] ,[CreatedByUserID]) VALUES " +
                 "(@Appointment_id, @IsSuccesses, @note, @user_id) ; SELECT SCOPE_IDENTITY() ;",
 
-                "INSERT INTO \"Tests\" (\"TestAppointmentID\" ,\"TestResult\" ,\"Notes\" ,\"CreatedByUserID\") VALUES " +
-                "(@Appointment_id, @IsSuccesses, @note, @user_id) RETURNING \"TestID\" ;");
+                "INSERT INTO tests (testappointmentid,testresult,notes,createdbyuserid) VALUES " +
+                "(@Appointment_id, @IsSuccesses, @note, @user_id) RETURNING testid ;");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);

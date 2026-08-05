@@ -21,9 +21,9 @@ namespace DataAccessLayer
                 "[ApplicationStatus],[LastStatusDate],[PaidFees],[CreatedByUserID]) VALUES(@PerID,@AppDate,@AppType,@AppStatus" +
                 ",@LastDate,@Fees,@UserID) ; SELECT SCOPE_IDENTITY() ;",
 
-                " INSERT INTO \"Applications\" (\"ApplicantPersonID\",\"ApplicationDate\",\"ApplicationTypeID\"," +
-                "\"ApplicationStatus\",\"LastStatusDate\",\"PaidFees\",\"CreatedByUserID\") VALUES(@PerID,@AppDate,@AppType,@AppStatus" +
-                ",@LastDate,@Fees,@UserID) RETURNING \"ApplicationID\" ;");
+                " INSERT INTO applications (applicantpersonid,applicationdate,applicationtypeid," +
+                "applicationstatus,laststatusdate,paidfees,createdbyuserid) VALUES(@PerID,@AppDate,@AppType,@AppStatus" +
+                ",@LastDate,@Fees,@UserID) RETURNING applicationid ;");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);
@@ -148,20 +148,20 @@ namespace DataAccessLayer
                 " from Applications inner join People on  Applications.ApplicantPersonID=People.PersonID " +
                 "inner join LocalDrivingLicenseApplications on LocalDrivingLicenseApplications.ApplicationID= Applications.ApplicationID;",
 
-                "select \"LocalDrivingLicenseApplications\".\"LocalDrivingLicenseApplicationID\" AS \"LDLAppID\" , " +
-                "( select \"LicenseClasses\".\"ClassName\" from \"LicenseClasses\" where" +
-                " \"LicenseClassID\"= \"LocalDrivingLicenseApplications\".\"LicenseClassID\") AS \"Driving Class\" , " +
-                "\"People\".\"NationalNo\", CASE  WHEN \"People\".\"FirstName\"  IS NULL THEN '' else " +
-                "\"People\".\"FirstName\"||' '  END ||CASE  WHEN \"People\".\"SecondName\"  IS NULL THEN '' " +
-                "else \"People\".\"SecondName\"||' ' END ||CASE  WHEN \"People\".\"ThirdName\"  IS NULL THEN ''  else " +
-                "\"People\".\"ThirdName\"||' 'END  ||CASE  WHEN \"People\".\"LastName\"  IS NULL THEN '' else \"People\".\"LastName\" " +
-                " END AS \"FullName\",\"ApplicationDate\",  (select  count(\"TestAppointments\".\"TestTypeID\" ) " +
-                "from \"Tests\" join \"TestAppointments\"  on \"Tests\".\"TestAppointmentID\" = \"TestAppointments\".\"TestAppointmentID\" where " +
-                "\"TestAppointments\".\"LocalDrivingLicenseApplicationID\"=\"LocalDrivingLicenseApplications\".\"LocalDrivingLicenseApplicationID\" " +
-                "and \"Tests\".\"TestResult\"=1) AS \"Passed Test\" , case  when \"Applications\".\"ApplicationStatus\" = 1 then 'New' " +
-                "when \"ApplicationStatus\"  = 2 then 'Cancelled' else 'Completed' end AS \"Status\" " +
-                " from \"Applications\" inner join \"People\" on  \"Applications\".\"ApplicantPersonID\"=\"People\".\"PersonID\" " +
-                "inner join \"LocalDrivingLicenseApplications\" on \"LocalDrivingLicenseApplications\".\"ApplicationID\"= \"Applications\".\"ApplicationID\";");
+                "select localdrivinglicenseapplications.localdrivinglicenseapplicationid AS \"LDLAppID\" , " +
+                "( select licenseclasses.classname from licenseclasses where" +
+                " licenseclassid= localdrivinglicenseapplications.licenseclassid) AS \"Driving Class\" , " +
+                "people.nationalno, CASE  WHEN people.firstname  IS NULL THEN '' else " +
+                "people.firstname||' '  END ||CASE  WHEN people.secondname  IS NULL THEN '' " +
+                "else people.secondname||' ' END ||CASE  WHEN people.thirdname  IS NULL THEN ''  else " +
+                "people.thirdname||' 'END  ||CASE  WHEN people.lastname  IS NULL THEN '' else people.lastname " +
+                " END AS \"FullName\",applicationdate,  (select  count(testappointments.testtypeid ) " +
+                "from tests join testappointments  on tests.testappointmentid = testappointments.testappointmentid where " +
+                "testappointments.localdrivinglicenseapplicationid=localdrivinglicenseapplications.localdrivinglicenseapplicationid " +
+                "and tests.testresult=1) AS \"Passed Test\" , case  when applications.applicationstatus = 1 then 'New' " +
+                "when applicationstatus  = 2 then 'Cancelled' else 'Completed' end AS \"Status\" " +
+                " from applications inner join people on  applications.applicantpersonid=people.personid " +
+                "inner join localdrivinglicenseapplications on localdrivinglicenseapplications.applicationid= applications.applicationid;");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);

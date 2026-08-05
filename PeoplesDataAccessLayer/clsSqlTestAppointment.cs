@@ -57,9 +57,9 @@ namespace DataAccessLayer
                 + ",[PaidFees] ,[CreatedByUserID] ,[IsLocked] ,[RetakeTestApplicationID]) VALUES (@testTypeID "
                 + ",@LDLID, @date, @fees ,@user_id ,@Locked  , @retake_app_id) ; SELECT SCOPE_IDENTITY() ;",
 
-                " INSERT INTO \"TestAppointments\" (\"TestTypeID\" ,\"LocalDrivingLicenseApplicationID\" ,\"AppointmentDate\" "
-                + ",\"PaidFees\" ,\"CreatedByUserID\" ,\"IsLocked\" ,\"RetakeTestApplicationID\") VALUES (@testTypeID "
-                + ",@LDLID, @date, @fees ,@user_id ,@Locked  , @retake_app_id) RETURNING \"TestAppointmentID\" ;");
+                " INSERT INTO testappointments (testtypeid ,localdrivinglicenseapplicationid ,appointmentdate "
+                + ",paidfees ,createdbyuserid ,islocked ,retaketestapplicationid) VALUES (@testTypeID "
+                + ",@LDLID, @date, @fees ,@user_id ,@Locked  , @retake_app_id) RETURNING testappointmentid ;");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);
@@ -236,7 +236,7 @@ namespace DataAccessLayer
             string q = clsDatabaseFactory.GetQuery(
                 "select 1 from TestAppointments where TestAppointmentID=@TAppoint_ID and RetakeTestApplicationID IS NOT NULL",
 
-                "select 1 from \"TestAppointments\" where \"TestAppointmentID\"=@TAppoint_ID and \"RetakeTestApplicationID\" IS NOT NULL");
+                "select 1 from testappointments where testappointmentid=@TAppoint_ID and retaketestapplicationid IS NOT NULL");
 
             connection.Open();
             var cmd = clsDatabaseFactory.CreateCommand(q, connection);

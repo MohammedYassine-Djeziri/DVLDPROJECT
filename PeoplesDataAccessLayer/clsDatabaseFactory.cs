@@ -71,7 +71,7 @@ namespace DataAccessLayer
         // -----------------------------------------------------------------
         /// <summary>
         /// Returns the SQL Server query as-is, or auto-converts bracketed
-        /// identifiers to quoted identifiers for PostgreSQL.
+        /// identifiers to lowercase unquoted identifiers for PostgreSQL.
         /// Call this overload for simple queries (SELECT / UPDATE / DELETE)
         /// that do NOT contain SQL-level '+' string concatenation or
         /// SCOPE_IDENTITY().
@@ -103,8 +103,11 @@ namespace DataAccessLayer
             // 1. Remove [dbo]. schema prefix (PG uses public schema by default)
             string result = Regex.Replace(mssql, @"\[dbo\]\.", "", RegexOptions.IgnoreCase);
 
-            // 2. Replace remaining [...] identifiers with quoted "..."
-            result = Regex.Replace(result, @"\[([^\]]+)\]", @"""$1""");
+            // 2. Replace remaining [...] identifiers with lowercase unquoted identifiers.
+            //    PostgreSQL folds unquoted identifiers to lowercase, so this keeps the
+            //    naming consistent (lowercase everywhere) without quoting.
+            result = Regex.Replace(result, @"\[([^\]]+)\]",
+                m => m.Groups[1].Value.ToLowerInvariant());
 
             // 3. Convert 'Alias'=column → column AS "Alias" (SQL Server → PG column alias)
             //    Pattern: 'string literal'=identifier[.identifier]

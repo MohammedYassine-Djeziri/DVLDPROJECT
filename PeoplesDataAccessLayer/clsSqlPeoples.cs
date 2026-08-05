@@ -26,10 +26,10 @@ namespace DataAccessLayer
                + " ,[ImagePath]) VALUES(@NatNub,@FN,@SN,@TN,@LN,@date, @gender ,@Addr,"
                + " @Phn,@Em , @Nat, @Img) ;  SELECT SCOPE_IDENTITY() ;",
 
-                "INSERT INTO \"People\" (\"NationalNo\" ,\"FirstName\" ,\"SecondName\",\"ThirdName\""
-               + " ,\"LastName\" ,\"DateOfBirth\" ,\"Gender\" ,\"Address\" ,\"Phone\" ,\"Email\" ,\"NationalityCountryID\""
-               + " ,\"ImagePath\") VALUES(@NatNub,@FN,@SN,@TN,@LN,@date, @gender ,@Addr,"
-               + " @Phn,@Em , @Nat, @Img) RETURNING \"PersonID\" ;");
+                "INSERT INTO people (nationalno ,firstname ,secondname,thirdname"
+               + " ,lastname ,dateofbirth ,gender ,address ,phone ,email ,nationalitycountryid"
+               + " ,imagepath) VALUES(@NatNub,@FN,@SN,@TN,@LN,@date, @gender ,@Addr,"
+               + " @Phn,@Em , @Nat, @Img) RETURNING personid ;");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);
@@ -199,11 +199,11 @@ namespace DataAccessLayer
                 "Nationality= Countries.CountryName \r\nfrom People  inner join Countries on " +
                 "People.NationalityCountryID = Countries.CountryID;",
 
-                "select \"People\".\"PersonID\" , \"People\".\"NationalNo\" , \"People\".\"FirstName\" , \"People\".\"SecondName\" , \"People\".\"ThirdName\", " +
-                "\"People\".\"LastName\" , \"People\".\"DateOfBirth\" , \r\ncase \r\nwhen (\"People\".\"Gender\" = 0) then 'Male'\r\nwhen " +
-                "(\"People\".\"Gender\" = 1) then 'Female'\r\nelse 'Croissant'\r\nend AS \"Gender\"\r\n, \"People\".\"Phone\", \"People\".\"Email\" , " +
-                "\"Countries\".\"CountryName\" AS \"Nationality\" \r\nfrom \"People\"  inner join \"Countries\" on " +
-                "\"People\".\"NationalityCountryID\" = \"Countries\".\"CountryID\";");
+                "select people.personid , people.nationalno , people.firstname , people.secondname , people.thirdname, " +
+                "people.lastname , people.dateofbirth , \r\ncase \r\nwhen (people.gender = 0) then 'Male'\r\nwhen " +
+                "(people.gender = 1) then 'Female'\r\nelse 'Croissant'\r\nend AS \"Gender\"\r\n, people.phone, people.email , " +
+                "countries.countryname AS \"Nationality\" \r\nfrom people  inner join countries on " +
+                "people.nationalitycountryid = countries.countryid;");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);
@@ -330,11 +330,11 @@ namespace DataAccessLayer
                 "+CASE  WHEN People.LastName  IS NULL THEN '' else People.LastName  END from " +
                 "People where PersonID =@person_id;",
 
-                "select CASE  WHEN \"People\".\"FirstName\"  IS NULL THEN '' else \"People\".\"FirstName\"||' '  " +
-                "END ||CASE  WHEN \"People\".\"SecondName\"  IS NULL THEN '' else \"People\".\"SecondName\"||' ' " +
-                "END ||CASE  WHEN \"People\".\"ThirdName\" IS NULL THEN ''  else \"People\".\"ThirdName\"||' 'END  " +
-                "||CASE  WHEN \"People\".\"LastName\"  IS NULL THEN '' else \"People\".\"LastName\"  END from " +
-                "\"People\" where \"PersonID\" =@person_id;");
+                "select CASE  WHEN people.firstname  IS NULL THEN '' else people.firstname||' '  " +
+                "END ||CASE  WHEN people.secondname  IS NULL THEN '' else people.secondname||' ' " +
+                "END ||CASE  WHEN people.thirdname IS NULL THEN ''  else people.thirdname||' 'END  " +
+                "||CASE  WHEN people.lastname  IS NULL THEN '' else people.lastname  END from " +
+                "people where personid =@person_id;");
 
             var command = clsDatabaseFactory.CreateCommand(q, connection);
             clsDatabaseFactory.AddParam(command, "@person_id", person_id);

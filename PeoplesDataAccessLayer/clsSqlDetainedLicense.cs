@@ -21,9 +21,9 @@ namespace DataAccessLayer
                 "[IsReleased],[ReleaseDate],[ReleasedByUserID],[ReleaseApplicationID]) VALUES (@license_ID , @date_det, @fees," +
                 " @det_user_id, @is_released, @date_rel,@rel_user_id , @app_ID ) ; SELECT SCOPE_IDENTITY() ; ",
 
-                " INSERT INTO \"DetainedLicenses\" (\"LicenseID\",\"DetainDate\",\"FineFees\",\"CreatedByUserID\"," +
-                "\"IsReleased\",\"ReleaseDate\",\"ReleasedByUserID\",\"ReleaseApplicationID\") VALUES (@license_ID , @date_det, @fees," +
-                " @det_user_id, @is_released, @date_rel,@rel_user_id , @app_ID ) RETURNING \"DetainID\" ; ");
+                " INSERT INTO detainedlicenses (licenseid,detaindate,finefees,createdbyuserid," +
+                "isreleased,releasedate,releasedbyuserid,releaseapplicationid) VALUES (@license_ID , @date_det, @fees," +
+                " @det_user_id, @is_released, @date_rel,@rel_user_id , @app_ID ) RETURNING detainid ; ");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);
@@ -269,15 +269,15 @@ namespace DataAccessLayer
                 " Licenses on DetainedLicenses.LicenseID = Licenses.LicenseID inner join Drivers on " +
                 "Licenses.DriverID = Drivers.DriverID inner join People on Drivers.PersonID = People.PersonID;",
 
-                "select \"DetainedLicenses\".\"DetainID\" AS \"D.ID\" , \"DetainedLicenses\".\"LicenseID\" AS \"L.ID\" , " +
-                "\"DetainedLicenses\".\"DetainDate\" AS \"D.Date\" , \"DetainedLicenses\".\"IsReleased\" , \"DetainedLicenses\".\"FineFees\" " +
-                ", \"DetainedLicenses\".\"ReleaseDate\"  , \"People\".\"NationalNo\" AS \"N.No\"  ,  case WHEN " +
-                "\"People\".\"FirstName\"  IS NULL THEN '' else \"People\".\"FirstName\"||' ' END ||CASE  WHEN \"People\".\"SecondName\"  " +
-                "IS NULL THEN '' else \"People\".\"SecondName\"||' '  END ||CASE  WHEN \"People\".\"ThirdName\" IS NULL THEN ''  " +
-                "else \"People\".\"ThirdName\"||' 'END  ||CASE  WHEN \"People\".\"LastName\"  IS NULL THEN '' else \"People\".\"LastName\" " +
-                " END AS \"Full Name\", \"DetainedLicenses\".\"ReleaseApplicationID\" AS \"Release App.ID\"   from \"DetainedLicenses\" inner join" +
-                " \"Licenses\" on \"DetainedLicenses\".\"LicenseID\" = \"Licenses\".\"LicenseID\" inner join \"Drivers\" on " +
-                "\"Licenses\".\"DriverID\" = \"Drivers\".\"DriverID\" inner join \"People\" on \"Drivers\".\"PersonID\" = \"People\".\"PersonID\";");
+                "select detainedlicenses.detainid AS \"D.ID\" , detainedlicenses.licenseid AS \"L.ID\" , " +
+                "detainedlicenses.detaindate AS \"D.Date\" , detainedlicenses.isreleased , detainedlicenses.finefees " +
+                ", detainedlicenses.releasedate  , people.nationalno AS \"N.No\"  ,  case WHEN " +
+                "people.firstname  IS NULL THEN '' else people.firstname||' ' END ||CASE  WHEN people.secondname  " +
+                "IS NULL THEN '' else people.secondname||' '  END ||CASE  WHEN people.thirdname IS NULL THEN ''  " +
+                "else people.thirdname||' 'END  ||CASE  WHEN people.lastname  IS NULL THEN '' else people.lastname " +
+                " END AS \"Full Name\", detainedlicenses.releaseapplicationid AS \"Release App.ID\"   from detainedlicenses inner join" +
+                " licenses on detainedlicenses.licenseid = licenses.licenseid inner join drivers on " +
+                "licenses.driverid = drivers.driverid inner join people on drivers.personid = people.personid;");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);

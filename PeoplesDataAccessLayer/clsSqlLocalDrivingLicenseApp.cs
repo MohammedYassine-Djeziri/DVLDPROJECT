@@ -19,8 +19,8 @@ namespace DataAccessLayer
                 " INSERT INTO [dbo].[LocalDrivingLicenseApplications] ([ApplicationID] ,[LicenseClassID])" +
                 "VALUES (@AppID, @LicenseClassID ) ; SELECT SCOPE_IDENTITY() ;",
 
-                " INSERT INTO \"LocalDrivingLicenseApplications\" (\"ApplicationID\" ,\"LicenseClassID\")" +
-                "VALUES (@AppID, @LicenseClassID ) RETURNING \"LocalDrivingLicenseApplicationID\" ;");
+                " INSERT INTO localdrivinglicenseapplications (applicationid ,licenseclassid)" +
+                "VALUES (@AppID, @LicenseClassID ) RETURNING localdrivinglicenseapplicationid ;");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);

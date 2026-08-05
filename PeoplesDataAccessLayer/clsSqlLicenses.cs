@@ -21,9 +21,9 @@ namespace DataAccessLayer
                 ",[Notes] ,[PaidFees] ,[IsActive] ,[IssueReason]  ,[CreatedByUserID]) VALUES ( @app_ID, @driver_id," +
                 " @license_class_ID, @dateI, @dateE, @notes,  @fees, @is_active, @isssue_reason, @user_id ) ; SELECT SCOPE_IDENTITY() ; ",
 
-                " INSERT INTO \"Licenses\" (\"ApplicationID\" ,\"DriverID\" ,\"LicenseClass\" ,\"IssueDate\" ,\"ExpirationDate\" " +
-                ",\"Notes\" ,\"PaidFees\" ,\"IsActive\" ,\"IssueReason\"  ,\"CreatedByUserID\") VALUES ( @app_ID, @driver_id," +
-                " @license_class_ID, @dateI, @dateE, @notes,  @fees, @is_active, @isssue_reason, @user_id ) RETURNING \"LicenseID\" ; ");
+                " INSERT INTO licenses (applicationid ,driverid ,licenseclass ,issuedate ,expirationdate " +
+                ",notes ,paidfees ,isactive ,issuereason  ,createdbyuserid) VALUES ( @app_ID, @driver_id," +
+                " @license_class_ID, @dateI, @dateE, @notes,  @fees, @is_active, @isssue_reason, @user_id ) RETURNING licenseid ; ");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);
@@ -108,7 +108,7 @@ namespace DataAccessLayer
             // invalid in PostgreSQL, so the PG branch must use = TRUE. SQL Server bit uses = 1.
             string q = clsDatabaseFactory.GetQuery(
                 "select 1 from Licenses where LicenseID=@licenseID  and IsActive=1 ;",
-                "select 1 from \"Licenses\" where \"LicenseID\"=@licenseID  and \"IsActive\" = TRUE ;");
+                "select 1 from licenses where licenseid=@licenseID  and isactive = TRUE ;");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);
@@ -341,7 +341,7 @@ namespace DataAccessLayer
             // SQL Server bit uses = 0.
             string q = clsDatabaseFactory.GetQuery(
                 " select 1 from DetainedLicenses where DetainedLicenses.LicenseID = @LicID  and DetainedLicenses.IsReleased = 0 ; ",
-                " select 1 from \"DetainedLicenses\" where \"DetainedLicenses\".\"LicenseID\" = @LicID  and \"DetainedLicenses\".\"IsReleased\" = FALSE ; ");
+                " select 1 from detainedlicenses where detainedlicenses.licenseid = @LicID  and detainedlicenses.isreleased = FALSE ; ");
 
             connection.Open();
             var cmd = clsDatabaseFactory.CreateCommand(q, connection);
