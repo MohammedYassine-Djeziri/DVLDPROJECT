@@ -91,9 +91,7 @@ namespace DVLD_Project.Users
 
 
 
-                   // File.WriteAllText(@"C:\Users\mohya\source\repos\ProjectBackUp\DVLD_Project\Users\RememberMe.txt", "");
-               // File.AppendAllText(@"C:\Users\mohya\source\repos\ProjectBackUp\DVLD_Project\Users\RememberMe.txt", UserName.Text+'|'+Password.Text);
-                }
+                                  }
                 if (clsCurrentUser.CurrentUser.IsActive)
                 {
                     //MainMenu frm = new MainMenu(333, 444 , this);
@@ -178,7 +176,6 @@ namespace DVLD_Project.Users
                 }
 
 
-                //File.WriteAllText(@"C:\Users\mohya\source\repos\ProjectBackUp\DVLD_Project\Users\RememberMe.txt", "");
             }
         }
     }

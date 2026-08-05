@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using DataAccessLayer;
 
 
@@ -67,6 +68,7 @@ namespace DVLDBusinessLayer
             this.DateOfBirth = date;
             this.Address = Addr;
             this.ImagePath = Img;
+            this.LastImg = Img;
             this.Mode = EnMode.Update;
         }
 
@@ -75,18 +77,81 @@ namespace DVLDBusinessLayer
             switch (Mode)
             {
                 case EnMode.New:
+                    // copy the chosen image (if any) into the ImageCopy folder
+                    ImagePath = CopyImageToFolder(ImagePath);
                     this.PerID = clsSqlPeoples.AddPerson(NationalNub, FirstName, SecondName, ThirdName, LastName
                         , Phone, Email, Nationality, DateOfBirth, Gender, Address, ImagePath);
                     this.Mode = EnMode.Update;
-                    break;
-                case EnMode.Update:
-                    //call function Update New from Access layer
-                    clsSqlPeoples.UpdatePerson(PerID, NationalNub, FirstName, SecondName, ThirdName, LastName
-                       , Phone, Email, Nationality, DateOfBirth, Gender, Address, ref ImagePath, ref LastImg);
-                    break;
-                default:
+                    this.LastImg = ImagePath;
                     break;
 
+                case EnMode.Update:
+                    // Decide what to do with the image based on ImagePath vs LastImg
+                    if (string.IsNullOrEmpty(ImagePath))
+                    {
+                        // image removed -> delete the previously stored file (if any)
+                        DeleteImageFile(LastImg);
+                        ImagePath = "";
+                    }
+                    else if (ImagePath != LastImg)
+                    {
+                        // a new source image was selected -> copy it and delete the old one
+                        string newPath = CopyImageToFolder(ImagePath);
+                        DeleteImageFile(LastImg);
+                        ImagePath = newPath;
+                    }
+                    // else: unchanged -> keep ImagePath (== LastImg), no file operations
+
+                    clsSqlPeoples.UpdatePerson(PerID, NationalNub, FirstName, SecondName, ThirdName, LastName
+                       , Phone, Email, Nationality, DateOfBirth, Gender, Address, ImagePath);
+                    this.LastImg = ImagePath;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        // -----------------------------------------------------------------
+        //  Image file helpers (ImageCopy lives under the working directory)
+        // -----------------------------------------------------------------
+
+        /// <summary>
+        /// Copies the selected source image into the ImageCopy folder under a new
+        /// GUID-based .png name and returns the new full path. Returns "" when no
+        /// source is provided or the source file does not exist.
+        /// </summary>
+        private static string CopyImageToFolder(string sourceImagePath)
+        {
+            if (string.IsNullOrEmpty(sourceImagePath) || !File.Exists(sourceImagePath))
+                return "";
+
+            string DirectoryPath = Directory.GetCurrentDirectory();
+            string ImagePathDirectory = Path.Combine(DirectoryPath, "ImageCopy");
+            if (!Directory.Exists(ImagePathDirectory))
+                Directory.CreateDirectory(ImagePathDirectory);
+
+            Guid guid = Guid.NewGuid();
+            string newFileName = guid.ToString() + ".png";
+            string newFilePath = Path.Combine(ImagePathDirectory, newFileName);
+
+            File.Copy(sourceImagePath, newFilePath);
+            return newFilePath;
+        }
+
+        /// <summary>
+        /// Safely deletes an image file (no-op for empty/missing paths).
+        /// </summary>
+        private static void DeleteImageFile(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return;
+            try
+            {
+                File.Delete(path);
+            }
+            catch
+            {
             }
         }
 
@@ -126,6 +191,12 @@ namespace DVLDBusinessLayer
 
         public static bool DeletePerson(int PerID)
         {
+            // Delete the person's image file (if any) before removing the DB record.
+            clsPeoples person = FindByPersonalID(PerID);
+            if (person != null)
+            {
+                DeleteImageFile(person.ImagePath);
+            }
             return clsSqlPeoples.DeletePerson(PerID);
         }
 

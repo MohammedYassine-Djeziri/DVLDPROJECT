@@ -16,13 +16,8 @@ namespace DataAccessLayer
         {
             int ID = -1;
             var connection = clsDatabaseFactory.CreateConnection();
-            if (Img != "")
-            {
-                Guid guid = Guid.NewGuid();
-                string path = @"C:\Users\mohya\source\repos\ProjectBackUp\DVLD_Project\ImageCopy\" + guid.ToString() + ".png";
-                File.Copy(Img, path);
-                Img = path;
-            }
+            // Image file handling (copy to the ImageCopy folder) is now done in
+            // the business layer (clsPeoples). Here we simply persist the path.
 
             // MSSQL: INSERT … SCOPE_IDENTITY(). PG: INSERT … RETURNING "PersonID"
             string q = clsDatabaseFactory.GetQuery(
@@ -93,18 +88,11 @@ namespace DataAccessLayer
 
 
         public static bool UpdatePerson(int ID, string NatNub, string FN, string SN, string TN, string LN, string Phn, string Em
-           , int Nat, DateTime date, int gender, string Addr, ref string Img, ref string LastImg)
+           , int Nat, DateTime date, int gender, string Addr, string Img)
         {
             bool IsUpdated = false;
             var connection = clsDatabaseFactory.CreateConnection();
-            Guid guid = Guid.NewGuid();
-            string path = "";
-            if (Img != "")
-            {
-                path = @"C:\Users\mohya\source\repos\ProjectBackUp\DVLD_Project\ImageCopy\" + guid.ToString() + ".png";
-                File.Copy(Img, path);
-            }
-            Img = path;
+            // Image file handling is now done in the business layer (clsPeoples).
 
             // Simple UPDATE – auto-convert handles brackets
             string q = clsDatabaseFactory.GetQuery(
@@ -164,17 +152,6 @@ namespace DataAccessLayer
             {
                 connection.Close();
             }
-            if (LastImg != "")
-            {
-                try
-                {
-                    File.Delete(LastImg);
-                }
-                catch
-                {
-                }
-            }
-            LastImg = Img;
             return IsUpdated;
         }
 
@@ -210,7 +187,7 @@ namespace DataAccessLayer
 
         public static DataTable ListPeoples()
         {
-            Stopwatch stopwatch1 = Stopwatch.StartNew();
+  
             DataTable table = new DataTable();
             var connection = clsDatabaseFactory.CreateConnection();
 
@@ -241,9 +218,7 @@ namespace DataAccessLayer
             finally
             {
                 connection.Close();
-                stopwatch1.Stop();
-                File.WriteAllText(@"C:\Users\mohya\OneDrive\Bureau\Untitled.txt", stopwatch1.ElapsedMilliseconds.ToString());
-            }
+                         }
             return table;
         }
 

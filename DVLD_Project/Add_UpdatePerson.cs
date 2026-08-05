@@ -86,26 +86,24 @@ namespace DVLD_Project
 
         private void linklblSetImg_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-          openFileDialog1.ShowDialog();
-            if (openFileDialog1.FileName != "" && openFileDialog1.FileName != "openFileDialog1" && Person.ImagePath=="")
+            openFileDialog1.ShowDialog();
+            if (openFileDialog1.FileName != "" && openFileDialog1.FileName != "openFileDialog1" && Person.ImagePath == "")
             {
+                // No image yet -> just remember the chosen source path.
+                // The actual copy into ImageCopy happens in clsPeoples.Save().
                 panelImage.BackgroundImage = Image.FromFile(openFileDialog1.FileName);
                 linklbl_Remove_Img.Visible = true;
-                Guid guid = Guid.NewGuid();
-                File.Copy(openFileDialog1.FileName, @"C:\Users\mohya\source\repos\ProjectBackUp\DVLD_Project\ImageCopy\" + guid.ToString() + ".png");
-                Person.ImagePath = @"C:\Users\mohya\source\repos\ProjectBackUp\DVLD_Project\ImageCopy\" + guid.ToString()+".png";
+                Person.ImagePath = openFileDialog1.FileName;
             }
-
-            else
+            else // update picture
             {
+                // An image is already stored -> remember it so the business layer
+                // can delete the old file on Save(), then point to the new source.
+                Person.LastImg = Person.ImagePath;
                 panelImage.BackgroundImage = Image.FromFile(openFileDialog1.FileName);
                 linklbl_Remove_Img.Visible = true;
-                string temp = Person.ImagePath;
-                File.Delete(@temp);
-                File.Copy(openFileDialog1.FileName, temp);
-
+                Person.ImagePath = openFileDialog1.FileName;
             }
-
         }
 
         private void Add_UpdatePerson_Load(object sender, EventArgs e)
@@ -123,11 +121,11 @@ namespace DVLD_Project
 
         private void linklbl_Remove_Img_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            
+            // Just clear the UI + mark the image for removal.
+            // The actual file deletion happens in clsPeoples.Save().
             panelImage.BackgroundImage = null;
             openFileDialog1.FileName = "";
-            System.Threading.Thread.Sleep(1000); // Sleep for 1 second
-            File.Delete((@Person.ImagePath));
+            Person.LastImg = Person.ImagePath;
             Person.ImagePath = "";
             if (CB_GENDER.SelectedIndex == 1)
             {

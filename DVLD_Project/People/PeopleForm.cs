@@ -19,37 +19,17 @@ namespace DVLD_Project
         private static DataView List = new DataView();
         public  PeopleForm()
         {
-            Thread t = new Thread(GetPeoplesList);
-            t.Start();
-
-            MessageBox.Show("i gonna build the UI");
             InitializeComponent();
-            
-            //Application.DoEvents();
-            MessageBox.Show("i finish UI");
-            
-            
-
-            //t.Join();
-            
-
-            //MessageBox.Show(dataGridView1.RowCount.ToString());
-            //searchPerson1.List = List;
+            GetPeoplesList();
         }
 
-        private void PeopleForm_Load(object sender, EventArgs e)
-        {
 
-            
-
-        }
 
         private void GetPeoplesList()
         {
-            MessageBox.Show("i gonna get the db");
-            Thread.Sleep(3000);
+  
             List = clsPeoples.ListPeoples().DefaultView;
-            MessageBox.Show("i finish db");dataGridView1.DataSource = List;
+            dataGridView1.DataSource = List;
             dataGridView1.Refresh();
         }
 
@@ -104,15 +84,8 @@ namespace DVLD_Project
             frm.ShowDialog();
         }
 
-        //private void searchPerson1_OnFilterCompleted(DataView obj)
-        //{
-        //    List = obj;
-        //    dataGridView1.DataSource = List;
-        //}
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
+        
+       
     }
 }
