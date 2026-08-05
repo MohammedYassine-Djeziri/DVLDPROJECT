@@ -13,7 +13,7 @@ namespace DataAccessLayer
         {
             bool IsExist = false;
             var connection = clsDatabaseFactory.CreateConnection();
-            string q = clsDatabaseFactory.GetQuery("select * from Users where Users.IsActive = 1 and Users.Password=@pass  and Users.UserName=@UserName;");
+            string q = clsDatabaseFactory.GetQuery("select * from Users where Users.IsActive = true and Users.Password=@pass  and Users.UserName=@UserName;");
             connection.Open();
             var cmd = clsDatabaseFactory.CreateCommand(q, connection);
             clsDatabaseFactory.AddParam(cmd, "@UserName", username);
@@ -38,7 +38,7 @@ namespace DataAccessLayer
         {
             bool IsExist = false;
             var connection = clsDatabaseFactory.CreateConnection();
-            string q = clsDatabaseFactory.GetQuery("select * from Users where Users.IsActive = 1 and Users.Password=@pass  and Users.UserName=@UserName;");
+            string q = clsDatabaseFactory.GetQuery("select * from Users where Users.IsActive = true and Users.Password=@pass  and Users.UserName=@UserName;");
             connection.Open();
             var cmd = clsDatabaseFactory.CreateCommand(q, connection);
             clsDatabaseFactory.AddParam(cmd, "@UserName", username);

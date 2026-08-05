@@ -8,3 +8,8 @@
 /home/user/Downloads/DVLD/DVLDBusinessLayer/obj/Debug/DVLDBusinessLayer.dll
 /home/user/Downloads/DVLD/DVLDBusinessLayer/obj/Debug/DVLDBusinessLayer.pdb
 /home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/Npgsql.dll
+/home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/System.Threading.Tasks.Extensions.dll
+/home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/System.Memory.dll
+/home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/Microsoft.Bcl.AsyncInterfaces.dll
+/home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/System.ValueTuple.dll
+/home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/System.Buffers.dll

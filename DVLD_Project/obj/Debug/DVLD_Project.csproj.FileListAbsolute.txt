@@ -65,3 +65,13 @@
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.exe
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.pdb
 /home/user/Downloads/DVLD/DVLD_Project/bin/Debug/Npgsql.dll
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Threading.Tasks.Extensions.dll
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Memory.dll
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Runtime.CompilerServices.Unsafe.dll
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/Microsoft.Bcl.AsyncInterfaces.dll
+/home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.exe.config
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Text.Encodings.Web.dll
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Text.Json.dll
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.ValueTuple.dll
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Numerics.Vectors.dll
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Buffers.dll

@@ -6,3 +6,11 @@
 /home/user/Downloads/DVLD/PeoplesDataAccessLayer/bin/Debug/Npgsql.dll
 /home/user/Downloads/DVLD/PeoplesDataAccessLayer/obj/Debug/DVLD_DataAccessLayer.csproj.AssemblyReference.cache
 /home/user/Downloads/DVLD/PeoplesDataAccessLayer/obj/Debug/DVLD_DataAccessLayer.csproj.CopyComplete
+/home/user/Downloads/DVLD/PeoplesDataAccessLayer/bin/Debug/System.Memory.dll
+/home/user/Downloads/DVLD/PeoplesDataAccessLayer/bin/Debug/System.Runtime.CompilerServices.Unsafe.dll
+/home/user/Downloads/DVLD/PeoplesDataAccessLayer/bin/Debug/System.Threading.Tasks.Extensions.dll
+/home/user/Downloads/DVLD/PeoplesDataAccessLayer/bin/Debug/Microsoft.Bcl.AsyncInterfaces.dll
+/home/user/Downloads/DVLD/PeoplesDataAccessLayer/bin/Debug/System.Text.Encodings.Web.dll
+/home/user/Downloads/DVLD/PeoplesDataAccessLayer/bin/Debug/System.Text.Json.dll
+/home/user/Downloads/DVLD/PeoplesDataAccessLayer/bin/Debug/System.ValueTuple.dll
+/home/user/Downloads/DVLD/PeoplesDataAccessLayer/bin/Debug/System.Buffers.dll

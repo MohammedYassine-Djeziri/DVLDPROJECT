@@ -53,6 +53,8 @@ namespace DataAccessLayer
                 case "postgres":
                 case "pg":
                     provider = "postgresql";
+                    if (string.IsNullOrWhiteSpace(server) || server == ".")
+                        server = "localhost";
                     return ($"Host={server};Database={dbName};Username={user};Password={password};", provider);
 
                 case "mssql":
