@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DVLDBusinessLayer
+namespace DVLD_Project.Global
 {
     internal class Class1
     {

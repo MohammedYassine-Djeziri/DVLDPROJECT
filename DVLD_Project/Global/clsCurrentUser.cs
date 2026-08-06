@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace DVLD_Project
+namespace DVLD_Project.Global
 {
     internal class clsCurrentUser
     {

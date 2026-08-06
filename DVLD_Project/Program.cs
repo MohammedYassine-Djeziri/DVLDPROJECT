@@ -1,10 +1,10 @@
-﻿using DVLD_Project.Users;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DVLD_Project.User.Forms;
 
 namespace DVLD_Project
 {
@@ -16,14 +16,14 @@ namespace DVLD_Project
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            System.Windows.Forms.Application.EnableVisualStyles();
+            System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
             Form form = new LogInScreen(null);
             Size size = new Size();
             size.Width = 755;
             size.Height = 580;
             form.Size = size;
-            Application.Run(form);
+            System.Windows.Forms.Application.Run(form);
         }
     }
 }
