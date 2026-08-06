@@ -17,6 +17,7 @@ namespace DVLD_Project.People.Forms
     public partial class PeopleForm : Form
     {
         private static DataView List = new DataView();
+
         public  PeopleForm()
         {
             InitializeComponent();
@@ -82,6 +83,12 @@ namespace DVLD_Project.People.Forms
             Add_Update_PersonForm frm = new Add_Update_PersonForm(-1);
             frm.Size= size;
             frm.ShowDialog();
+        }
+
+        private void searchPerson1_OnFilterCompleted(DataView List)
+        {
+            dataGridView1.DataSource = List;
+            dataGridView1.Refresh();
         }
 
 

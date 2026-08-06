@@ -162,11 +162,11 @@ namespace DVLD_Project.People.Forms
             // 
             // searchPerson1
             // 
-            this.searchPerson1.Location = new System.Drawing.Point(0, 435);
+            this.searchPerson1.Location = new System.Drawing.Point(20, 435);
             this.searchPerson1.Name = "searchPerson1";
             this.searchPerson1.Size = new System.Drawing.Size(946, 87);
             this.searchPerson1.TabIndex = 5;
-            //this.searchPerson1.OnFilterCompleted += new System.Action<System.Data.DataView>(this.searchPerson1_OnFilterCompleted);
+            this.searchPerson1.OnFilterCompleted += new System.Action<System.Data.DataView>(this.searchPerson1_OnFilterCompleted);
             // 
             // PeopleForm
             // 

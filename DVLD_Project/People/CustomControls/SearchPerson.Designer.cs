@@ -1,5 +1,6 @@
 ﻿namespace DVLD_Project.People.CustomControls
 {
+    //// this a full control that can be used in any form to filter the people list by any field in the people table
     partial class SearchPerson
     {
         /// <summary> 

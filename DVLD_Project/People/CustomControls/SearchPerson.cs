@@ -15,6 +15,7 @@ namespace DVLD_Project.People.CustomControls
     {
 
         public event Action<DataView> OnFilterCompleted;
+
         protected virtual void FilterCompleted(DataView list)
         {
             Action<DataView> handler = OnFilterCompleted;
@@ -33,6 +34,7 @@ namespace DVLD_Project.People.CustomControls
         {
             textBox1.Text = "";
             List = clsPeoples.ListPeoples().DefaultView;
+           
             if (comboBox1.SelectedIndex != 0)
             {
                 textBox1.Visible = true;
@@ -47,17 +49,21 @@ namespace DVLD_Project.People.CustomControls
             {
                 FilterCompleted(List);
             }
+            else
+            {
+                MessageBox.Show("No event handler is attached to the OnFilterCompleted event.");
+            }
         }
         
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            
             if (textBox1.Text != "")
             {
                 if (comboBox1.SelectedIndex == 1)
                 {
                     if (!(int.TryParse(textBox1.Text, out int value)))
                     {
-                        MessageBox.Show("Id nort exist");
                         textBox1.Text = string.Empty;
                     }
                     else
@@ -70,8 +76,16 @@ namespace DVLD_Project.People.CustomControls
 
                 else if (comboBox1.SelectedIndex == 2)
                 {
+                    try
+                    {
+                        List.RowFilter = $"NationalNo like '{textBox1.Text}%'";
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
 
-                    List.RowFilter = $"NationalNo like '{textBox1.Text}%'";
+                    
                 }
 
 
@@ -123,7 +137,7 @@ namespace DVLD_Project.People.CustomControls
                     List.RowFilter = $"Email like '{textBox1.Text}%'";
                 }
 
-
+                
 
 
             }
@@ -132,9 +146,10 @@ namespace DVLD_Project.People.CustomControls
                 List = clsPeoples.ListPeoples().DefaultView;
 
             }
-            //dataGridView1.DataSource = List;
+
             if (OnFilterCompleted != null)
             {
+                
                 FilterCompleted(List);
             }
 
