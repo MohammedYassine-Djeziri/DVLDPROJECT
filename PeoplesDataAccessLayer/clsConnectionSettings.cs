@@ -7,6 +7,7 @@ namespace DataAccessLayer
     public static class clsConnectionSettings
     {
         private static string _connectionString;
+        private static string _databaseName;
         private static readonly object _lock = new object();
 
         public static string Provider { get; private set; }
@@ -17,18 +18,7 @@ namespace DataAccessLayer
         {
             get
             {
-                if (_connectionString == null)
-                {
-                    lock (_lock)
-                    {
-                        if (_connectionString == null)
-                        {
-                            var (connStr, provider) = BuildConnectionString();
-                            _connectionString = connStr;
-                            Provider = provider;
-                        }
-                    }
-                }
+                EnsureInitialized();
                 return _connectionString;
             }
             set
@@ -37,31 +27,95 @@ namespace DataAccessLayer
             }
         }
 
-        private static (string connStr, string provider) BuildConnectionString()
+        /// <summary>
+        /// Server-only connection string (no Database= parameter).
+        /// Used by the database initializer to connect without a database.
+        /// </summary>
+        public static string ServerConnectionString
         {
-            var env = LoadEnvFile();
-
-            string provider = GetEnvValue(env, "DB_PROVIDER")?.ToLower() ?? "mssql";
-            string server = GetEnvValue(env, "DB_SERVER") ?? ".";
-            string dbName = GetEnvValue(env, "DB_NAME") ?? "DVLD_DataBase";
-            string user = GetEnvValue(env, "DB_USER") ?? "sa";
-            string password = GetEnvValue(env, "DB_PASSWORD") ?? "";
-
-            switch (provider)
+            get
             {
-                case "postgresql":
-                case "postgres":
-                case "pg":
-                    provider = "postgresql";
+                EnsureInitialized();
+                string server = _serverValue;
+                string user = _userValue;
+                string password = _passwordValue;
+
+                if (IsPostgreSQL)
+                {
                     if (string.IsNullOrWhiteSpace(server) || server == ".")
                         server = "localhost";
-                    return ($"Host={server};Database={dbName};Username={user};Password={password};", provider);
+                    return $"Host={server};Username={user};Password={password};";
+                }
+                else
+                {
+                    return $"Server={server};User Id={user};Password={password};";
+                }
+            }
+        }
 
-                case "mssql":
-                case "sqlserver":
-                default:
-                    provider = "mssql";
-                    return ($"Server={server};Database={dbName};User Id={user};Password={password};", provider);
+        /// <summary>
+        /// Value of DB_NAME from .env (or default).
+        /// </summary>
+        public static string DatabaseName
+        {
+            get
+            {
+                EnsureInitialized();
+                return _databaseName;
+            }
+        }
+
+        // Cached env values for ServerConnectionString
+        private static string _serverValue;
+        private static string _userValue;
+        private static string _passwordValue;
+        private static bool _initialized;
+
+        private static void EnsureInitialized()
+        {
+            if (_initialized)
+                return;
+
+            lock (_lock)
+            {
+                if (_initialized)
+                    return;
+
+                var env = LoadEnvFile();
+
+                string provider = GetEnvValue(env, "DB_PROVIDER")?.ToLower() ?? "mssql";
+                string server = GetEnvValue(env, "DB_SERVER") ?? ".";
+                string dbName = GetEnvValue(env, "DB_NAME") ?? "DVLD_DataBase";
+                string user = GetEnvValue(env, "DB_USER") ?? "sa";
+                string password = GetEnvValue(env, "DB_PASSWORD") ?? "";
+
+                // Cache raw values
+                _serverValue = server;
+                _userValue = user;
+                _passwordValue = password;
+                _databaseName = dbName;
+
+                switch (provider)
+                {
+                    case "postgresql":
+                    case "postgres":
+                    case "pg":
+                        provider = "postgresql";
+                        if (string.IsNullOrWhiteSpace(server) || server == ".")
+                            server = "localhost";
+                        _connectionString = $"Host={server};Database={dbName};Username={user};Password={password};";
+                        break;
+
+                    case "mssql":
+                    case "sqlserver":
+                    default:
+                        provider = "mssql";
+                        _connectionString = $"Server={server};Database={dbName};User Id={user};Password={password};";
+                        break;
+                }
+
+                Provider = provider;
+                _initialized = true;
             }
         }
 

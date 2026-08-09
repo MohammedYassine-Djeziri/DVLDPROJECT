@@ -16,6 +16,14 @@ namespace DVLD_Project
         [STAThread]
         static void Main()
         {
+            try { DataAccessLayer.clsDatabaseInitializer.EnsureDatabaseCreated(); }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("Failed to initialize database:\n"
+                    + ex.Message, "DVLD - Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
             Form form = new LogInScreen(null);

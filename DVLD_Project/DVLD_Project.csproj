@@ -575,6 +575,10 @@
       <Project>{f3057df9-e56e-490f-a2aa-f992f845b8aa}</Project>
       <Name>DVLD_BusinessLayer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PeoplesDataAccessLayer\DVLD_DataAccessLayer.csproj">
+      <Project>{df40c3f7-5be2-4052-8877-3be80229672c}</Project>
+      <Name>DVLD_DataAccessLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\user-management-icon.png" />

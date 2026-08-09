@@ -21,9 +21,9 @@ namespace DataAccessLayer
                 "  ,[IsActive] , [CreatedByUserID]) VALUES ( @app_ID, @driver_id, @license_id, " +
                 "   @dateI, @dateE,  @is_active,   @user_id ) ; SELECT SCOPE_IDENTITY() ; ",
 
-                " INSERT INTO internallicenses (applicationid ,driverid ,issuedusinglocallicenseid ,issuedate ,expirationdate " +
+                " INSERT INTO internationallicenses (applicationid ,driverid ,issuedusinglocallicenseid ,issuedate ,expirationdate " +
                 "  ,isactive , createdbyuserid) VALUES ( @app_ID, @driver_id, @license_id, " +
-                "   @dateI, @dateE,  @is_active,   @user_id ) RETURNING internallicenseid ; ");
+                "   @dateI, @dateE,  @is_active,   @user_id ) RETURNING internationallicenseid ; ");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);

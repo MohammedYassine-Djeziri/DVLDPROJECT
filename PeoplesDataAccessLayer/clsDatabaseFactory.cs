@@ -116,6 +116,10 @@ namespace DataAccessLayer
             //             'Appointment ID'=TestAppointmentID
             result = Regex.Replace(result, @"'([^']+)'=(\w+(?:\.\w+)?)", @"$2 AS ""$1""");
 
+
+            //convert to lowercase for PostgreSQL
+            result = result.ToLowerInvariant();
+
             return result;
         }
     }

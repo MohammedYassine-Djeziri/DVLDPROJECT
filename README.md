@@ -30,8 +30,8 @@ DVLD/
 git clone <repo-url>
 ```
 
+### 2. Open the folder
 
-### 2. open the folder
 ```bash
 cd DVLDPROJECT
 ```
@@ -61,6 +61,8 @@ DB_PASSWORD=your_password
 The connection string is assembled automatically at runtime based on the provider:
 - **mssql** → `Server={DB_SERVER};Database={DB_NAME};User Id={DB_USER};Password={DB_PASSWORD};`
 - **postgresql** → `Host={DB_SERVER};Database={DB_NAME};Username={DB_USER};Password={DB_PASSWORD};`
+
+**Automatic database creation:** On first run, the application automatically creates the database and all required tables (including seed/lookup data) from the `.env` configuration. You only need a running SQL Server or PostgreSQL instance with the credentials specified in `.env` – no manual schema setup is required.  The process is idempotent; subsequent runs will detect that the database already exists and skip creation.
 
 ### 4. Build the project
 
