@@ -35,6 +35,9 @@
   <PropertyGroup>
   <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
 </PropertyGroup>
+<PropertyGroup>
+  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+</PropertyGroup>
 
 
   <ItemGroup>
@@ -58,9 +61,23 @@
   <ItemGroup>
   <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" PrivateAssets="All" />
   <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" PrivateAssets="All" />
-  <PackageReference Include="System.Text.Json" Version="8.0.0" PrivateAssets="All" />
-  <PackageReference Include="System.Text.Encodings.Web" Version="8.0.0" PrivateAssets="All" />
-</ItemGroup>
+  <!-- Npgsql loads System.Text.Json / System.Text.Encodings.Web at runtime.
+       Do NOT use PrivateAssets=All here, otherwise the DLLs are not copied to
+       the app output and the loader throws "Could not load file or assembly". -->
+  <PackageReference Include="System.Text.Json" Version="8.0.0">
+    <PrivateAssets>build;analyzers</PrivateAssets>
+  </PackageReference>
+  <PackageReference Include="System.Text.Encodings.Web" Version="8.0.0">
+    <PrivateAssets>build;analyzers</PrivateAssets>
+  </PackageReference>
+  <!-- System.Memory is a runtime dependency of Npgsql. It must be copied to the
+       output directory (do NOT mark it PrivateAssets=All / exclude compile),
+       otherwise the loader fails with "Could not load file or assembly
+       'System.Memory, Version=4.0.1.2' ... File not found." -->
+  <PackageReference Include="System.Memory" Version="4.5.5">
+    <PrivateAssets>build;analyzers</PrivateAssets>
+  </PackageReference>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\Forms\ShowApplicationInfoForm.Designer.cs">
       <DependentUpon>ShowApplicationInfoForm.cs</DependentUpon>
@@ -889,4 +906,26 @@
 
   
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <!-- Npgsql is referenced as a raw DLL (..\lib\Npgsql.dll), so its transitive
+       NuGet dependencies (System.Memory, System.Buffers, System.Text.Json,
+       System.Text.Encodings.Web, ...) are NOT auto-copied into this project's
+       output. They ARE produced into the DataAccessLayer output, though, so
+       copy them here so the runtime loader finds them next to the exe. Without
+       System.Memory.dll you get: "Could not load file or assembly
+       'System.Memory, Version=4.0.1.2' ... File not found." -->
+  <Target Name="CopyNpgsqlRuntimeDependencies" AfterTargets="Build">
+    <ItemGroup>
+      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\System.Memory.dll" />
+      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\System.Buffers.dll" />
+      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\System.Text.Json.dll" />
+      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\System.Text.Encodings.Web.dll" />
+      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\System.Runtime.CompilerServices.Unsafe.dll" />
+      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\Microsoft.Bcl.AsyncInterfaces.dll" />
+      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\System.Threading.Tasks.Extensions.dll" />
+      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\System.ValueTuple.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(NpgsqlRuntimeDeps)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" Condition="Exists('%(Identity)')" />
+  </Target>
+
 </Project>

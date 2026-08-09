@@ -44,3 +44,6 @@ DVLD_Project/ImageCopy/
 
 # Logs
 *.log
+
+# Mono runtime crash dumps
+mono_crash.*
