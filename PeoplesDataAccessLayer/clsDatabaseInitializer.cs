@@ -19,9 +19,10 @@ namespace DataAccessLayer
         {
             try
             {
+                
+                string databaseName = clsConnectionSettings.DatabaseName;
                 string provider = clsConnectionSettings.Provider;
                 bool isPg = clsConnectionSettings.IsPostgreSQL;
-                string databaseName = clsConnectionSettings.DatabaseName;
                 string serverConnStr = clsConnectionSettings.ServerConnectionString;
                 string dbConnStr = clsConnectionSettings.ConnectionString;
 

@@ -3,647 +3,649 @@
 -- Idempotent: CREATE TABLE IF NOT EXISTS / CREATE OR REPLACE VIEW
 -- ===========================================================================
 
--- ApplicationTypes
-CREATE TABLE IF NOT EXISTS ApplicationTypes (
-    ApplicationTypeID int GENERATED ALWAYS AS IDENTITY,
-    ApplicationTypeTitle varchar(150) NOT NULL,
-    ApplicationFees numeric(10,4) DEFAULT 0 NOT NULL,
-    CONSTRAINT PK_ApplicationTypes PRIMARY KEY (ApplicationTypeID)
+-- applicationtypes
+CREATE TABLE IF NOT EXISTS applicationtypes (
+    applicationtypeid int GENERATED ALWAYS AS IDENTITY,
+    applicationtypetitle varchar(150) NOT NULL,
+    applicationfees numeric(10,4) DEFAULT 0 NOT NULL,
+    CONSTRAINT pkapplicationtypes PRIMARY KEY (applicationtypeid)
 );
 
--- Countries
-CREATE TABLE IF NOT EXISTS Countries (
-    CountryID int GENERATED ALWAYS AS IDENTITY,
-    CountryName varchar(50) NOT NULL,
-    CONSTRAINT PK_Countries PRIMARY KEY (CountryID)
+-- countries
+CREATE TABLE IF NOT EXISTS countries (
+    countryid int GENERATED ALWAYS AS IDENTITY,
+    countryname varchar(50) NOT NULL,
+    CONSTRAINT pkcountries PRIMARY KEY (countryid)
 );
 
--- LicenseClasses
-CREATE TABLE IF NOT EXISTS LicenseClasses (
-    LicenseClassID int GENERATED ALWAYS AS IDENTITY,
-    ClassName varchar(50) NOT NULL,
-    ClassDescription varchar(500) NOT NULL,
-    MinimumAllowedAge smallint DEFAULT 18 NOT NULL,
-    DefaultValidityLength smallint DEFAULT 1 NOT NULL,
-    ClassFees numeric(10,4) DEFAULT 0 NOT NULL,
-    CONSTRAINT PK_LicenseClasses PRIMARY KEY (LicenseClassID)
+-- licenseclasses
+CREATE TABLE IF NOT EXISTS licenseclasses (
+    licenseclassid int GENERATED ALWAYS AS IDENTITY,
+    classname varchar(50) NOT NULL,
+    classdescription varchar(500) NOT NULL,
+    minimumallowedage smallint DEFAULT 18 NOT NULL,
+    defaultvaliditylength smallint DEFAULT 1 NOT NULL,
+    classfees numeric(10,4) DEFAULT 0 NOT NULL,
+    CONSTRAINT pklicenseclasses PRIMARY KEY (licenseclassid)
 );
 
--- TestTypes
-CREATE TABLE IF NOT EXISTS TestTypes (
-    TestTypeID int GENERATED ALWAYS AS IDENTITY,
-    TestTypeTitle varchar(100) NOT NULL,
-    TestTypeDescription varchar(500) NOT NULL,
-    TestTypeFees numeric(10,4) NOT NULL,
-    CONSTRAINT PK_TestTypes PRIMARY KEY (TestTypeID)
+-- testtypes
+CREATE TABLE IF NOT EXISTS testtypes (
+    testtypeid int GENERATED ALWAYS AS IDENTITY,
+    testtypetitle varchar(100) NOT NULL,
+    testtypedescription varchar(500) NOT NULL,
+    testtypefees numeric(10,4) NOT NULL,
+    CONSTRAINT pktesttypes PRIMARY KEY (testtypeid)
 );
 
--- People
-CREATE TABLE IF NOT EXISTS People (
-    PersonID int GENERATED ALWAYS AS IDENTITY,
-    NationalNo varchar(20) NOT NULL,
-    FirstName varchar(20) NOT NULL,
-    SecondName varchar(20) NOT NULL,
-    ThirdName varchar(20) NULL,
-    LastName varchar(20) NOT NULL,
-    DateOfBirth timestamp NOT NULL,
-    Gender smallint DEFAULT 0 NOT NULL,
-    Address varchar(500) NOT NULL,
-    Phone varchar(20) NOT NULL,
-    Email varchar(50) NULL,
-    NationalityCountryID int NOT NULL,
-    ImagePath varchar(250) NULL,
-    CONSTRAINT PK_People PRIMARY KEY (PersonID),
-    CONSTRAINT FK_People_Countries1 FOREIGN KEY (NationalityCountryID) REFERENCES Countries(CountryID)
+-- people
+CREATE TABLE IF NOT EXISTS people (
+    personid int GENERATED ALWAYS AS IDENTITY,
+    nationalno varchar(20) NOT NULL,
+    firstname varchar(20) NOT NULL,
+    secondname varchar(20) NOT NULL,
+    thirdname varchar(20) NULL,
+    lastname varchar(20) NOT NULL,
+    dateofbirth timestamp NOT NULL,
+    gender smallint DEFAULT 0 NOT NULL,
+    address varchar(500) NOT NULL,
+    phone varchar(20) NOT NULL,
+    email varchar(50) NULL,
+    nationalitycountryid int NOT NULL,
+    imagepath varchar(250) NULL,
+    CONSTRAINT pkpeople PRIMARY KEY (personid),
+    CONSTRAINT fkpeoplecountries1 FOREIGN KEY (nationalitycountryid) REFERENCES countries(countryid)
 );
 
--- Users
-CREATE TABLE IF NOT EXISTS Users (
-    UserID int GENERATED ALWAYS AS IDENTITY,
-    PersonID int NOT NULL,
-    UserName varchar(20) NOT NULL,
-    Password varchar(20) NOT NULL,
-    IsActive boolean NOT NULL,
-    CONSTRAINT PK_Users PRIMARY KEY (UserID),
-    CONSTRAINT FK_Users_People FOREIGN KEY (PersonID) REFERENCES People(PersonID)
+-- users
+CREATE TABLE IF NOT EXISTS users (
+    userid int GENERATED ALWAYS AS IDENTITY,
+    personid int NOT NULL,
+    username varchar(20) NOT NULL,
+    password varchar(20) NOT NULL,
+    isactive boolean NOT NULL,
+    CONSTRAINT pkusers PRIMARY KEY (userid),
+    CONSTRAINT fkuserspeople FOREIGN KEY (personid) REFERENCES people(personid)
 );
 
--- Applications
-CREATE TABLE IF NOT EXISTS Applications (
-    ApplicationID int GENERATED ALWAYS AS IDENTITY,
-    ApplicantPersonID int NOT NULL,
-    ApplicationDate timestamp NOT NULL,
-    ApplicationTypeID int NOT NULL,
-    ApplicationStatus smallint DEFAULT 1 NOT NULL,
-    LastStatusDate timestamp NOT NULL,
-    PaidFees numeric(10,4) NOT NULL,
-    CreatedByUserID int NOT NULL,
-    CONSTRAINT PK_Applications PRIMARY KEY (ApplicationID),
-    CONSTRAINT FK_Applications_ApplicationTypes FOREIGN KEY (ApplicationTypeID) REFERENCES ApplicationTypes(ApplicationTypeID),
-    CONSTRAINT FK_Applications_People FOREIGN KEY (ApplicantPersonID) REFERENCES People(PersonID),
-    CONSTRAINT FK_Applications_Users FOREIGN KEY (CreatedByUserID) REFERENCES Users(UserID)
+-- applications
+CREATE TABLE IF NOT EXISTS applications (
+    applicationid int GENERATED ALWAYS AS IDENTITY,
+    applicantpersonid int NOT NULL,
+    applicationdate timestamp NOT NULL,
+    applicationtypeid int NOT NULL,
+    applicationstatus smallint DEFAULT 1 NOT NULL,
+    laststatusdate timestamp NOT NULL,
+    paidfees numeric(10,4) NOT NULL,
+    createdbyuserid int NOT NULL,
+    CONSTRAINT pkapplications PRIMARY KEY (applicationid),
+    CONSTRAINT fkapplicationsapplicationtypes FOREIGN KEY (applicationtypeid) REFERENCES applicationtypes(applicationtypeid),
+    CONSTRAINT fkapplicationspeople FOREIGN KEY (applicantpersonid) REFERENCES people(personid),
+    CONSTRAINT fkapplicationsusers FOREIGN KEY (createdbyuserid) REFERENCES users(userid)
 );
--- Drivers
-CREATE TABLE IF NOT EXISTS Drivers (
-    DriverID int GENERATED ALWAYS AS IDENTITY,
-    PersonID int NOT NULL,
-    CreatedByUserID int NOT NULL,
-    CreatedDate timestamp NOT NULL,
-    CONSTRAINT PK_Drivers_1 PRIMARY KEY (DriverID),
-    CONSTRAINT FK_Drivers_People FOREIGN KEY (PersonID) REFERENCES People(PersonID),
-    CONSTRAINT FK_Drivers_Users FOREIGN KEY (CreatedByUserID) REFERENCES Users(UserID)
-);
-
--- Licenses
-CREATE TABLE IF NOT EXISTS Licenses (
-    LicenseID int GENERATED ALWAYS AS IDENTITY,
-    ApplicationID int NOT NULL,
-    DriverID int NOT NULL,
-    LicenseClass int NOT NULL,
-    IssueDate timestamp NOT NULL,
-    ExpirationDate timestamp NOT NULL,
-    Notes varchar(500) NULL,
-    PaidFees numeric(10,4) NOT NULL,
-    IsActive boolean DEFAULT true NOT NULL,
-    IssueReason smallint DEFAULT 1 NOT NULL,
-    CreatedByUserID int NOT NULL,
-    CONSTRAINT PK_Licenses PRIMARY KEY (LicenseID),
-    CONSTRAINT FK_Licenses_Applications FOREIGN KEY (ApplicationID) REFERENCES Applications(ApplicationID),
-    CONSTRAINT FK_Licenses_Drivers FOREIGN KEY (DriverID) REFERENCES Drivers(DriverID),
-    CONSTRAINT FK_Licenses_LicenseClasses FOREIGN KEY (LicenseClass) REFERENCES LicenseClasses(LicenseClassID),
-    CONSTRAINT FK_Licenses_Users FOREIGN KEY (CreatedByUserID) REFERENCES Users(UserID)
+-- drivers
+CREATE TABLE IF NOT EXISTS drivers (
+    driverid int GENERATED ALWAYS AS IDENTITY,
+    personid int NOT NULL,
+    createdbyuserid int NOT NULL,
+    createddate timestamp NOT NULL,
+    CONSTRAINT pkdrivers1 PRIMARY KEY (driverid),
+    CONSTRAINT fkdriverspeople FOREIGN KEY (personid) REFERENCES people(personid),
+    CONSTRAINT fkdriversusers FOREIGN KEY (createdbyuserid) REFERENCES users(userid)
 );
 
--- LocalDrivingLicenseApplications
-CREATE TABLE IF NOT EXISTS LocalDrivingLicenseApplications (
-    LocalDrivingLicenseApplicationID int GENERATED ALWAYS AS IDENTITY,
-    ApplicationID int NOT NULL,
-    LicenseClassID int NOT NULL,
-    CONSTRAINT PK_DrivingLicsenseApplications PRIMARY KEY (LocalDrivingLicenseApplicationID),
-    CONSTRAINT FK_DrivingLicsenseApplications_Applications FOREIGN KEY (ApplicationID) REFERENCES Applications(ApplicationID),
-    CONSTRAINT FK_DrivingLicsenseApplications_LicenseClasses FOREIGN KEY (LicenseClassID) REFERENCES LicenseClasses(LicenseClassID)
+-- licenses
+CREATE TABLE IF NOT EXISTS licenses (
+    licenseid int GENERATED ALWAYS AS IDENTITY,
+    applicationid int NOT NULL,
+    driverid int NOT NULL,
+    licenseclass int NOT NULL,
+    issuedate timestamp NOT NULL,
+    expirationdate timestamp NOT NULL,
+    notes varchar(500) NULL,
+    paidfees numeric(10,4) NOT NULL,
+    isactive boolean DEFAULT true NOT NULL,
+    issuereason smallint DEFAULT 1 NOT NULL,
+    createdbyuserid int NOT NULL,
+    CONSTRAINT pklicenses PRIMARY KEY (licenseid),
+    CONSTRAINT fklicensesapplications FOREIGN KEY (applicationid) REFERENCES applications(applicationid),
+    CONSTRAINT fklicensesdrivers FOREIGN KEY (driverid) REFERENCES drivers(driverid),
+    CONSTRAINT fklicenseslicenseclasses FOREIGN KEY (licenseclass) REFERENCES licenseclasses(licenseclassid),
+    CONSTRAINT fklicensesusers FOREIGN KEY (createdbyuserid) REFERENCES users(userid)
 );
 
--- TestAppointments
-CREATE TABLE IF NOT EXISTS TestAppointments (
-    TestAppointmentID int GENERATED ALWAYS AS IDENTITY,
-    TestTypeID int NOT NULL,
-    LocalDrivingLicenseApplicationID int NOT NULL,
-    AppointmentDate timestamp NOT NULL,
-    PaidFees numeric(10,4) NOT NULL,
-    CreatedByUserID int NOT NULL,
-    IsLocked boolean DEFAULT false NOT NULL,
-    CONSTRAINT PK_TestAppointments PRIMARY KEY (TestAppointmentID),
-    CONSTRAINT FK_TestAppointments_LocalDrivingLicenseApplications FOREIGN KEY (LocalDrivingLicenseApplicationID) REFERENCES LocalDrivingLicenseApplications(LocalDrivingLicenseApplicationID),
-    CONSTRAINT FK_TestAppointments_TestTypes FOREIGN KEY (TestTypeID) REFERENCES TestTypes(TestTypeID),
-    CONSTRAINT FK_TestAppointments_Users FOREIGN KEY (CreatedByUserID) REFERENCES Users(UserID)
+-- localdrivinglicenseapplications
+CREATE TABLE IF NOT EXISTS localdrivinglicenseapplications (
+    localdrivinglicenseapplicationid int GENERATED ALWAYS AS IDENTITY,
+    applicationid int NOT NULL,
+    licenseclassid int NOT NULL,
+    CONSTRAINT pkdrivinglicsenseapplications PRIMARY KEY (localdrivinglicenseapplicationid),
+    CONSTRAINT fkdrivinglicsenseapplicationsapplications FOREIGN KEY (applicationid) REFERENCES applications(applicationid),
+    CONSTRAINT fkdrivinglicsenseapplicationslicenseclasses FOREIGN KEY (licenseclassid) REFERENCES licenseclasses(licenseclassid)
 );
 
--- Tests
-CREATE TABLE IF NOT EXISTS Tests (
-    TestID int GENERATED ALWAYS AS IDENTITY,
-    TestAppointmentID int NOT NULL,
-    TestResult boolean NOT NULL,
-    Notes varchar(500) NULL,
-    CreatedByUserID int NOT NULL,
-    CONSTRAINT PK_Tests PRIMARY KEY (TestID),
-    CONSTRAINT FK_Tests_TestAppointments FOREIGN KEY (TestAppointmentID) REFERENCES TestAppointments(TestAppointmentID),
-    CONSTRAINT FK_Tests_Users FOREIGN KEY (CreatedByUserID) REFERENCES Users(UserID)
+-- testappointments
+CREATE TABLE IF NOT EXISTS testappointments (
+    testappointmentid int GENERATED ALWAYS AS IDENTITY,
+    testtypeid int NOT NULL,
+    localdrivinglicenseapplicationid int NOT NULL,
+    appointmentdate timestamp NOT NULL,
+    paidfees numeric(10,4) NOT NULL,
+    createdbyuserid int NOT NULL,
+    islocked boolean DEFAULT false NOT NULL,
+    CONSTRAINT pktestappointments PRIMARY KEY (testappointmentid),
+    CONSTRAINT fktestappointmentslocaldrivinglicenseapplications FOREIGN KEY (localdrivinglicenseapplicationid) REFERENCES localdrivinglicenseapplications(localdrivinglicenseapplicationid),
+    CONSTRAINT fktestappointmentstesttypes FOREIGN KEY (testtypeid) REFERENCES testtypes(testtypeid),
+    CONSTRAINT fktestappointmentsusers FOREIGN KEY (createdbyuserid) REFERENCES users(userid)
 );
 
--- DetainedLicenses
-CREATE TABLE IF NOT EXISTS DetainedLicenses (
-    DetainID int GENERATED ALWAYS AS IDENTITY,
-    LicenseID int NOT NULL,
-    DetainDate timestamp NOT NULL,
-    FineFees numeric(10,4) NOT NULL,
-    CreatedByUserID int NOT NULL,
-    IsReleased boolean DEFAULT false NOT NULL,
-    ReleaseDate timestamp NULL,
-    ReleasedByUserID int NULL,
-    ReleaseApplicationID int NULL,
-    CONSTRAINT PK_DetainedLicenses PRIMARY KEY (DetainID),
-    CONSTRAINT FK_DetainedLicenses_Applications FOREIGN KEY (ReleaseApplicationID) REFERENCES Applications(ApplicationID),
-    CONSTRAINT FK_DetainedLicenses_Licenses FOREIGN KEY (LicenseID) REFERENCES Licenses(LicenseID),
-    CONSTRAINT FK_DetainedLicenses_Users FOREIGN KEY (CreatedByUserID) REFERENCES Users(UserID),
-    CONSTRAINT FK_DetainedLicenses_Users1 FOREIGN KEY (ReleasedByUserID) REFERENCES Users(UserID)
+-- tests
+CREATE TABLE IF NOT EXISTS tests (
+    testid int GENERATED ALWAYS AS IDENTITY,
+    testappointmentid int NOT NULL,
+    testresult boolean NOT NULL,
+    notes varchar(500) NULL,
+    createdbyuserid int NOT NULL,
+    CONSTRAINT pktests PRIMARY KEY (testid),
+    CONSTRAINT fkteststestappointments FOREIGN KEY (testappointmentid) REFERENCES testappointments(testappointmentid),
+    CONSTRAINT fktestsusers FOREIGN KEY (createdbyuserid) REFERENCES users(userid)
 );
 
--- InternationalLicenses
-CREATE TABLE IF NOT EXISTS InternationalLicenses (
-    InternationalLicenseID int GENERATED ALWAYS AS IDENTITY,
-    ApplicationID int NOT NULL,
-    DriverID int NOT NULL,
-    IssuedUsingLocalLicenseID int NOT NULL,
-    IssueDate timestamp NOT NULL,
-    ExpirationDate timestamp NOT NULL,
-    IsActive boolean NOT NULL,
-    CreatedByUserID int NOT NULL,
-    CONSTRAINT PK_InternationalLicenses PRIMARY KEY (InternationalLicenseID),
-    CONSTRAINT FK_InternationalLicenses_Applications FOREIGN KEY (ApplicationID) REFERENCES Applications(ApplicationID),
-    CONSTRAINT FK_InternationalLicenses_Drivers FOREIGN KEY (DriverID) REFERENCES Drivers(DriverID),
-    CONSTRAINT FK_InternationalLicenses_Licenses FOREIGN KEY (IssuedUsingLocalLicenseID) REFERENCES Licenses(LicenseID),
-CONSTRAINT FK_InternationalLicenses_Users FOREIGN KEY (CreatedByUserID) REFERENCES Users(UserID)
+-- detainedlicenses
+CREATE TABLE IF NOT EXISTS detainedlicenses (
+    detainid int GENERATED ALWAYS AS IDENTITY,
+    licenseid int NOT NULL,
+    detaindate timestamp NOT NULL,
+    finefees numeric(10,4) NOT NULL,
+    createdbyuserid int NOT NULL,
+    isreleased boolean DEFAULT false NOT NULL,
+    releasedate timestamp NULL,
+    releasedbyuserid int NULL,
+    releaseapplicationid int NULL,
+    CONSTRAINT pkdetainedlicenses PRIMARY KEY (detainid),
+    CONSTRAINT fkdetainedlicensesapplications FOREIGN KEY (releaseapplicationid) REFERENCES applications(applicationid),
+    CONSTRAINT fkdetainedlicenseslicenses FOREIGN KEY (licenseid) REFERENCES licenses(licenseid),
+    CONSTRAINT fkdetainedlicensesusers FOREIGN KEY (createdbyuserid) REFERENCES users(userid),
+    CONSTRAINT fkdetainedlicensesusers1 FOREIGN KEY (releasedbyuserid) REFERENCES users(userid)
+);
+
+-- internationallicenses
+CREATE TABLE IF NOT EXISTS internationallicenses (
+    internationallicenseid int GENERATED ALWAYS AS IDENTITY,
+    applicationid int NOT NULL,
+    driverid int NOT NULL,
+    issuedusinglocallicenseid int NOT NULL,
+    issuedate timestamp NOT NULL,
+    expirationdate timestamp NOT NULL,
+    isactive boolean NOT NULL,
+    createdbyuserid int NOT NULL,
+    CONSTRAINT pkinternationallicenses PRIMARY KEY (internationallicenseid),
+    CONSTRAINT fkinternationallicensesapplications FOREIGN KEY (applicationid) REFERENCES applications(applicationid),
+    CONSTRAINT fkinternationallicensesdrivers FOREIGN KEY (driverid) REFERENCES drivers(driverid),
+    CONSTRAINT fkinternationallicenseslicenses FOREIGN KEY (issuedusinglocallicenseid) REFERENCES licenses(licenseid),
+    CONSTRAINT fkinternationallicensesusers FOREIGN KEY (createdbyuserid) REFERENCES users(userid)
 );
 
 -- =====================================================================
 -- Views
 -- =====================================================================
 
--- Drivers_Views
-CREATE OR REPLACE VIEW Drivers_Views AS
+-- driversviews
+CREATE OR REPLACE VIEW driversviews AS
 SELECT
-    d.DriverID,
-    d.PersonID,
-    p.NationalNo,
-    p.FirstName || ' ' || p.SecondName || ' ' || COALESCE(p.ThirdName, '') || ' ' || p.LastName AS FullName,
-    d.CreatedDate,
-    (SELECT COUNT(l.LicenseID)
-     FROM Licenses l
-     WHERE l.IsActive = true AND l.DriverID = d.DriverID) AS NumberOfActiveLicenses
-FROM Drivers d
-INNER JOIN People p ON d.PersonID = p.PersonID;
+    d.driverid,
+    d.personid,
+    p.nationalno,
+    p.firstname || ' ' || p.secondname || ' ' || COALESCE(p.thirdname, '') || ' ' || p.lastname AS fullname,
+    d.createddate,
+    (SELECT COUNT(l.licenseid)
+     FROM licenses l
+     WHERE l.isactive = true AND l.driverid = d.driverid) AS numberofactivelicenses
+FROM drivers d
+INNER JOIN people p ON d.personid = p.personid;
 
--- ListLocalDrivingLicenseApplications_View
-CREATE OR REPLACE VIEW ListLocalDrivingLicenseApplications_View AS
+-- listlocaldrivinglicenseapplicationsview
+CREATE OR REPLACE VIEW listlocaldrivinglicenseapplicationsview AS
 SELECT
-    lda.LocalDrivingLicenseApplicationID,
-    lc.ClassName,
-    p.NationalNo,
-    p.FirstName || ' ' || p.SecondName || ' ' || COALESCE(p.ThirdName, '') || ' ' || p.LastName AS FullName,
-    a.ApplicationDate,
-    (SELECT COUNT(ta.TestTypeID)
-     FROM Tests t
-     INNER JOIN TestAppointments ta ON t.TestAppointmentID = ta.TestAppointmentID
-     WHERE ta.LocalDrivingLicenseApplicationID = lda.LocalDrivingLicenseApplicationID
-       AND t.TestResult = true) AS PassedTestCount,
+    lda.localdrivinglicenseapplicationid,
+    lc.classname,
+    p.nationalno,
+    p.firstname || ' ' || p.secondname || ' ' || COALESCE(p.thirdname, '') || ' ' || p.lastname AS fullname,
+    a.applicationdate,
+    (SELECT COUNT(ta.testtypeid)
+     FROM tests t
+     INNER JOIN testappointments ta ON t.testappointmentid = ta.testappointmentid
+     WHERE ta.localdrivinglicenseapplicationid = lda.localdrivinglicenseapplicationid
+       AND t.testresult = true) AS passedtestcount,
     CASE
-        WHEN a.ApplicationStatus = 1 THEN 'New'
-        WHEN a.ApplicationStatus = 2 THEN 'Cancelled'
-        WHEN a.ApplicationStatus = 3 THEN 'Completed'
-    END AS Status
-FROM LocalDrivingLicenseApplications lda
-INNER JOIN Applications a ON lda.ApplicationID = a.ApplicationID
-INNER JOIN LicenseClasses lc ON lda.LicenseClassID = lc.LicenseClassID
-INNER JOIN People p ON a.ApplicantPersonID = p.PersonID;
+        WHEN a.applicationstatus = 1 THEN 'New'
+        WHEN a.applicationstatus = 2 THEN 'Cancelled'
+        WHEN a.applicationstatus = 3 THEN 'Completed'
+    END AS status
+FROM localdrivinglicenseapplications lda
+INNER JOIN applications a ON lda.applicationid = a.applicationid
+INNER JOIN licenseclasses lc ON lda.licenseclassid = lc.licenseclassid
+INNER JOIN people p ON a.applicantpersonid = p.personid;
 
--- GetAllTestAppointments_View
-CREATE OR REPLACE VIEW GetAllTestAppointments_View AS
+-- getalltestappointmentsview
+CREATE OR REPLACE VIEW getalltestappointmentsview AS
 SELECT
-    ta.TestAppointmentID,
-    ta.LocalDrivingLicenseApplicationID,
-    tt.TestTypeTitle,
-    lc.ClassName,
-    ta.AppointmentDate,
-    ta.PaidFees,
-    p.FirstName || ' ' || p.SecondName || ' ' || COALESCE(p.ThirdName, '') || ' ' || p.LastName AS FullName,
-    ta.IsLocked
-FROM TestAppointments ta
-INNER JOIN TestTypes tt ON ta.TestTypeID = tt.TestTypeID
-INNER JOIN LocalDrivingLicenseApplications lda ON ta.LocalDrivingLicenseApplicationID = lda.LocalDrivingLicenseApplicationID
-INNER JOIN Applications a ON lda.ApplicationID = a.ApplicationID
-INNER JOIN People p ON a.ApplicantPersonID = p.PersonID
-INNER JOIN LicenseClasses lc ON lda.LicenseClassID = lc.LicenseClassID;-- countries
-INSERT INTO Countries (CountryName)
-SELECT 'Afghanistan' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Afghanistan');
-INSERT INTO Countries (CountryName)
-SELECT 'Albania' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Albania');
-INSERT INTO Countries (CountryName)
-SELECT 'Algeria' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Algeria');
-INSERT INTO Countries (CountryName)
-SELECT 'Andorra' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Andorra');
-INSERT INTO Countries (CountryName)
-SELECT 'Angola' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Angola');
-INSERT INTO Countries (CountryName)
-SELECT 'Antigua and Barbuda' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Antigua and Barbuda');
-INSERT INTO Countries (CountryName)
-SELECT 'Argentina' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Argentina');
-INSERT INTO Countries (CountryName)
-SELECT 'Armenia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Armenia');
-INSERT INTO Countries (CountryName)
-SELECT 'Austria' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Austria');
-INSERT INTO Countries (CountryName)
-SELECT 'Azerbaijan' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Azerbaijan');
-INSERT INTO Countries (CountryName)
-SELECT 'Bahrain' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Bahrain');
-INSERT INTO Countries (CountryName)
-SELECT 'Bangladesh' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Bangladesh');
-INSERT INTO Countries (CountryName)
-SELECT 'Barbados' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Barbados');
-INSERT INTO Countries (CountryName)
-SELECT 'Belarus' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Belarus');
-INSERT INTO Countries (CountryName)
-SELECT 'Belgium' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Belgium');
-INSERT INTO Countries (CountryName)
-SELECT 'Belize' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Belize');
-INSERT INTO Countries (CountryName)
-SELECT 'Benin' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Benin');
-INSERT INTO Countries (CountryName)
-SELECT 'Bhutan' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Bhutan');
-INSERT INTO Countries (CountryName)
-SELECT 'Bolivia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Bolivia');
-INSERT INTO Countries (CountryName)
-SELECT 'Bosnia and Herzegovina' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Bosnia and Herzegovina');
-INSERT INTO Countries (CountryName)
-SELECT 'Botswana' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Botswana');
-INSERT INTO Countries (CountryName)
-SELECT 'Brazil' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Brazil');
-INSERT INTO Countries (CountryName)
-SELECT 'Brunei' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Brunei');
-INSERT INTO Countries (CountryName)
-SELECT 'Bulgaria' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Bulgaria');
-INSERT INTO Countries (CountryName)
-SELECT 'Burkina Faso' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Burkina Faso');
-INSERT INTO Countries (CountryName)
-SELECT 'Burundi' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Burundi');
-INSERT INTO Countries (CountryName)
-SELECT 'Cabo Verde' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Cabo Verde');
-INSERT INTO Countries (CountryName)
-SELECT 'Cambodia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Cambodia');
-INSERT INTO Countries (CountryName)
-SELECT 'Cameroon' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Cameroon');
-INSERT INTO Countries (CountryName)
-SELECT 'Canada' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Canada');
-INSERT INTO Countries (CountryName)
-SELECT 'Central African Republic' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Central African Republic');
-INSERT INTO Countries (CountryName)
-SELECT 'Chad' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Chad');
-INSERT INTO Countries (CountryName)
-SELECT 'Channel Islands' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Channel Islands');
-INSERT INTO Countries (CountryName)
-SELECT 'Chile' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Chile');
-INSERT INTO Countries (CountryName)
-SELECT 'China' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'China');
-INSERT INTO Countries (CountryName)
-SELECT 'Colombia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Colombia');
-INSERT INTO Countries (CountryName)
-SELECT 'Comoros' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Comoros');
-INSERT INTO Countries (CountryName)
-SELECT 'Congo' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Congo');
-INSERT INTO Countries (CountryName)
-SELECT 'Costa Rica' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Costa Rica');
-INSERT INTO Countries (CountryName)
-SELECT 'Cote d''Ivoire' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Cote d''Ivoire');
-INSERT INTO Countries (CountryName)
-SELECT 'Croatia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Croatia');
-INSERT INTO Countries (CountryName)
-SELECT 'Cuba' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Cuba');
-INSERT INTO Countries (CountryName)
-SELECT 'Cyprus' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Cyprus');
-INSERT INTO Countries (CountryName)
-SELECT 'Czech Republic' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Czech Republic');
-INSERT INTO Countries (CountryName)
-SELECT 'Denmark' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Denmark');
-INSERT INTO Countries (CountryName)
-SELECT 'Djibouti' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Djibouti');
-INSERT INTO Countries (CountryName)
-SELECT 'Dominica' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Dominica');
-INSERT INTO Countries (CountryName)
-SELECT 'Dominican Republic' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Dominican Republic');
-INSERT INTO Countries (CountryName)
-SELECT 'DR Congo' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'DR Congo');
-INSERT INTO Countries (CountryName)
-SELECT 'Ecuador' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Ecuador');
-INSERT INTO Countries (CountryName)
-SELECT 'Egypt' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Egypt');
-INSERT INTO Countries (CountryName)
-SELECT 'El Salvador' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'El Salvador');
-INSERT INTO Countries (CountryName)
-SELECT 'Equatorial Guinea' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Equatorial Guinea');
-INSERT INTO Countries (CountryName)
-SELECT 'Eritrea' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Eritrea');
-INSERT INTO Countries (CountryName)
-SELECT 'Estonia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Estonia');
-INSERT INTO Countries (CountryName)
-SELECT 'Eswatini' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Eswatini');
-INSERT INTO Countries (CountryName)
-SELECT 'Ethiopia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Ethiopia');
-INSERT INTO Countries (CountryName)
-SELECT 'Faeroe Islands' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Faeroe Islands');
-INSERT INTO Countries (CountryName)
-SELECT 'Finland' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Finland');
-INSERT INTO Countries (CountryName)
-SELECT 'France' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'France');
-INSERT INTO Countries (CountryName)
-SELECT 'French Guiana' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'French Guiana');
-INSERT INTO Countries (CountryName)
-SELECT 'Gabon' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Gabon');
-INSERT INTO Countries (CountryName)
-SELECT 'Gambia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Gambia');
-INSERT INTO Countries (CountryName)
-SELECT 'Georgia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Georgia');
-INSERT INTO Countries (CountryName)
-SELECT 'Germany' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Germany');
-INSERT INTO Countries (CountryName)
-SELECT 'Ghana' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Ghana');
-INSERT INTO Countries (CountryName)
-SELECT 'Gibraltar' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Gibraltar');
-INSERT INTO Countries (CountryName)
-SELECT 'Greece' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Greece');
-INSERT INTO Countries (CountryName)
-SELECT 'Grenada' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Grenada');
-INSERT INTO Countries (CountryName)
-SELECT 'Guatemala' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Guatemala');
-INSERT INTO Countries (CountryName)
-SELECT 'Guinea' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Guinea');
-INSERT INTO Countries (CountryName)
-SELECT 'Guinea-Bissau' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Guinea-Bissau');
-INSERT INTO Countries (CountryName)
-SELECT 'Guyana' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Guyana');
-INSERT INTO Countries (CountryName)
-SELECT 'Haiti' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Haiti');
-INSERT INTO Countries (CountryName)
-SELECT 'Holy See' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Holy See');
-INSERT INTO Countries (CountryName)
-SELECT 'Honduras' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Honduras');
-INSERT INTO Countries (CountryName)
-SELECT 'Hong Kong' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Hong Kong');
-INSERT INTO Countries (CountryName)
-SELECT 'Hungary' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Hungary');
-INSERT INTO Countries (CountryName)
-SELECT 'Iceland' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Iceland');
-INSERT INTO Countries (CountryName)
-SELECT 'India' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'India');
-INSERT INTO Countries (CountryName)
-SELECT 'Indonesia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Indonesia');
-INSERT INTO Countries (CountryName)
-SELECT 'Iran' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Iran');
-INSERT INTO Countries (CountryName)
-SELECT 'Iraq' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Iraq');
-INSERT INTO Countries (CountryName)
-SELECT 'Ireland' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Ireland');
-INSERT INTO Countries (CountryName)
-SELECT 'Isle of Man' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Isle of Man');
-INSERT INTO Countries (CountryName)
-SELECT 'Israel' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Israel');
-INSERT INTO Countries (CountryName)
-SELECT 'Italy' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Italy');
-INSERT INTO Countries (CountryName)
-SELECT 'Jamaica' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Jamaica');
-INSERT INTO Countries (CountryName)
-SELECT 'Japan' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Japan');
-INSERT INTO Countries (CountryName)
-SELECT 'Jordan' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Jordan');
-INSERT INTO Countries (CountryName)
-SELECT 'Kazakhstan' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Kazakhstan');
-INSERT INTO Countries (CountryName)
-SELECT 'Kenya' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Kenya');
-INSERT INTO Countries (CountryName)
-SELECT 'Kuwait' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Kuwait');
-INSERT INTO Countries (CountryName)
-SELECT 'Kyrgyzstan' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Kyrgyzstan');
-INSERT INTO Countries (CountryName)
-SELECT 'Laos' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Laos');
-INSERT INTO Countries (CountryName)
-SELECT 'Latvia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Latvia');
-INSERT INTO Countries (CountryName)
-SELECT 'Lebanon' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Lebanon');
-INSERT INTO Countries (CountryName)
-SELECT 'Lesotho' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Lesotho');
-INSERT INTO Countries (CountryName)
-SELECT 'Liberia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Liberia');
-INSERT INTO Countries (CountryName)
-SELECT 'Libya' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Libya');
-INSERT INTO Countries (CountryName)
-SELECT 'Liechtenstein' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Liechtenstein');
-INSERT INTO Countries (CountryName)
-SELECT 'Lithuania' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Lithuania');
-INSERT INTO Countries (CountryName)
-SELECT 'Luxembourg' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Luxembourg');
-INSERT INTO Countries (CountryName)
-SELECT 'Macao' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Macao');
-INSERT INTO Countries (CountryName)
-SELECT 'Madagascar' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Madagascar');
-INSERT INTO Countries (CountryName)
-SELECT 'Malawi' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Malawi');
-INSERT INTO Countries (CountryName)
-SELECT 'Malaysia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Malaysia');
-INSERT INTO Countries (CountryName)
-SELECT 'Maldives' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Maldives');
-INSERT INTO Countries (CountryName)
-SELECT 'Mali' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Mali');
-INSERT INTO Countries (CountryName)
-SELECT 'Malta' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Malta');
-INSERT INTO Countries (CountryName)
-SELECT 'Mauritania' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Mauritania');
-INSERT INTO Countries (CountryName)
-SELECT 'Mauritius' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Mauritius');
-INSERT INTO Countries (CountryName)
-SELECT 'Mayotte' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Mayotte');
-INSERT INTO Countries (CountryName)
-SELECT 'Mexico' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Mexico');
-INSERT INTO Countries (CountryName)
-SELECT 'Moldova' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Moldova');
-INSERT INTO Countries (CountryName)
-SELECT 'Monaco' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Monaco');
-INSERT INTO Countries (CountryName)
-SELECT 'Mongolia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Mongolia');
-INSERT INTO Countries (CountryName)
-SELECT 'Montenegro' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Montenegro');
-INSERT INTO Countries (CountryName)
-SELECT 'Morocco' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Morocco');
-INSERT INTO Countries (CountryName)
-SELECT 'Mozambique' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Mozambique');
-INSERT INTO Countries (CountryName)
-SELECT 'Myanmar' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Myanmar');
-INSERT INTO Countries (CountryName)
-SELECT 'Namibia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Namibia');
-INSERT INTO Countries (CountryName)
-SELECT 'Nepal' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Nepal');
-INSERT INTO Countries (CountryName)
-SELECT 'Netherlands' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Netherlands');
-INSERT INTO Countries (CountryName)
-SELECT 'Nicaragua' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Nicaragua');
-INSERT INTO Countries (CountryName)
-SELECT 'Niger' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Niger');
-INSERT INTO Countries (CountryName)
-SELECT 'Nigeria' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Nigeria');
-INSERT INTO Countries (CountryName)
-SELECT 'North Korea' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'North Korea');
-INSERT INTO Countries (CountryName)
-SELECT 'North Macedonia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'North Macedonia');
-INSERT INTO Countries (CountryName)
-SELECT 'Norway' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Norway');
-INSERT INTO Countries (CountryName)
-SELECT 'Oman' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Oman');
-INSERT INTO Countries (CountryName)
-SELECT 'Pakistan' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Pakistan');
-INSERT INTO Countries (CountryName)
-SELECT 'Panama' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Panama');
-INSERT INTO Countries (CountryName)
-SELECT 'Paraguay' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Paraguay');
-INSERT INTO Countries (CountryName)
-SELECT 'Peru' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Peru');
-INSERT INTO Countries (CountryName)
-SELECT 'Philippines' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Philippines');
-INSERT INTO Countries (CountryName)
-SELECT 'Poland' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Poland');
-INSERT INTO Countries (CountryName)
-SELECT 'Portugal' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Portugal');
-INSERT INTO Countries (CountryName)
-SELECT 'Qatar' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Qatar');
-INSERT INTO Countries (CountryName)
-SELECT 'Reunion' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Reunion');
-INSERT INTO Countries (CountryName)
-SELECT 'Romania' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Romania');
-INSERT INTO Countries (CountryName)
-SELECT 'Russia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Russia');
-INSERT INTO Countries (CountryName)
-SELECT 'Rwanda' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Rwanda');
-INSERT INTO Countries (CountryName)
-SELECT 'Saint Helena' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Saint Helena');
-INSERT INTO Countries (CountryName)
-SELECT 'Saint Kitts and Nevis' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Saint Kitts and Nevis');
-INSERT INTO Countries (CountryName)
-SELECT 'Saint Lucia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Saint Lucia');
-INSERT INTO Countries (CountryName)
-SELECT 'Saint Vincent and the Grenadines' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Saint Vincent and the Grenadines');
-INSERT INTO Countries (CountryName)
-SELECT 'San Marino' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'San Marino');
-INSERT INTO Countries (CountryName)
-SELECT 'Sao Tome & Principe' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Sao Tome & Principe');
-INSERT INTO Countries (CountryName)
-SELECT 'Saudi Arabia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Saudi Arabia');
-INSERT INTO Countries (CountryName)
-SELECT 'Senegal' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Senegal');
-INSERT INTO Countries (CountryName)
-SELECT 'Serbia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Serbia');
-INSERT INTO Countries (CountryName)
-SELECT 'Seychelles' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Seychelles');
-INSERT INTO Countries (CountryName)
-SELECT 'Sierra Leone' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Sierra Leone');
-INSERT INTO Countries (CountryName)
-SELECT 'Singapore' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Singapore');
-INSERT INTO Countries (CountryName)
-SELECT 'Slovakia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Slovakia');
-INSERT INTO Countries (CountryName)
-SELECT 'Slovenia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Slovenia');
-INSERT INTO Countries (CountryName)
-SELECT 'Somalia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Somalia');
-INSERT INTO Countries (CountryName)
-SELECT 'South Africa' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'South Africa');
-INSERT INTO Countries (CountryName)
-SELECT 'South Korea' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'South Korea');
-INSERT INTO Countries (CountryName)
-SELECT 'South Sudan' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'South Sudan');
-INSERT INTO Countries (CountryName)
-SELECT 'Spain' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Spain');
-INSERT INTO Countries (CountryName)
-SELECT 'Sri Lanka' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Sri Lanka');
-INSERT INTO Countries (CountryName)
-SELECT 'State of Palestine' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'State of Palestine');
-INSERT INTO Countries (CountryName)
-SELECT 'Sudan' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Sudan');
-INSERT INTO Countries (CountryName)
-SELECT 'Suriname' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Suriname');
-INSERT INTO Countries (CountryName)
-SELECT 'Sweden' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Sweden');
-INSERT INTO Countries (CountryName)
-SELECT 'Switzerland' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Switzerland');
-INSERT INTO Countries (CountryName)
-SELECT 'Syria' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Syria');
-INSERT INTO Countries (CountryName)
-SELECT 'Taiwan' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Taiwan');
-INSERT INTO Countries (CountryName)
-SELECT 'Tajikistan' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Tajikistan');
-INSERT INTO Countries (CountryName)
-SELECT 'Tanzania' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Tanzania');
-INSERT INTO Countries (CountryName)
-SELECT 'Thailand' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Thailand');
-INSERT INTO Countries (CountryName)
-SELECT 'The Bahamas' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'The Bahamas');
-INSERT INTO Countries (CountryName)
-SELECT 'Timor-Leste' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Timor-Leste');
-INSERT INTO Countries (CountryName)
-SELECT 'Togo' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Togo');
-INSERT INTO Countries (CountryName)
-SELECT 'Trinidad and Tobago' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Trinidad and Tobago');
-INSERT INTO Countries (CountryName)
-SELECT 'Tunisia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Tunisia');
-INSERT INTO Countries (CountryName)
-SELECT 'Turkey' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Turkey');
-INSERT INTO Countries (CountryName)
-SELECT 'Turkmenistan' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Turkmenistan');
-INSERT INTO Countries (CountryName)
-SELECT 'Uganda' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Uganda');
-INSERT INTO Countries (CountryName)
-SELECT 'Ukraine' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Ukraine');
-INSERT INTO Countries (CountryName)
-SELECT 'United Arab Emirates' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'United Arab Emirates');
-INSERT INTO Countries (CountryName)
-SELECT 'United Kingdom' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'United Kingdom');
-INSERT INTO Countries (CountryName)
-SELECT 'United States' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'United States');
-INSERT INTO Countries (CountryName)
-SELECT 'Uruguay' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Uruguay');
-INSERT INTO Countries (CountryName)
-SELECT 'Uzbekistan' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Uzbekistan');
-INSERT INTO Countries (CountryName)
-SELECT 'Venezuela' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Venezuela');
-INSERT INTO Countries (CountryName)
-SELECT 'Vietnam' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Vietnam');
-INSERT INTO Countries (CountryName)
-SELECT 'Western Sahara' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Western Sahara');
-INSERT INTO Countries (CountryName)
-SELECT 'Yemen' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Yemen');
-INSERT INTO Countries (CountryName)
-SELECT 'Zambia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Zambia');
-INSERT INTO Countries (CountryName)
-SELECT 'Zimbabwe' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Zimbabwe');
+    ta.testappointmentid,
+    ta.localdrivinglicenseapplicationid,
+    tt.testtypetitle,
+    lc.classname,
+    ta.appointmentdate,
+    ta.paidfees,
+    p.firstname || ' ' || p.secondname || ' ' || COALESCE(p.thirdname, '') || ' ' || p.lastname AS fullname,
+    ta.islocked
+FROM testappointments ta
+INNER JOIN testtypes tt ON ta.testtypeid = tt.testtypeid
+INNER JOIN localdrivinglicenseapplications lda ON ta.localdrivinglicenseapplicationid = lda.localdrivinglicenseapplicationid
+INNER JOIN applications a ON lda.applicationid = a.applicationid
+INNER JOIN people p ON a.applicantpersonid = p.personid
+INNER JOIN licenseclasses lc ON lda.licenseclassid = lc.licenseclassid;
+
+-- countries
+INSERT INTO countries (countryname)
+SELECT 'Afghanistan' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Afghanistan');
+INSERT INTO countries (countryname)
+SELECT 'Albania' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Albania');
+INSERT INTO countries (countryname)
+SELECT 'Algeria' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Algeria');
+INSERT INTO countries (countryname)
+SELECT 'Andorra' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Andorra');
+INSERT INTO countries (countryname)
+SELECT 'Angola' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Angola');
+INSERT INTO countries (countryname)
+SELECT 'Antigua and Barbuda' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Antigua and Barbuda');
+INSERT INTO countries (countryname)
+SELECT 'Argentina' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Argentina');
+INSERT INTO countries (countryname)
+SELECT 'Armenia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Armenia');
+INSERT INTO countries (countryname)
+SELECT 'Austria' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Austria');
+INSERT INTO countries (countryname)
+SELECT 'Azerbaijan' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Azerbaijan');
+INSERT INTO countries (countryname)
+SELECT 'Bahrain' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Bahrain');
+INSERT INTO countries (countryname)
+SELECT 'Bangladesh' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Bangladesh');
+INSERT INTO countries (countryname)
+SELECT 'Barbados' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Barbados');
+INSERT INTO countries (countryname)
+SELECT 'Belarus' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Belarus');
+INSERT INTO countries (countryname)
+SELECT 'Belgium' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Belgium');
+INSERT INTO countries (countryname)
+SELECT 'Belize' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Belize');
+INSERT INTO countries (countryname)
+SELECT 'Benin' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Benin');
+INSERT INTO countries (countryname)
+SELECT 'Bhutan' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Bhutan');
+INSERT INTO countries (countryname)
+SELECT 'Bolivia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Bolivia');
+INSERT INTO countries (countryname)
+SELECT 'Bosnia and Herzegovina' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Bosnia and Herzegovina');
+INSERT INTO countries (countryname)
+SELECT 'Botswana' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Botswana');
+INSERT INTO countries (countryname)
+SELECT 'Brazil' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Brazil');
+INSERT INTO countries (countryname)
+SELECT 'Brunei' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Brunei');
+INSERT INTO countries (countryname)
+SELECT 'Bulgaria' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Bulgaria');
+INSERT INTO countries (countryname)
+SELECT 'Burkina Faso' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Burkina Faso');
+INSERT INTO countries (countryname)
+SELECT 'Burundi' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Burundi');
+INSERT INTO countries (countryname)
+SELECT 'Cabo Verde' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Cabo Verde');
+INSERT INTO countries (countryname)
+SELECT 'Cambodia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Cambodia');
+INSERT INTO countries (countryname)
+SELECT 'Cameroon' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Cameroon');
+INSERT INTO countries (countryname)
+SELECT 'Canada' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Canada');
+INSERT INTO countries (countryname)
+SELECT 'Central African Republic' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Central African Republic');
+INSERT INTO countries (countryname)
+SELECT 'Chad' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Chad');
+INSERT INTO countries (countryname)
+SELECT 'Channel Islands' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Channel Islands');
+INSERT INTO countries (countryname)
+SELECT 'Chile' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Chile');
+INSERT INTO countries (countryname)
+SELECT 'China' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'China');
+INSERT INTO countries (countryname)
+SELECT 'Colombia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Colombia');
+INSERT INTO countries (countryname)
+SELECT 'Comoros' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Comoros');
+INSERT INTO countries (countryname)
+SELECT 'Congo' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Congo');
+INSERT INTO countries (countryname)
+SELECT 'Costa Rica' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Costa Rica');
+INSERT INTO countries (countryname)
+SELECT 'Cote d''Ivoire' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Cote d''Ivoire');
+INSERT INTO countries (countryname)
+SELECT 'Croatia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Croatia');
+INSERT INTO countries (countryname)
+SELECT 'Cuba' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Cuba');
+INSERT INTO countries (countryname)
+SELECT 'Cyprus' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Cyprus');
+INSERT INTO countries (countryname)
+SELECT 'Czech Republic' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Czech Republic');
+INSERT INTO countries (countryname)
+SELECT 'Denmark' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Denmark');
+INSERT INTO countries (countryname)
+SELECT 'Djibouti' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Djibouti');
+INSERT INTO countries (countryname)
+SELECT 'Dominica' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Dominica');
+INSERT INTO countries (countryname)
+SELECT 'Dominican Republic' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Dominican Republic');
+INSERT INTO countries (countryname)
+SELECT 'DR Congo' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'DR Congo');
+INSERT INTO countries (countryname)
+SELECT 'Ecuador' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Ecuador');
+INSERT INTO countries (countryname)
+SELECT 'Egypt' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Egypt');
+INSERT INTO countries (countryname)
+SELECT 'El Salvador' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'El Salvador');
+INSERT INTO countries (countryname)
+SELECT 'Equatorial Guinea' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Equatorial Guinea');
+INSERT INTO countries (countryname)
+SELECT 'Eritrea' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Eritrea');
+INSERT INTO countries (countryname)
+SELECT 'Estonia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Estonia');
+INSERT INTO countries (countryname)
+SELECT 'Eswatini' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Eswatini');
+INSERT INTO countries (countryname)
+SELECT 'Ethiopia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Ethiopia');
+INSERT INTO countries (countryname)
+SELECT 'Faeroe Islands' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Faeroe Islands');
+INSERT INTO countries (countryname)
+SELECT 'Finland' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Finland');
+INSERT INTO countries (countryname)
+SELECT 'France' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'France');
+INSERT INTO countries (countryname)
+SELECT 'French Guiana' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'French Guiana');
+INSERT INTO countries (countryname)
+SELECT 'Gabon' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Gabon');
+INSERT INTO countries (countryname)
+SELECT 'Gambia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Gambia');
+INSERT INTO countries (countryname)
+SELECT 'Georgia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Georgia');
+INSERT INTO countries (countryname)
+SELECT 'Germany' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Germany');
+INSERT INTO countries (countryname)
+SELECT 'Ghana' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Ghana');
+INSERT INTO countries (countryname)
+SELECT 'Gibraltar' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Gibraltar');
+INSERT INTO countries (countryname)
+SELECT 'Greece' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Greece');
+INSERT INTO countries (countryname)
+SELECT 'Grenada' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Grenada');
+INSERT INTO countries (countryname)
+SELECT 'Guatemala' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Guatemala');
+INSERT INTO countries (countryname)
+SELECT 'Guinea' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Guinea');
+INSERT INTO countries (countryname)
+SELECT 'Guinea-Bissau' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Guinea-Bissau');
+INSERT INTO countries (countryname)
+SELECT 'Guyana' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Guyana');
+INSERT INTO countries (countryname)
+SELECT 'Haiti' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Haiti');
+INSERT INTO countries (countryname)
+SELECT 'Holy See' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Holy See');
+INSERT INTO countries (countryname)
+SELECT 'Honduras' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Honduras');
+INSERT INTO countries (countryname)
+SELECT 'Hong Kong' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Hong Kong');
+INSERT INTO countries (countryname)
+SELECT 'Hungary' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Hungary');
+INSERT INTO countries (countryname)
+SELECT 'Iceland' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Iceland');
+INSERT INTO countries (countryname)
+SELECT 'India' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'India');
+INSERT INTO countries (countryname)
+SELECT 'Indonesia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Indonesia');
+INSERT INTO countries (countryname)
+SELECT 'Iran' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Iran');
+INSERT INTO countries (countryname)
+SELECT 'Iraq' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Iraq');
+INSERT INTO countries (countryname)
+SELECT 'Ireland' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Ireland');
+INSERT INTO countries (countryname)
+SELECT 'Isle of Man' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Isle of Man');
+INSERT INTO countries (countryname)
+SELECT 'Israel' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Israel');
+INSERT INTO countries (countryname)
+SELECT 'Italy' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Italy');
+INSERT INTO countries (countryname)
+SELECT 'Jamaica' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Jamaica');
+INSERT INTO countries (countryname)
+SELECT 'Japan' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Japan');
+INSERT INTO countries (countryname)
+SELECT 'Jordan' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Jordan');
+INSERT INTO countries (countryname)
+SELECT 'Kazakhstan' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Kazakhstan');
+INSERT INTO countries (countryname)
+SELECT 'Kenya' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Kenya');
+INSERT INTO countries (countryname)
+SELECT 'Kuwait' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Kuwait');
+INSERT INTO countries (countryname)
+SELECT 'Kyrgyzstan' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Kyrgyzstan');
+INSERT INTO countries (countryname)
+SELECT 'Laos' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Laos');
+INSERT INTO countries (countryname)
+SELECT 'Latvia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Latvia');
+INSERT INTO countries (countryname)
+SELECT 'Lebanon' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Lebanon');
+INSERT INTO countries (countryname)
+SELECT 'Lesotho' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Lesotho');
+INSERT INTO countries (countryname)
+SELECT 'Liberia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Liberia');
+INSERT INTO countries (countryname)
+SELECT 'Libya' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Libya');
+INSERT INTO countries (countryname)
+SELECT 'Liechtenstein' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Liechtenstein');
+INSERT INTO countries (countryname)
+SELECT 'Lithuania' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Lithuania');
+INSERT INTO countries (countryname)
+SELECT 'Luxembourg' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Luxembourg');
+INSERT INTO countries (countryname)
+SELECT 'Macao' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Macao');
+INSERT INTO countries (countryname)
+SELECT 'Madagascar' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Madagascar');
+INSERT INTO countries (countryname)
+SELECT 'Malawi' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Malawi');
+INSERT INTO countries (countryname)
+SELECT 'Malaysia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Malaysia');
+INSERT INTO countries (countryname)
+SELECT 'Maldives' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Maldives');
+INSERT INTO countries (countryname)
+SELECT 'Mali' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Mali');
+INSERT INTO countries (countryname)
+SELECT 'Malta' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Malta');
+INSERT INTO countries (countryname)
+SELECT 'Mauritania' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Mauritania');
+INSERT INTO countries (countryname)
+SELECT 'Mauritius' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Mauritius');
+INSERT INTO countries (countryname)
+SELECT 'Mayotte' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Mayotte');
+INSERT INTO countries (countryname)
+SELECT 'Mexico' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Mexico');
+INSERT INTO countries (countryname)
+SELECT 'Moldova' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Moldova');
+INSERT INTO countries (countryname)
+SELECT 'Monaco' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Monaco');
+INSERT INTO countries (countryname)
+SELECT 'Mongolia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Mongolia');
+INSERT INTO countries (countryname)
+SELECT 'Montenegro' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Montenegro');
+INSERT INTO countries (countryname)
+SELECT 'Morocco' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Morocco');
+INSERT INTO countries (countryname)
+SELECT 'Mozambique' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Mozambique');
+INSERT INTO countries (countryname)
+SELECT 'Myanmar' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Myanmar');
+INSERT INTO countries (countryname)
+SELECT 'Namibia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Namibia');
+INSERT INTO countries (countryname)
+SELECT 'Nepal' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Nepal');
+INSERT INTO countries (countryname)
+SELECT 'Netherlands' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Netherlands');
+INSERT INTO countries (countryname)
+SELECT 'Nicaragua' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Nicaragua');
+INSERT INTO countries (countryname)
+SELECT 'Niger' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Niger');
+INSERT INTO countries (countryname)
+SELECT 'Nigeria' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Nigeria');
+INSERT INTO countries (countryname)
+SELECT 'North Korea' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'North Korea');
+INSERT INTO countries (countryname)
+SELECT 'North Macedonia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'North Macedonia');
+INSERT INTO countries (countryname)
+SELECT 'Norway' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Norway');
+INSERT INTO countries (countryname)
+SELECT 'Oman' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Oman');
+INSERT INTO countries (countryname)
+SELECT 'Pakistan' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Pakistan');
+INSERT INTO countries (countryname)
+SELECT 'Panama' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Panama');
+INSERT INTO countries (countryname)
+SELECT 'Paraguay' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Paraguay');
+INSERT INTO countries (countryname)
+SELECT 'Peru' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Peru');
+INSERT INTO countries (countryname)
+SELECT 'Philippines' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Philippines');
+INSERT INTO countries (countryname)
+SELECT 'Poland' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Poland');
+INSERT INTO countries (countryname)
+SELECT 'Portugal' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Portugal');
+INSERT INTO countries (countryname)
+SELECT 'Qatar' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Qatar');
+INSERT INTO countries (countryname)
+SELECT 'Reunion' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Reunion');
+INSERT INTO countries (countryname)
+SELECT 'Romania' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Romania');
+INSERT INTO countries (countryname)
+SELECT 'Russia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Russia');
+INSERT INTO countries (countryname)
+SELECT 'Rwanda' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Rwanda');
+INSERT INTO countries (countryname)
+SELECT 'Saint Helena' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Saint Helena');
+INSERT INTO countries (countryname)
+SELECT 'Saint Kitts and Nevis' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Saint Kitts and Nevis');
+INSERT INTO countries (countryname)
+SELECT 'Saint Lucia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Saint Lucia');
+INSERT INTO countries (countryname)
+SELECT 'Saint Vincent and the Grenadines' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Saint Vincent and the Grenadines');
+INSERT INTO countries (countryname)
+SELECT 'San Marino' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'San Marino');
+INSERT INTO countries (countryname)
+SELECT 'Sao Tome & Principe' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Sao Tome & Principe');
+INSERT INTO countries (countryname)
+SELECT 'Saudi Arabia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Saudi Arabia');
+INSERT INTO countries (countryname)
+SELECT 'Senegal' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Senegal');
+INSERT INTO countries (countryname)
+SELECT 'Serbia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Serbia');
+INSERT INTO countries (countryname)
+SELECT 'Seychelles' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Seychelles');
+INSERT INTO countries (countryname)
+SELECT 'Sierra Leone' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Sierra Leone');
+INSERT INTO countries (countryname)
+SELECT 'Singapore' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Singapore');
+INSERT INTO countries (countryname)
+SELECT 'Slovakia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Slovakia');
+INSERT INTO countries (countryname)
+SELECT 'Slovenia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Slovenia');
+INSERT INTO countries (countryname)
+SELECT 'Somalia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Somalia');
+INSERT INTO countries (countryname)
+SELECT 'South Africa' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'South Africa');
+INSERT INTO countries (countryname)
+SELECT 'South Korea' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'South Korea');
+INSERT INTO countries (countryname)
+SELECT 'South Sudan' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'South Sudan');
+INSERT INTO countries (countryname)
+SELECT 'Spain' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Spain');
+INSERT INTO countries (countryname)
+SELECT 'Sri Lanka' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Sri Lanka');
+INSERT INTO countries (countryname)
+SELECT 'State of Palestine' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'State of Palestine');
+INSERT INTO countries (countryname)
+SELECT 'Sudan' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Sudan');
+INSERT INTO countries (countryname)
+SELECT 'Suriname' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Suriname');
+INSERT INTO countries (countryname)
+SELECT 'Sweden' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Sweden');
+INSERT INTO countries (countryname)
+SELECT 'Switzerland' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Switzerland');
+INSERT INTO countries (countryname)
+SELECT 'Syria' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Syria');
+INSERT INTO countries (countryname)
+SELECT 'Taiwan' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Taiwan');
+INSERT INTO countries (countryname)
+SELECT 'Tajikistan' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Tajikistan');
+INSERT INTO countries (countryname)
+SELECT 'Tanzania' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Tanzania');
+INSERT INTO countries (countryname)
+SELECT 'Thailand' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Thailand');
+INSERT INTO countries (countryname)
+SELECT 'The Bahamas' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'The Bahamas');
+INSERT INTO countries (countryname)
+SELECT 'Timor-Leste' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Timor-Leste');
+INSERT INTO countries (countryname)
+SELECT 'Togo' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Togo');
+INSERT INTO countries (countryname)
+SELECT 'Trinidad and Tobago' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Trinidad and Tobago');
+INSERT INTO countries (countryname)
+SELECT 'Tunisia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Tunisia');
+INSERT INTO countries (countryname)
+SELECT 'Turkey' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Turkey');
+INSERT INTO countries (countryname)
+SELECT 'Turkmenistan' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Turkmenistan');
+INSERT INTO countries (countryname)
+SELECT 'Uganda' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Uganda');
+INSERT INTO countries (countryname)
+SELECT 'Ukraine' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Ukraine');
+INSERT INTO countries (countryname)
+SELECT 'United Arab Emirates' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'United Arab Emirates');
+INSERT INTO countries (countryname)
+SELECT 'United Kingdom' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'United Kingdom');
+INSERT INTO countries (countryname)
+SELECT 'United States' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'United States');
+INSERT INTO countries (countryname)
+SELECT 'Uruguay' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Uruguay');
+INSERT INTO countries (countryname)
+SELECT 'Uzbekistan' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Uzbekistan');
+INSERT INTO countries (countryname)
+SELECT 'Venezuela' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Venezuela');
+INSERT INTO countries (countryname)
+SELECT 'Vietnam' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Vietnam');
+INSERT INTO countries (countryname)
+SELECT 'Western Sahara' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Western Sahara');
+INSERT INTO countries (countryname)
+SELECT 'Yemen' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Yemen');
+INSERT INTO countries (countryname)
+SELECT 'Zambia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Zambia');
+INSERT INTO countries (countryname)
+SELECT 'Zimbabwe' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Zimbabwe');
 
 -- Default Admin User
 DO $$
 DECLARE
-    admin_person_id INT;
+    adminpersonid INT;
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM Users WHERE UserName = 'admin') THEN
-        IF NOT EXISTS (SELECT 1 FROM People WHERE NationalNo = 'ADMIN001') THEN
-            INSERT INTO People (NationalNo, FirstName, SecondName, ThirdName, LastName, DateOfBirth, Gendor, Address, Phone, Email, NationalityCountryID, ImagePath)
+    IF NOT EXISTS (SELECT 1 FROM users WHERE username = 'admin') THEN
+        IF NOT EXISTS (SELECT 1 FROM people WHERE nationalno = 'ADMIN001') THEN
+            INSERT INTO people (nationalno, firstname, secondname, thirdname, lastname, dateofbirth, gender, address, phone, email, nationalitycountryid, imagepath)
             VALUES ('ADMIN001', 'System', 'Admin', NULL, 'User', '2000-01-01', 0, 'DVLD System', '0000000000', NULL, 1, NULL)
-            RETURNING PersonID INTO admin_person_id;
+            RETURNING personid INTO adminpersonid;
 
-            INSERT INTO Users (PersonID, UserName, Password, IsActive)
-            VALUES (admin_person_id, 'admin', 'admin', true);
+            INSERT INTO users (personid, username, password, isactive)
+            VALUES (adminpersonid, 'admin', 'admin', true);
         END IF;
     END IF;
 END $$;

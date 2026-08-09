@@ -36,20 +36,7 @@ namespace DataAccessLayer
             get
             {
                 EnsureInitialized();
-                string server = _serverValue;
-                string user = _userValue;
-                string password = _passwordValue;
-
-                if (IsPostgreSQL)
-                {
-                    if (string.IsNullOrWhiteSpace(server) || server == ".")
-                        server = "localhost";
-                    return $"Host={server};Username={user};Password={password};";
-                }
-                else
-                {
-                    return $"Server={server};User Id={user};Password={password};";
-                }
+                return _connectionString;
             }
         }
 

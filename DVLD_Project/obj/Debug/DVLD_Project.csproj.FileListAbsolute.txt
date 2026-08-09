@@ -73,3 +73,7 @@
 /home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Resources.Extensions.dll
 /home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Resources.Extensions.xml
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Pro.F4BE20FF.Up2Date
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/Microsoft.Bcl.AsyncInterfaces.dll
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Text.Json.dll
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Runtime.CompilerServices.Unsafe.dll
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Text.Encodings.Web.dll

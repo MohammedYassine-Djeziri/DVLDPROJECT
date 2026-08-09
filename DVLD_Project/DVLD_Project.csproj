@@ -53,23 +53,14 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml" />
-    <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>/usr/lib/mono/4.5/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Bcl.AsyncInterfaces">
-      <HintPath>/usr/lib/mono/msbuild/Current/bin/Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Text.Json">
-      <HintPath>/usr/lib/mono/msbuild/Current/bin/System.Text.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Text.Encodings.Web">
-      <HintPath>/usr/lib/mono/msbuild/Current/bin/System.Text.Encodings.Web.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+
   </ItemGroup>
+  <ItemGroup>
+  <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" PrivateAssets="All" />
+  <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" PrivateAssets="All" />
+  <PackageReference Include="System.Text.Json" Version="8.0.0" PrivateAssets="All" />
+  <PackageReference Include="System.Text.Encodings.Web" Version="8.0.0" PrivateAssets="All" />
+</ItemGroup>
   <ItemGroup>
     <Compile Include="Application\Forms\ShowApplicationInfoForm.Designer.cs">
       <DependentUpon>ShowApplicationInfoForm.cs</DependentUpon>
