@@ -4,7 +4,6 @@
 /home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/DVLDBusinessLayer.pdb
 /home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/PeoplesDataAccessLayer.dll
 /home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/PeoplesDataAccessLayer.pdb
-/home/user/Downloads/DVLD/DVLDBusinessLayer/obj/Debug/DVLD_BusinessLayer.csproj.CopyComplete
 /home/user/Downloads/DVLD/DVLDBusinessLayer/obj/Debug/DVLDBusinessLayer.dll
 /home/user/Downloads/DVLD/DVLDBusinessLayer/obj/Debug/DVLDBusinessLayer.pdb
 /home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/Npgsql.dll
@@ -13,3 +12,4 @@
 /home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/Microsoft.Bcl.AsyncInterfaces.dll
 /home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/System.ValueTuple.dll
 /home/user/Downloads/DVLD/DVLDBusinessLayer/bin/Debug/System.Buffers.dll
+/home/user/Downloads/DVLD/DVLDBusinessLayer/obj/Debug/DVLD_Bus.693E2707.Up2Date

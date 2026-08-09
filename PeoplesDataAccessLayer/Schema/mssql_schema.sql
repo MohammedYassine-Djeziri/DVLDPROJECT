@@ -199,20 +199,6 @@ BEGIN
 END
 GO
 
--- ----------------------------------------------------------------------------
--- 11. sysdiagrams
--- ----------------------------------------------------------------------------
-IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'sysdiagrams')
-BEGIN
-    CREATE TABLE [dbo].[sysdiagrams] (
-        [name]         NVARCHAR(128) NOT NULL,
-        [principal_id] INT           NOT NULL,
-        [diagram_id]   INT IDENTITY(1,1) NOT NULL,
-        [version]      INT           NULL,
-        [definition]   VARBINARY(MAX) NULL,
-        CONSTRAINT [PK_sysdiagrams] PRIMARY KEY CLUSTERED ([diagram_id]),
-        CONSTRAINT [UK_principal_name] UNIQUE ([principal_id], [name])
-    );
 END
 GO
 -- ----------------------------------------------------------------------------
@@ -1167,4 +1153,20 @@ IF NOT EXISTS (SELECT 1 FROM [dbo].[Countries] WHERE [CountryName] = N'Zambia')
     INSERT INTO [dbo].[Countries] ([CountryName]) VALUES (N'Zambia');
 IF NOT EXISTS (SELECT 1 FROM [dbo].[Countries] WHERE [CountryName] = N'Zimbabwe')
     INSERT INTO [dbo].[Countries] ([CountryName]) VALUES (N'Zimbabwe');
+GO
+
+-- Default Admin User
+IF NOT EXISTS (SELECT 1 FROM [dbo].[Users] WHERE [UserName] = N'admin')
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM [dbo].[People] WHERE [NationalNo] = N'ADMIN001')
+    BEGIN
+        INSERT INTO [dbo].[People] ([NationalNo],[FirstName],[SecondName],[ThirdName],[LastName],[DateOfBirth],[Gendor],[Address],[Phone],[Email],[NationalityCountryID],[ImagePath])
+        VALUES (N'ADMIN001', N'System', N'Admin', NULL, N'User', '2000-01-01', 0, N'DVLD System', N'0000000000', NULL, 1, NULL);
+
+        DECLARE @AdminPersonID INT = SCOPE_IDENTITY();
+
+        INSERT INTO [dbo].[Users] ([PersonID],[UserName],[Password],[IsActive])
+        VALUES (@AdminPersonID, N'admin', N'admin', 1);
+    END
+END
 GO

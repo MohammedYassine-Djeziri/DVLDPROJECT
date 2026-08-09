@@ -91,5 +91,8 @@
     <EmbeddedResource Include="Schema\mssql_schema.sql" />
     <EmbeddedResource Include="Schema\postgresql_schema.sql" />
   </ItemGroup>
+  <ItemGroup>
+  <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+</ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

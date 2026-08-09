@@ -17,11 +17,7 @@
 /home/user/Downloads/DVLD/DVLD_Project/bin/Debug/Npgsql.dll
 /home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Threading.Tasks.Extensions.dll
 /home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Memory.dll
-/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Runtime.CompilerServices.Unsafe.dll
-/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/Microsoft.Bcl.AsyncInterfaces.dll
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.exe.config
-/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Text.Encodings.Web.dll
-/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Text.Json.dll
 /home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.ValueTuple.dll
 /home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Numerics.Vectors.dll
 /home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Buffers.dll
@@ -75,3 +71,4 @@
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.User.Forms.UsersManagementForm.resources
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.TestAppointment.Forms.TestAppointmentForm.resources
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.People.Forms.PersonInfo.resources
+/home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.csproj.SuggestedBindingRedirects.cache

@@ -38,17 +38,6 @@ CREATE TABLE IF NOT EXISTS TestTypes (
     CONSTRAINT PK_TestTypes PRIMARY KEY (TestTypeID)
 );
 
--- sysdiagrams
-CREATE TABLE IF NOT EXISTS sysdiagrams (
-    name varchar(128) NOT NULL,
-    principal_id int NOT NULL,
-    diagram_id int GENERATED ALWAYS AS IDENTITY,
-    version int NULL,
-    definition bytea NULL,
-    CONSTRAINT PK_sysdiagrams PRIMARY KEY (diagram_id),
-    CONSTRAINT UK_principal_name UNIQUE (principal_id, name)
-);
-
 -- People
 CREATE TABLE IF NOT EXISTS People (
     PersonID int GENERATED ALWAYS AS IDENTITY,
@@ -58,7 +47,7 @@ CREATE TABLE IF NOT EXISTS People (
     ThirdName varchar(20) NULL,
     LastName varchar(20) NOT NULL,
     DateOfBirth timestamp NOT NULL,
-    Gendor smallint DEFAULT 0 NOT NULL,
+    Gender smallint DEFAULT 0 NOT NULL,
     Address varchar(500) NOT NULL,
     Phone varchar(20) NOT NULL,
     Email varchar(50) NULL,
@@ -641,3 +630,20 @@ INSERT INTO Countries (CountryName)
 SELECT 'Zambia' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Zambia');
 INSERT INTO Countries (CountryName)
 SELECT 'Zimbabwe' WHERE NOT EXISTS (SELECT 1 FROM Countries WHERE CountryName = 'Zimbabwe');
+
+-- Default Admin User
+DO $$
+DECLARE
+    admin_person_id INT;
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM Users WHERE UserName = 'admin') THEN
+        IF NOT EXISTS (SELECT 1 FROM People WHERE NationalNo = 'ADMIN001') THEN
+            INSERT INTO People (NationalNo, FirstName, SecondName, ThirdName, LastName, DateOfBirth, Gendor, Address, Phone, Email, NationalityCountryID, ImagePath)
+            VALUES ('ADMIN001', 'System', 'Admin', NULL, 'User', '2000-01-01', 0, 'DVLD System', '0000000000', NULL, 1, NULL)
+            RETURNING PersonID INTO admin_person_id;
+
+            INSERT INTO Users (PersonID, UserName, Password, IsActive)
+            VALUES (admin_person_id, 'admin', 'admin', true);
+        END IF;
+    END IF;
+END $$;
