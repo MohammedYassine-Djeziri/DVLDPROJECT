@@ -11,12 +11,10 @@
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.Properties.Resources.resources
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.csproj.GenerateResource.cache
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.csproj.CoreCompileInputs.cache
-/home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.csproj.CopyComplete
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.exe
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.pdb
 /home/user/Downloads/DVLD/DVLD_Project/bin/Debug/Npgsql.dll
 /home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Threading.Tasks.Extensions.dll
-/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Memory.dll
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.exe.config
 /home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.ValueTuple.dll
 /home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Numerics.Vectors.dll
@@ -72,3 +70,6 @@
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.TestAppointment.Forms.TestAppointmentForm.resources
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.People.Forms.PersonInfo.resources
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.csproj.SuggestedBindingRedirects.cache
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Resources.Extensions.dll
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Resources.Extensions.xml
+/home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Pro.F4BE20FF.Up2Date

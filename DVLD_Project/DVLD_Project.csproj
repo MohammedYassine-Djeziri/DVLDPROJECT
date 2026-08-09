@@ -32,6 +32,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+  <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+</PropertyGroup>
+
+
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,6 +48,10 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Resources.Extensions">
+      <HintPath>$(NuGetPackageRoot)system.resources.extensions\8.0.0\lib\net462\System.Resources.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe">
       <HintPath>/usr/lib/mono/4.5/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
@@ -549,6 +558,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" PrivateAssets="All" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\IMG_E1449.JPG" />
   </ItemGroup>
   <ItemGroup>
@@ -880,8 +895,7 @@
   <ItemGroup>
     <None Include="Resources\Release Detained License 64.png" />
   </ItemGroup>
-  <ItemGroup>
-  <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
-</ItemGroup>
+
+  
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
