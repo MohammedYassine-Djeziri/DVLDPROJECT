@@ -1,5 +1,7 @@
 -- ============================================================================
 -- DVLD Database Schema – SQL Server
+-- Follows the canonical SSMS schema (dbo schema, Arabic_CI_AI collation).
+-- Follows the canonical SSMS schema (dbo schema, Arabic_CI_AI collation).
 -- ============================================================================
 -- Idempotent: every CREATE TABLE is wrapped in IF NOT EXISTS, and seed rows
 -- check for existence before inserting.  Re-running is safe.
@@ -12,7 +14,7 @@ IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Count
 BEGIN
     CREATE TABLE [dbo].[Countries] (
         [CountryID]   INT IDENTITY(1,1) NOT NULL,
-        [CountryName] NVARCHAR(50)     NOT NULL,
+        [CountryName] NVARCHAR(50) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NOT NULL,
         CONSTRAINT [PK_Countries] PRIMARY KEY CLUSTERED ([CountryID])
     );
 END
@@ -25,18 +27,18 @@ IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Peopl
 BEGIN
     CREATE TABLE [dbo].[People] (
         [PersonID]             INT IDENTITY(1,1) NOT NULL,
-        [NationalNo]           NVARCHAR(20)      NOT NULL,
-        [FirstName]            NVARCHAR(20)      NOT NULL,
-        [SecondName]           NVARCHAR(20)      NOT NULL,
-        [ThirdName]            NVARCHAR(20)      NULL,
-        [LastName]             NVARCHAR(20)      NOT NULL,
+        [NationalNo]           NVARCHAR(20) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NOT NULL,
+        [FirstName]            NVARCHAR(20) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NOT NULL,
+        [SecondName]           NVARCHAR(20) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NOT NULL,
+        [ThirdName]            NVARCHAR(20) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NULL,
+        [LastName]             NVARCHAR(20) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NOT NULL,
         [DateOfBirth]          DATETIME          NOT NULL,
         [Gender]               TINYINT DEFAULT 0 NOT NULL,
-        [Address]              NVARCHAR(500)     NOT NULL,
-        [Phone]                NVARCHAR(20)      NOT NULL,
-        [Email]                NVARCHAR(50)      NULL,
+        [Address]              NVARCHAR(500) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NOT NULL,
+        [Phone]                NVARCHAR(20) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NOT NULL,
+        [Email]                NVARCHAR(50) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NULL,
         [NationalityCountryID] INT               NOT NULL,
-        [ImagePath]            NVARCHAR(250)     NULL,
+        [ImagePath]            NVARCHAR(250) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NULL,
         CONSTRAINT [PK_People] PRIMARY KEY CLUSTERED ([PersonID]),
         CONSTRAINT [FK_People_Countries1] FOREIGN KEY ([NationalityCountryID])
             REFERENCES [dbo].[Countries] ([CountryID])
@@ -52,8 +54,8 @@ BEGIN
     CREATE TABLE [dbo].[Users] (
         [UserID]   INT IDENTITY(1,1) NOT NULL,
         [PersonID] INT               NOT NULL,
-        [UserName] NVARCHAR(20)      NOT NULL,
-        [Password] NVARCHAR(20)      NOT NULL,
+        [UserName] NVARCHAR(20) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NOT NULL,
+        [Password] NVARCHAR(20) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NOT NULL,
         [IsActive] BIT               NOT NULL,
         CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED ([UserID]),
         CONSTRAINT [FK_Users_People] FOREIGN KEY ([PersonID])
@@ -69,7 +71,7 @@ IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Appli
 BEGIN
     CREATE TABLE [dbo].[ApplicationTypes] (
         [ApplicationTypeID]    INT IDENTITY(1,1) NOT NULL,
-        [ApplicationTypeTitle] NVARCHAR(150)     NOT NULL,
+        [ApplicationTypeTitle] NVARCHAR(150) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NOT NULL,
         [ApplicationFees]      SMALLMONEY DEFAULT 0 NOT NULL,
         CONSTRAINT [PK_ApplicationTypes] PRIMARY KEY CLUSTERED ([ApplicationTypeID])
     );
@@ -83,8 +85,8 @@ IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Licen
 BEGIN
     CREATE TABLE [dbo].[LicenseClasses] (
         [LicenseClassID]        INT IDENTITY(1,1) NOT NULL,
-        [ClassName]             NVARCHAR(50)      NOT NULL,
-        [ClassDescription]      NVARCHAR(500)     NOT NULL,
+        [ClassName]             NVARCHAR(50) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NOT NULL,
+        [ClassDescription]      NVARCHAR(500) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NOT NULL,
         [MinimumAllowedAge]     TINYINT DEFAULT 18 NOT NULL,
         [DefaultValidityLength] TINYINT DEFAULT 1  NOT NULL,
         [ClassFees]             SMALLMONEY DEFAULT 0 NOT NULL,
@@ -100,14 +102,46 @@ IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'TestT
 BEGIN
     CREATE TABLE [dbo].[TestTypes] (
         [TestTypeID]          INT IDENTITY(1,1) NOT NULL,
-        [TestTypeTitle]       NVARCHAR(100)     NOT NULL,
-        [TestTypeDescription] NVARCHAR(500)     NOT NULL,
+        [TestTypeTitle]       NVARCHAR(100) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NOT NULL,
+        [TestTypeDescription] NVARCHAR(500) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NOT NULL,
         [TestTypeFees]        SMALLMONEY        NOT NULL,
         CONSTRAINT [PK_TestTypes] PRIMARY KEY CLUSTERED ([TestTypeID])
     );
 END
 GO
 -- ----------------------------------------------------------------------------
+-- ----------------------------------------------------------------------------
+-- 6b. sysdiagrams (SSMS artifact, kept for schema parity)
+-- ----------------------------------------------------------------------------
+IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'sysdiagrams')
+BEGIN
+    CREATE TABLE [dbo].[sysdiagrams] (
+        [name]         SYSNAME COLLATE Arabic_CI_AI NOT NULL,
+        [principal_id] INT                          NOT NULL,
+        [diagram_id]   INT IDENTITY(1,1)            NOT NULL,
+        [version]      INT                          NULL,
+        [definition]   VARBINARY(MAX)               NULL,
+        CONSTRAINT [PK_sysdiagrams] PRIMARY KEY CLUSTERED ([diagram_id]),
+        CONSTRAINT [UK_principal_name] UNIQUE ([principal_id], [name])
+    );
+END
+GO
+-- ----------------------------------------------------------------------------
+-- 6b. sysdiagrams (SSMS artifact, kept for schema parity)
+-- ----------------------------------------------------------------------------
+IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'sysdiagrams')
+BEGIN
+    CREATE TABLE [dbo].[sysdiagrams] (
+        [name]         SYSNAME COLLATE Arabic_CI_AI NOT NULL,
+        [principal_id] INT                          NOT NULL,
+        [diagram_id]   INT IDENTITY(1,1)            NOT NULL,
+        [version]      INT                          NULL,
+        [definition]   VARBINARY(MAX)               NULL,
+        CONSTRAINT [PK_sysdiagrams] PRIMARY KEY CLUSTERED ([diagram_id]),
+        CONSTRAINT [UK_principal_name] UNIQUE ([principal_id], [name])
+    );
+END
+GO
 -- 7. Applications
 -- ----------------------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Applications')
@@ -141,7 +175,7 @@ BEGIN
         [DriverID]        INT IDENTITY(1,1) NOT NULL,
         [PersonID]        INT               NOT NULL,
         [CreatedByUserID] INT               NOT NULL,
-        [CreatedDate]     DATETIME          NOT NULL,
+        [CreatedDate]     SMALLDATETIME          NOT NULL,
         CONSTRAINT [PK_Drivers_1] PRIMARY KEY CLUSTERED ([DriverID]),
         CONSTRAINT [FK_Drivers_People] FOREIGN KEY ([PersonID])
             REFERENCES [dbo].[People] ([PersonID]),
@@ -163,7 +197,7 @@ BEGIN
         [LicenseClass]     INT               NOT NULL,
         [IssueDate]        DATETIME          NOT NULL,
         [ExpirationDate]   DATETIME          NOT NULL,
-        [Notes]            NVARCHAR(500)     NULL,
+        [Notes]            NVARCHAR(500) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NULL,
         [PaidFees]         SMALLMONEY        NOT NULL,
         [IsActive]         BIT DEFAULT 1     NOT NULL,
         [IssueReason]      TINYINT DEFAULT 1 NOT NULL,
@@ -207,11 +241,14 @@ BEGIN
         [TestAppointmentID]                 INT IDENTITY(1,1) NOT NULL,
         [TestTypeID]                        INT               NOT NULL,
         [LocalDrivingLicenseApplicationID]  INT               NOT NULL,
-        [AppointmentDate]                   DATETIME          NOT NULL,
+        [AppointmentDate]                   SMALLDATETIME          NOT NULL,
         [PaidFees]                          SMALLMONEY        NOT NULL,
         [CreatedByUserID]                   INT               NOT NULL,
         [IsLocked]                          BIT DEFAULT 0     NOT NULL,
+        [RetakeTestApplicationID]           INT               NULL,
         CONSTRAINT [PK_TestAppointments] PRIMARY KEY CLUSTERED ([TestAppointmentID]),
+        CONSTRAINT [FK_TestAppointments_Applications] FOREIGN KEY ([RetakeTestApplicationID])
+            REFERENCES [dbo].[Applications] ([ApplicationID]),
         CONSTRAINT [FK_TestAppointments_LocalDrivingLicenseApplications] FOREIGN KEY ([LocalDrivingLicenseApplicationID])
             REFERENCES [dbo].[LocalDrivingLicenseApplications] ([LocalDrivingLicenseApplicationID]),
         CONSTRAINT [FK_TestAppointments_TestTypes] FOREIGN KEY ([TestTypeID])
@@ -231,7 +268,7 @@ BEGIN
         [TestID]            INT IDENTITY(1,1) NOT NULL,
         [TestAppointmentID] INT               NOT NULL,
         [TestResult]        BIT               NOT NULL,
-        [Notes]             NVARCHAR(500)     NULL,
+        [Notes]             NVARCHAR(500) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NULL,
         [CreatedByUserID]   INT               NOT NULL,
         CONSTRAINT [PK_Tests] PRIMARY KEY CLUSTERED ([TestID]),
         CONSTRAINT [FK_Tests_TestAppointments] FOREIGN KEY ([TestAppointmentID])
@@ -250,11 +287,11 @@ BEGIN
     CREATE TABLE [dbo].[DetainedLicenses] (
         [DetainID]             INT IDENTITY(1,1) NOT NULL,
         [LicenseID]            INT               NOT NULL,
-        [DetainDate]           DATETIME          NOT NULL,
+        [DetainDate]           SMALLDATETIME          NOT NULL,
         [FineFees]             SMALLMONEY        NOT NULL,
         [CreatedByUserID]      INT               NOT NULL,
         [IsReleased]           BIT DEFAULT 0     NOT NULL,
-        [ReleaseDate]          DATETIME          NULL,
+        [ReleaseDate]          SMALLDATETIME          NULL,
         [ReleasedByUserID]     INT               NULL,
         [ReleaseApplicationID] INT               NULL,
         CONSTRAINT [PK_DetainedLicenses] PRIMARY KEY CLUSTERED ([DetainID]),
@@ -280,8 +317,8 @@ BEGIN
         [ApplicationID]               INT               NOT NULL,
         [DriverID]                    INT               NOT NULL,
         [IssuedUsingLocalLicenseID]   INT               NOT NULL,
-        [IssueDate]                   DATETIME          NOT NULL,
-        [ExpirationDate]              DATETIME          NOT NULL,
+        [IssueDate]                   SMALLDATETIME          NOT NULL,
+        [ExpirationDate]              SMALLDATETIME          NOT NULL,
         [IsActive]                    BIT               NOT NULL,
         [CreatedByUserID]             INT               NOT NULL,
         CONSTRAINT [PK_InternationalLicenses] PRIMARY KEY CLUSTERED ([InternationalLicenseID]),
@@ -299,6 +336,27 @@ GO
 -- ============================================================================
 -- VIEWS
 -- ============================================================================
+
+-- DetainedLicenses_View
+IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'DetainedLicenses_View')
+    EXEC('CREATE VIEW [dbo].[DetainedLicenses_View] AS SELECT * FROM [dbo].[DetainedLicenses]');
+GO
+ALTER VIEW [dbo].[DetainedLicenses_View] AS
+SELECT
+    dl.DetainID,
+    dl.LicenseID,
+    dl.DetainDate,
+    dl.IsReleased,
+    dl.FineFees,
+    dl.ReleaseDate,
+    p.NationalNo,
+    p.FirstName + ' ' + p.SecondName + ' ' + ISNULL(p.ThirdName, ' ') + ' ' + p.LastName AS FullName,
+    dl.ReleaseApplicationID
+FROM [dbo].[People] p
+INNER JOIN [dbo].[Drivers] d ON p.PersonID = d.PersonID
+INNER JOIN [dbo].[Licenses] l ON d.DriverID = l.DriverID
+RIGHT OUTER JOIN [dbo].[DetainedLicenses] dl ON l.LicenseID = dl.LicenseID;
+GO
 
 -- Drivers_Views
 IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'Drivers_Views')
@@ -345,6 +403,26 @@ INNER JOIN [dbo].[LicenseClasses] lc ON lda.LicenseClassID = lc.LicenseClassID
 INNER JOIN [dbo].[People] p ON a.ApplicantPersonID = p.PersonID;
 GO
 
+-- LocalDrivingLicenseFullApplications
+IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'LocalDrivingLicenseFullApplications')
+    EXEC('CREATE VIEW [dbo].[LocalDrivingLicenseFullApplications] AS SELECT * FROM [dbo].[LocalDrivingLicenseApplications]');
+GO
+ALTER VIEW [dbo].[LocalDrivingLicenseFullApplications] AS
+SELECT
+    a.ApplicationID,
+    a.ApplicantPersonID,
+    a.ApplicationDate,
+    a.ApplicationTypeID,
+    a.ApplicationStatus,
+    a.LastStatusDate,
+    a.PaidFees,
+    a.CreatedByUserID,
+    lda.LocalDrivingLicenseApplicationID,
+    lda.LicenseClassID
+FROM [dbo].[Applications] a
+INNER JOIN [dbo].[LocalDrivingLicenseApplications] lda ON a.ApplicationID = lda.ApplicationID;
+GO
+
 -- GetAllTestAppointments_View
 IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'GetAllTestAppointments_View')
     EXEC('CREATE VIEW [dbo].[GetAllTestAppointments_View] AS SELECT * FROM [dbo].[TestAppointments]');
@@ -366,7 +444,6 @@ INNER JOIN [dbo].[Applications] a ON lda.ApplicationID = a.ApplicationID
 INNER JOIN [dbo].[People] p ON a.ApplicantPersonID = p.PersonID
 INNER JOIN [dbo].[LicenseClasses] lc ON lda.LicenseClassID = lc.LicenseClassID;
 GO
--- ============================================================================
 -- SEED DATA
 -- ============================================================================
 
