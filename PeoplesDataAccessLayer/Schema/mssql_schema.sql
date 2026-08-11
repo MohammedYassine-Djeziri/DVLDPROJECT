@@ -14,7 +14,7 @@ IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Count
 BEGIN
     CREATE TABLE [dbo].[Countries] (
         [CountryID]   INT IDENTITY(1,1) NOT NULL,
-        [CountryName] NVARCHAR(50) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NOT NULL,
+        [CountryName] NVARCHAR(50)      NOT NULL,
         CONSTRAINT [PK_Countries] PRIMARY KEY CLUSTERED ([CountryID])
     );
 END
@@ -27,18 +27,18 @@ IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Peopl
 BEGIN
     CREATE TABLE [dbo].[People] (
         [PersonID]             INT IDENTITY(1,1) NOT NULL,
-        [NationalNo]           NVARCHAR(20) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NOT NULL,
-        [FirstName]            NVARCHAR(20) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NOT NULL,
-        [SecondName]           NVARCHAR(20) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NOT NULL,
-        [ThirdName]            NVARCHAR(20) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NULL,
-        [LastName]             NVARCHAR(20) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NOT NULL,
+        [NationalNo]           NVARCHAR(20)       NOT NULL,
+        [FirstName]            NVARCHAR(20)       NOT NULL,
+        [SecondName]           NVARCHAR(20)       NOT NULL,
+        [ThirdName]            NVARCHAR(20)       NULL,
+        [LastName]             NVARCHAR(20)       NOT NULL,
         [DateOfBirth]          DATETIME          NOT NULL,
         [Gender]               TINYINT DEFAULT 0 NOT NULL,
-        [Address]              NVARCHAR(500) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NOT NULL,
-        [Phone]                NVARCHAR(20) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NOT NULL,
-        [Email]                NVARCHAR(50) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NULL,
+        [Address]              NVARCHAR(500)      NOT NULL,
+        [Phone]                NVARCHAR(20)       NOT NULL,
+        [Email]                NVARCHAR(50)       NULL,
         [NationalityCountryID] INT               NOT NULL,
-        [ImagePath]            NVARCHAR(250) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NULL,
+        [ImagePath]            NVARCHAR(250)      NULL,
         CONSTRAINT [PK_People] PRIMARY KEY CLUSTERED ([PersonID]),
         CONSTRAINT [FK_People_Countries1] FOREIGN KEY ([NationalityCountryID])
             REFERENCES [dbo].[Countries] ([CountryID])
@@ -54,8 +54,8 @@ BEGIN
     CREATE TABLE [dbo].[Users] (
         [UserID]   INT IDENTITY(1,1) NOT NULL,
         [PersonID] INT               NOT NULL,
-        [UserName] NVARCHAR(20) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NOT NULL,
-        [Password] NVARCHAR(20) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NOT NULL,
+        [UserName] NVARCHAR(20)       NOT NULL,
+        [Password] NVARCHAR(20)       NOT NULL,
         [IsActive] BIT               NOT NULL,
         CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED ([UserID]),
         CONSTRAINT [FK_Users_People] FOREIGN KEY ([PersonID])
@@ -71,7 +71,7 @@ IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Appli
 BEGIN
     CREATE TABLE [dbo].[ApplicationTypes] (
         [ApplicationTypeID]    INT IDENTITY(1,1) NOT NULL,
-        [ApplicationTypeTitle] NVARCHAR(150) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NOT NULL,
+        [ApplicationTypeTitle] NVARCHAR(150)      NOT NULL,
         [ApplicationFees]      SMALLMONEY DEFAULT 0 NOT NULL,
         CONSTRAINT [PK_ApplicationTypes] PRIMARY KEY CLUSTERED ([ApplicationTypeID])
     );
@@ -85,8 +85,8 @@ IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Licen
 BEGIN
     CREATE TABLE [dbo].[LicenseClasses] (
         [LicenseClassID]        INT IDENTITY(1,1) NOT NULL,
-        [ClassName]             NVARCHAR(50) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI      NOT NULL,
-        [ClassDescription]      NVARCHAR(500) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NOT NULL,
+        [ClassName]             NVARCHAR(50)       NOT NULL,
+        [ClassDescription]      NVARCHAR(500)      NOT NULL,
         [MinimumAllowedAge]     TINYINT DEFAULT 18 NOT NULL,
         [DefaultValidityLength] TINYINT DEFAULT 1  NOT NULL,
         [ClassFees]             SMALLMONEY DEFAULT 0 NOT NULL,
@@ -102,8 +102,8 @@ IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'TestT
 BEGIN
     CREATE TABLE [dbo].[TestTypes] (
         [TestTypeID]          INT IDENTITY(1,1) NOT NULL,
-        [TestTypeTitle]       NVARCHAR(100) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NOT NULL,
-        [TestTypeDescription] NVARCHAR(500) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NOT NULL,
+        [TestTypeTitle]       NVARCHAR(100)      NOT NULL,
+        [TestTypeDescription] NVARCHAR(500)      NOT NULL,
         [TestTypeFees]        SMALLMONEY        NOT NULL,
         CONSTRAINT [PK_TestTypes] PRIMARY KEY CLUSTERED ([TestTypeID])
     );
@@ -116,7 +116,7 @@ GO
 IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'sysdiagrams')
 BEGIN
     CREATE TABLE [dbo].[sysdiagrams] (
-        [name]         SYSNAME COLLATE Arabic_CI_AI NOT NULL,
+        [name]         SYSNAME      NOT NULL,
         [principal_id] INT                          NOT NULL,
         [diagram_id]   INT IDENTITY(1,1)            NOT NULL,
         [version]      INT                          NULL,
@@ -132,7 +132,7 @@ GO
 IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'sysdiagrams')
 BEGIN
     CREATE TABLE [dbo].[sysdiagrams] (
-        [name]         SYSNAME COLLATE Arabic_CI_AI NOT NULL,
+        [name]         SYSNAME  NOT NULL,
         [principal_id] INT                          NOT NULL,
         [diagram_id]   INT IDENTITY(1,1)            NOT NULL,
         [version]      INT                          NULL,
@@ -197,7 +197,7 @@ BEGIN
         [LicenseClass]     INT               NOT NULL,
         [IssueDate]        DATETIME          NOT NULL,
         [ExpirationDate]   DATETIME          NOT NULL,
-        [Notes]            NVARCHAR(500) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NULL,
+        [Notes]            NVARCHAR(500)      NULL,
         [PaidFees]         SMALLMONEY        NOT NULL,
         [IsActive]         BIT DEFAULT 1     NOT NULL,
         [IssueReason]      TINYINT DEFAULT 1 NOT NULL,
@@ -268,7 +268,7 @@ BEGIN
         [TestID]            INT IDENTITY(1,1) NOT NULL,
         [TestAppointmentID] INT               NOT NULL,
         [TestResult]        BIT               NOT NULL,
-        [Notes]             NVARCHAR(500) COLLATE Arabic_CI_AI COLLATE Arabic_CI_AI     NULL,
+        [Notes]             NVARCHAR(500)      NULL,
         [CreatedByUserID]   INT               NOT NULL,
         CONSTRAINT [PK_Tests] PRIMARY KEY CLUSTERED ([TestID]),
         CONSTRAINT [FK_Tests_TestAppointments] FOREIGN KEY ([TestAppointmentID])
