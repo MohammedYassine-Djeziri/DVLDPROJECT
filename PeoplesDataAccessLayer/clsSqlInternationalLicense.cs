@@ -207,14 +207,7 @@ namespace DataAccessLayer
                     license_id = Convert.ToInt32(r[3]);
                     dateI = Convert.ToDateTime(r[4]);
                     dateE = Convert.ToDateTime(r[5]);
-                    if (Convert.ToInt32(r[6]) == 1)
-                    {
-                        is_active = true;
-                    }
-                    else
-                    {
-                        is_active = false;
-                    }
+                    is_active = Convert.ToBoolean(r[6]);
                     user_id = Convert.ToInt32(r[7]);
 
                     IsExist = true;
@@ -256,14 +249,7 @@ namespace DataAccessLayer
                     driver_id = Convert.ToInt32(r[2]);
                     dateI = Convert.ToDateTime(r[4]);
                     dateE = Convert.ToDateTime(r[5]);
-                    if (Convert.ToInt32(r[6]) == 1)
-                    {
-                        is_active = true;
-                    }
-                    else
-                    {
-                        is_active = false;
-                    }
+                    is_active = Convert.ToBoolean(r[6]);
                     user_id = Convert.ToInt32(r[7]);
 
                     IsExist = true;
@@ -305,14 +291,7 @@ namespace DataAccessLayer
                     license_id = Convert.ToInt32(r[3]);
                     dateI = Convert.ToDateTime(r[4]);
                     dateE = Convert.ToDateTime(r[5]);
-                    if (Convert.ToInt32(r[6]) == 1)
-                    {
-                        is_active = true;
-                    }
-                    else
-                    {
-                        is_active = false;
-                    }
+                    is_active = Convert.ToBoolean(r[6]);
                     user_id = Convert.ToInt32(r[7]);
 
                     IsExist = true;

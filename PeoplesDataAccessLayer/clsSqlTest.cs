@@ -12,12 +12,6 @@ namespace DataAccessLayer
     {
         public static int AddNewTest(int Appointment_id, int user_id, bool Result, string note)
         {
-            byte IsSuccesses = 0;
-            if (Result)
-            {
-                IsSuccesses = 1;
-            }
-
             int ID = -1;
             var connection = clsDatabaseFactory.CreateConnection();
 
@@ -34,7 +28,7 @@ namespace DataAccessLayer
             clsDatabaseFactory.AddParam(command, "@Appointment_id", Appointment_id);
             clsDatabaseFactory.AddParam(command, "@user_id", user_id);
             clsDatabaseFactory.AddParam(command, "@note", note);
-            clsDatabaseFactory.AddParam(command, "@IsSuccesses", IsSuccesses);
+            clsDatabaseFactory.AddParam(command, "@IsSuccesses", Result);
 
             try
             {

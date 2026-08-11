@@ -16,6 +16,8 @@ namespace DVLD_Project
         [STAThread]
         static void Main()
         {
+            try
+            {
             try { DataAccessLayer.clsDatabaseInitializer.EnsureDatabaseCreated(); }
             catch (Exception ex)
             {
@@ -32,6 +34,12 @@ namespace DVLD_Project
             size.Height = 580;
             form.Size = size;
             System.Windows.Forms.Application.Run(form);
+        }
+        catch (Exception ex)
+        {
+            System.Windows.Forms.MessageBox.Show("An unexpected error occurred:\n"
+                + ex.ToString(), "DVLD - Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
         }
     }
 }

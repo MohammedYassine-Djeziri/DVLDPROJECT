@@ -43,11 +43,6 @@ namespace DataAccessLayer
         public static int AddNewTestAppointment(int testTypeID, int LDLID, DateTime date,
             float fees, int user_id, bool is_locked, int retake_app_id)
         {
-            byte Locked = 0;
-            if (is_locked)
-            {
-                Locked = 1;
-            }
             int ID = -1;
             var connection = clsDatabaseFactory.CreateConnection();
 
@@ -68,7 +63,7 @@ namespace DataAccessLayer
             clsDatabaseFactory.AddParam(command, "@date", date);
             clsDatabaseFactory.AddParam(command, "@fees", fees);
             clsDatabaseFactory.AddParam(command, "@user_id", user_id);
-            clsDatabaseFactory.AddParam(command, "@Locked", Locked);
+            clsDatabaseFactory.AddParam(command, "@Locked", is_locked);
             if (retake_app_id == -1)
             {
                 clsDatabaseFactory.AddParam(command, "@retake_app_id", DBNull.Value);
@@ -99,11 +94,6 @@ namespace DataAccessLayer
         public static bool UpdateTestAppointment(int AppointmentID, int testTypeID, int LDLID, DateTime date,
             float fees, int user_id, bool is_locked, int retake_app_id)
         {
-            byte Locked = 0;
-            if (is_locked)
-            {
-                Locked = 1;
-            }
             int r = 0;
             var connection = clsDatabaseFactory.CreateConnection();
 
@@ -121,7 +111,7 @@ namespace DataAccessLayer
             clsDatabaseFactory.AddParam(command, "@date", date);
             clsDatabaseFactory.AddParam(command, "@fees", fees);
             clsDatabaseFactory.AddParam(command, "@user_id", user_id);
-            clsDatabaseFactory.AddParam(command, "@Locked", Locked);
+            clsDatabaseFactory.AddParam(command, "@Locked", is_locked);
             if (retake_app_id == -1)
             {
                 clsDatabaseFactory.AddParam(command, "@retake_app_id", DBNull.Value);
@@ -150,10 +140,14 @@ namespace DataAccessLayer
             bool IsActive = false;
             var connection = clsDatabaseFactory.CreateConnection();
 
-            // Simple SELECT – auto-convert
+            // Dual version: testappointments.islocked is a PostgreSQL boolean column.
+            // 'boolean = 0' is invalid in PG → must use = FALSE.
             string q = clsDatabaseFactory.GetQuery(
                 "select 1 from TestAppointments where TestAppointments.LocalDrivingLicenseApplicationID=" +
-                "@LDLID and TestTypeID=@testTypeID and IsLocked = 0 ; \r\n");
+                "@LDLID and TestTypeID=@testTypeID and IsLocked = 0 ; \r\n",
+
+                "select 1 from testappointments where testappointments.localdrivinglicenseapplicationid=" +
+                "@LDLID and testtypeid=@testTypeID and islocked = FALSE ; \r\n");
 
             connection.Open();
             var command = clsDatabaseFactory.CreateCommand(q, connection);
@@ -267,10 +261,14 @@ namespace DataAccessLayer
             bool IsExist = false;
             var connection = clsDatabaseFactory.CreateConnection();
 
-            // Simple SELECT – auto-convert
+            // Dual version: tests.testresult is a PostgreSQL boolean column.
+            // 'boolean = 1' is a syntax/type error in PG → must use = TRUE.
             string q = clsDatabaseFactory.GetQuery(
                 "select 1 from TestAppointments join Tests on TestAppointments.TestAppointmentID= Tests.TestAppointmentID " +
-                "where TestAppointments.LocalDrivingLicenseApplicationID=@LdlID and TestTypeID=@Test___Type and TestResult=1;");
+                "where TestAppointments.LocalDrivingLicenseApplicationID=@LdlID and TestTypeID=@Test___Type and TestResult=1;",
+
+                "select 1 from testappointments join tests on testappointments.testappointmentid = tests.testappointmentid " +
+                "where testappointments.localdrivinglicenseapplicationid=@LdlID and testtypeid=@Test___Type and testresult = TRUE;");
 
             connection.Open();
             var cmd = clsDatabaseFactory.CreateCommand(q, connection);

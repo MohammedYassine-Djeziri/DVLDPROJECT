@@ -153,8 +153,6 @@ namespace DataAccessLayer
         public static bool AddNewUser(ref int UserID, int perID, string UserName, string Pass, bool IsActive)
         {
             bool IsAdded = false;
-            Byte f = 0;
-            if (IsActive) { f = 1; }
             var connection = clsDatabaseFactory.CreateConnection();
 
             // INSERT with SCOPE_IDENTITY → explicit PG RETURNING version
@@ -170,7 +168,7 @@ namespace DataAccessLayer
             clsDatabaseFactory.AddParam(cmd, "@perID", perID);
             clsDatabaseFactory.AddParam(cmd, "@UserName", UserName);
             clsDatabaseFactory.AddParam(cmd, "@Pass", Pass);
-            clsDatabaseFactory.AddParam(cmd, "@Active", f);
+            clsDatabaseFactory.AddParam(cmd, "@Active", IsActive);
 
             try
             {
@@ -192,8 +190,6 @@ namespace DataAccessLayer
         public static bool UpdateUser(int UserID, int perID, string UserName, string Pass, bool IsActive)
         {
             bool IsUpdated = false;
-            Byte f = 0;
-            if (IsActive) { f = 1; }
             var connection = clsDatabaseFactory.CreateConnection();
             string q = clsDatabaseFactory.GetQuery(
                 @"UPDATE [dbo].[Users] SET [PersonID] = @perID ,[UserName] = @UserName ,[Password] = @Pass
@@ -204,7 +200,7 @@ namespace DataAccessLayer
             clsDatabaseFactory.AddParam(cmd, "@perID", perID);
             clsDatabaseFactory.AddParam(cmd, "@UserName", UserName);
             clsDatabaseFactory.AddParam(cmd, "@Pass", Pass);
-            clsDatabaseFactory.AddParam(cmd, "@Active", f);
+            clsDatabaseFactory.AddParam(cmd, "@Active", IsActive);
 
             try
             {

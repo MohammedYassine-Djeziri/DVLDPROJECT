@@ -73,3 +73,8 @@
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Pro.F4BE20FF.Up2Date
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.exe
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.pdb
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Text.Json.dll
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Text.Encodings.Web.dll
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Numerics.Vectors.dll
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Memory.dll
+/home/user/Downloads/DVLD/DVLD_Project/bin/Debug/System.Buffers.dll

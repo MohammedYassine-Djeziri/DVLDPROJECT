@@ -190,14 +190,7 @@ namespace DataAccessLayer
                     dateE = Convert.ToDateTime(r[5]);
                     notes = Convert.ToString(r[6]);
                     fees = Convert.ToSingle(r[7]);
-                    if (Convert.ToInt32(r[8]) == 1)
-                    {
-                        is_active = true;
-                    }
-                    else
-                    {
-                        is_active = false;
-                    }
+                    is_active = Convert.ToBoolean(r[8]);
                     isssue_reason = Convert.ToInt16(r[9]);
                     user_id = Convert.ToInt32(r[10]);
 
@@ -242,14 +235,7 @@ namespace DataAccessLayer
                     dateE = Convert.ToDateTime(r[5]);
                     notes = Convert.ToString(r[6]);
                     fees = Convert.ToSingle(r[7]);
-                    if (Convert.ToInt32(r[8]) == 1)
-                    {
-                        is_active = true;
-                    }
-                    else
-                    {
-                        is_active = false;
-                    }
+                    is_active = Convert.ToBoolean(r[8]);
                     isssue_reason = Convert.ToInt16(r[9]);
                     user_id = Convert.ToInt32(r[10]);
 

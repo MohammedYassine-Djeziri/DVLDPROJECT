@@ -162,14 +162,7 @@ namespace DataAccessLayer
                     else
                     { date_rel = DateTime.MinValue; }
                     fees = Convert.ToSingle(r[3]);
-                    if (Convert.ToInt32(r[5]) == 1)
-                    {
-                        is_released = true;
-                    }
-                    else
-                    {
-                        is_released = false;
-                    }
+                    is_released = Convert.ToBoolean(r[5]);
 
                     IsExist = true;
                 }
@@ -228,14 +221,7 @@ namespace DataAccessLayer
                     else
                     { date_rel = DateTime.MinValue; }
                     fees = Convert.ToSingle(r[3]);
-                    if (Convert.ToInt32(r[5]) == 1)
-                    {
-                        is_released = true;
-                    }
-                    else
-                    {
-                        is_released = false;
-                    }
+                    is_released = Convert.ToBoolean(r[5]);
 
                     IsExist = true;
                 }

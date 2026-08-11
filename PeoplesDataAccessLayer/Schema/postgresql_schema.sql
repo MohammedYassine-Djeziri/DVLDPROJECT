@@ -633,6 +633,37 @@ SELECT 'Zambia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Z
 INSERT INTO countries (countryname)
 SELECT 'Zimbabwe' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Zimbabwe');
 
+-- ApplicationTypes
+INSERT INTO applicationtypes (applicationtypetitle, applicationfees)
+SELECT 'New Local Driving License Service', 15
+WHERE NOT EXISTS (SELECT 1 FROM applicationtypes WHERE applicationtypetitle = 'New Local Driving License Service');
+INSERT INTO applicationtypes (applicationtypetitle, applicationfees)
+SELECT 'Renew Driving License Service', 5
+WHERE NOT EXISTS (SELECT 1 FROM applicationtypes WHERE applicationtypetitle = 'Renew Driving License Service');
+INSERT INTO applicationtypes (applicationtypetitle, applicationfees)
+SELECT 'Replacement for a Lost Driving License', 10
+WHERE NOT EXISTS (SELECT 1 FROM applicationtypes WHERE applicationtypetitle = 'Replacement for a Lost Driving License');
+INSERT INTO applicationtypes (applicationtypetitle, applicationfees)
+SELECT 'Replacement for a Damaged Driving License', 5
+WHERE NOT EXISTS (SELECT 1 FROM applicationtypes WHERE applicationtypetitle = 'Replacement for a Damaged Driving License');
+INSERT INTO applicationtypes (applicationtypetitle, applicationfees)
+SELECT 'Release Detained Driving Licsense', 15
+WHERE NOT EXISTS (SELECT 1 FROM applicationtypes WHERE applicationtypetitle = 'Release Detained Driving Licsense');
+INSERT INTO applicationtypes (applicationtypetitle, applicationfees)
+SELECT 'New International License', 50
+WHERE NOT EXISTS (SELECT 1 FROM applicationtypes WHERE applicationtypetitle = 'New International License');
+
+-- TestTypes
+INSERT INTO testtypes (testtypetitle, testtypedescription, testtypefees)
+SELECT 'Vision Test', 'This assesses the applicant''s visual acuity to ensure they have sufficient vision to drive safely.', 10
+WHERE NOT EXISTS (SELECT 1 FROM testtypes WHERE testtypetitle = 'Vision Test');
+INSERT INTO testtypes (testtypetitle, testtypedescription, testtypefees)
+SELECT 'Written (Theory) Test', 'This test assesses the applicant''s knowledge of traffic rules, road signs, and driving regulations. It typically consists of multiple-choice questions, and the applicant must select the correct answer(s). The written test aims to ensure that the applicant understands the rules of the road and can apply them in various driving scenarios.', 20
+WHERE NOT EXISTS (SELECT 1 FROM testtypes WHERE testtypetitle = 'Written (Theory) Test');
+INSERT INTO testtypes (testtypetitle, testtypedescription, testtypefees)
+SELECT 'Practical (Street) Test', 'This test evaluates the applicant''s driving skills and ability to operate a motor vehicle safely on public roads. A licensed examiner accompanies the applicant in the vehicle and observes their driving performance.', 30
+WHERE NOT EXISTS (SELECT 1 FROM testtypes WHERE testtypetitle = 'Practical (Street) Test');
+
 -- Default Admin User
 DO $$
 DECLARE

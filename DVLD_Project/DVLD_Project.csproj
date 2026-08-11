@@ -77,6 +77,9 @@
   <PackageReference Include="System.Memory" Version="4.5.5">
     <PrivateAssets>build;analyzers</PrivateAssets>
   </PackageReference>
+  <PackageReference Include="System.Numerics.Vectors" Version="4.6.1">
+    <PrivateAssets>build;analyzers</PrivateAssets>
+  </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\Forms\ShowApplicationInfoForm.Designer.cs">
@@ -924,6 +927,13 @@
       <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\Microsoft.Bcl.AsyncInterfaces.dll" />
       <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\System.Threading.Tasks.Extensions.dll" />
       <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\System.ValueTuple.dll" />
+      <!-- System.Numerics.Vectors is a framework facade (its nuspec declares
+           frameworkAssembly=System.Numerics), so MSBuild marks it CopyLocal=false
+           and PeoplesDataAccessLayer\bin is NEVER populated with it. Pull it
+           straight from the NuGet cache, otherwise the runtime loader throws:
+           "Could not load file or assembly 'System.Numerics.Vectors,
+           Version=4.1.4.0, PublicKeyToken=b03f5f7f11d50a3a' ... File not found." -->
+      <NpgsqlRuntimeDeps Include="$(NuGetPackageRoot)system.numerics.vectors\4.6.1\lib\net462\System.Numerics.Vectors.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(NpgsqlRuntimeDeps)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" Condition="Exists('%(Identity)')" />
   </Target>

@@ -31,7 +31,7 @@ BEGIN
         [ThirdName]            NVARCHAR(20)      NULL,
         [LastName]             NVARCHAR(20)      NOT NULL,
         [DateOfBirth]          DATETIME          NOT NULL,
-        [Gendor]               TINYINT DEFAULT 0 NOT NULL,
+        [Gender]               TINYINT DEFAULT 0 NOT NULL,
         [Address]              NVARCHAR(500)     NOT NULL,
         [Phone]                NVARCHAR(20)      NOT NULL,
         [Email]                NVARCHAR(50)      NULL,
@@ -196,9 +196,6 @@ BEGIN
         CONSTRAINT [FK_DrivingLicsenseApplications_LicenseClasses] FOREIGN KEY ([LicenseClassID])
             REFERENCES [dbo].[LicenseClasses] ([LicenseClassID])
     );
-END
-GO
-
 END
 GO
 -- ----------------------------------------------------------------------------
@@ -1155,12 +1152,36 @@ IF NOT EXISTS (SELECT 1 FROM [dbo].[Countries] WHERE [CountryName] = N'Zimbabwe'
     INSERT INTO [dbo].[Countries] ([CountryName]) VALUES (N'Zimbabwe');
 GO
 
+-- ApplicationTypes
+IF NOT EXISTS (SELECT 1 FROM [dbo].[ApplicationTypes] WHERE [ApplicationTypeTitle] = N'New Local Driving License Service')
+    INSERT INTO [dbo].[ApplicationTypes] ([ApplicationTypeTitle],[ApplicationFees]) VALUES (N'New Local Driving License Service', 15);
+IF NOT EXISTS (SELECT 1 FROM [dbo].[ApplicationTypes] WHERE [ApplicationTypeTitle] = N'Renew Driving License Service')
+    INSERT INTO [dbo].[ApplicationTypes] ([ApplicationTypeTitle],[ApplicationFees]) VALUES (N'Renew Driving License Service', 5);
+IF NOT EXISTS (SELECT 1 FROM [dbo].[ApplicationTypes] WHERE [ApplicationTypeTitle] = N'Replacement for a Lost Driving License')
+    INSERT INTO [dbo].[ApplicationTypes] ([ApplicationTypeTitle],[ApplicationFees]) VALUES (N'Replacement for a Lost Driving License', 10);
+IF NOT EXISTS (SELECT 1 FROM [dbo].[ApplicationTypes] WHERE [ApplicationTypeTitle] = N'Replacement for a Damaged Driving License')
+    INSERT INTO [dbo].[ApplicationTypes] ([ApplicationTypeTitle],[ApplicationFees]) VALUES (N'Replacement for a Damaged Driving License', 5);
+IF NOT EXISTS (SELECT 1 FROM [dbo].[ApplicationTypes] WHERE [ApplicationTypeTitle] = N'Release Detained Driving Licsense')
+    INSERT INTO [dbo].[ApplicationTypes] ([ApplicationTypeTitle],[ApplicationFees]) VALUES (N'Release Detained Driving Licsense', 15);
+IF NOT EXISTS (SELECT 1 FROM [dbo].[ApplicationTypes] WHERE [ApplicationTypeTitle] = N'New International License')
+    INSERT INTO [dbo].[ApplicationTypes] ([ApplicationTypeTitle],[ApplicationFees]) VALUES (N'New International License', 50);
+GO
+
+-- TestTypes
+IF NOT EXISTS (SELECT 1 FROM [dbo].[TestTypes] WHERE [TestTypeTitle] = N'Vision Test')
+    INSERT INTO [dbo].[TestTypes] ([TestTypeTitle],[TestTypeDescription],[TestTypeFees]) VALUES (N'Vision Test', N'This assesses the applicant''s visual acuity to ensure they have sufficient vision to drive safely.', 10);
+IF NOT EXISTS (SELECT 1 FROM [dbo].[TestTypes] WHERE [TestTypeTitle] = N'Written (Theory) Test')
+    INSERT INTO [dbo].[TestTypes] ([TestTypeTitle],[TestTypeDescription],[TestTypeFees]) VALUES (N'Written (Theory) Test', N'This test assesses the applicant''s knowledge of traffic rules, road signs, and driving regulations. It typically consists of multiple-choice questions, and the applicant must select the correct answer(s). The written test aims to ensure that the applicant understands the rules of the road and can apply them in various driving scenarios.', 20);
+IF NOT EXISTS (SELECT 1 FROM [dbo].[TestTypes] WHERE [TestTypeTitle] = N'Practical (Street) Test')
+    INSERT INTO [dbo].[TestTypes] ([TestTypeTitle],[TestTypeDescription],[TestTypeFees]) VALUES (N'Practical (Street) Test', N'This test evaluates the applicant''s driving skills and ability to operate a motor vehicle safely on public roads. A licensed examiner accompanies the applicant in the vehicle and observes their driving performance.', 30);
+GO
+
 -- Default Admin User
 IF NOT EXISTS (SELECT 1 FROM [dbo].[Users] WHERE [UserName] = N'admin')
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM [dbo].[People] WHERE [NationalNo] = N'ADMIN001')
     BEGIN
-        INSERT INTO [dbo].[People] ([NationalNo],[FirstName],[SecondName],[ThirdName],[LastName],[DateOfBirth],[Gendor],[Address],[Phone],[Email],[NationalityCountryID],[ImagePath])
+        INSERT INTO [dbo].[People] ([NationalNo],[FirstName],[SecondName],[ThirdName],[LastName],[DateOfBirth],[Gender],[Address],[Phone],[Email],[NationalityCountryID],[ImagePath])
         VALUES (N'ADMIN001', N'System', N'Admin', NULL, N'User', '2000-01-01', 0, N'DVLD System', N'0000000000', NULL, 1, NULL);
 
         DECLARE @AdminPersonID INT = SCOPE_IDENTITY();

@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
 using System.Text.RegularExpressions;
 using Npgsql;
 
@@ -100,25 +101,141 @@ namespace DataAccessLayer
         // -----------------------------------------------------------------
         private static string AutoConvertToPg(string mssql)
         {
-            // 1. Remove [dbo]. schema prefix (PG uses public schema by default)
-            string result = Regex.Replace(mssql, @"\[dbo\]\.", "", RegexOptions.IgnoreCase);
+            // a) Strip [dbo]. schema prefix (PG uses public schema by default)
+            string s = Regex.Replace(mssql, @"\[dbo\]\.", "", RegexOptions.IgnoreCase);
 
-            // 2. Replace remaining [...] identifiers with lowercase unquoted identifiers.
-            //    PostgreSQL folds unquoted identifiers to lowercase, so this keeps the
-            //    naming consistent (lowercase everywhere) without quoting.
-            result = Regex.Replace(result, @"\[([^\]]+)\]",
-                m => m.Groups[1].Value.ToLowerInvariant());
+            // b) Replace every [identifier] with the identifier lowercased and UNQUOTED.
+            //    Handles table, field, view, schema-qualified, and table.column brackets,
+            //    and ]] escaped brackets inside the identifier.
+            s = Regex.Replace(s, @"\[((?:\]\]|[^\]])+)\]",
+                m => m.Groups[1].Value.Replace("]]", "]").ToLowerInvariant());
 
-            // 3. Convert 'Alias'=column → column AS "Alias" (SQL Server → PG column alias)
-            //    Pattern: 'string literal'=identifier[.identifier]
-            //    Handles: 'Int.Lic ID'=InternationalLicenses.InternationalLicenseID
-            //             'Lic.ID'=Licenses.LicenseID
-            //             'Appointment ID'=TestAppointmentID
-            result = Regex.Replace(result, @"'([^']+)'=(\w+(?:\.\w+)?)", @"$2 AS ""$1""");
+            // c) Convert SQL Server column-alias syntax to PG. Whitespace-tolerant.
+            //    'Alias'=column        ->  column AS "Alias"
+            //    'Alias' = table.col   ->  table.col AS "Alias"
+            //    The alias text inside double quotes KEEPS its original case.
+            s = Regex.Replace(s, @"'([^']+)'\s*=\s*([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)?)",
+                "$2 AS \"$1\"");
 
+            // d)+e) Token-aware pass: lowercase identifiers ONLY in normal state.
+            //        Never touches string literals, double-quoted identifiers, or comments.
+            s = LowercaseAndConvertScalars(s);
 
-            //convert to lowercase for PostgreSQL
-            result = result.ToLowerInvariant();
+            return s;
+        }
+/// <summary>
+        /// Walks the SQL string with a state machine. In normal (code) state
+        /// everything is lowercased and scalar function replacements are applied.
+        /// String literals (single-quoted), double-quoted identifiers, and
+        /// comments (-- and /* */) are copied verbatim.
+        /// </summary>
+        private static string LowercaseAndConvertScalars(string s)
+        {
+            var sb = new StringBuilder(s.Length);
+            int i = 0;
+            int n = s.Length;
+            int? topLimit = null;
+
+            while (i < n)
+            {
+                char c = s[i];
+
+                // line comment  -- ... \n  (or end of string)
+                if (c == '-' && i + 1 < n && s[i + 1] == '-')
+                {
+                    int start = i;
+                    while (i < n && s[i] != '\n') i++;
+                    sb.Append(s, start, i - start);
+                    continue;
+                }
+
+                // block comment  /* ... */
+                if (c == '/' && i + 1 < n && s[i + 1] == '*')
+                {
+                    int start = i;
+                    i += 2;
+                    while (i + 1 < n && !(s[i] == '*' && s[i + 1] == '/')) i++;
+                    if (i + 1 < n) i += 2; else i = n;
+                    sb.Append(s, start, i - start);
+                    continue;
+                }
+
+                // single-quoted string literal  '...'  (SQL escapes '' inside)
+                if (c == '\'')
+                {
+                    int start = i;
+                    i++;
+                    while (i < n)
+                    {
+                        if (s[i] == '\'')
+                        {
+                            if (i + 1 < n && s[i + 1] == '\'') { i += 2; continue; }
+                            i++; break;
+                        }
+                        i++;
+                    }
+                    sb.Append(s, start, i - start);
+                    continue;
+                }
+
+                // double-quoted identifier  "..."  (PG preserves case verbatim)
+                if (c == '"')
+                {
+                    int start = i;
+                    i++;
+                    while (i < n && s[i] != '"') i++;
+                    if (i < n) i++; // closing quote
+                    sb.Append(s, start, i - start);
+                    continue;
+                }
+
+                // normal (code) state: gather a run until next special token
+                int segStart = i;
+                while (i < n)
+                {
+                    char d = s[i];
+                    if (d == '\'' || d == '"' ||
+                        (d == '-' && i + 1 < n && s[i + 1] == '-') ||
+                        (d == '/' && i + 1 < n && s[i + 1] == '*'))
+                        break;
+                    i++;
+                }
+                string seg = s.Substring(segStart, i - segStart);
+
+                // Lowercase the whole normal segment (identifiers, keywords,
+                // parameters — all become lowercase in PG).
+                string lower = seg.ToLowerInvariant();
+
+                // SELECT TOP <n>  ->  remove the TOP n token and remember n;
+                // a LIMIT n clause is appended at the end of the whole string.
+                var topMatch = Regex.Match(lower, @"\bselect\s+top\s+(\d+)");
+                if (topMatch.Success)
+                {
+                    topLimit = int.Parse(topMatch.Groups[1].Value);
+                    lower = Regex.Replace(lower, @"\bselect\s+top\s+\d+\s*", "select ");
+                }
+
+                // Mechanical scalar/function replacements (token-safe within
+                // normal segments; never applied inside literals or comments).
+                lower = Regex.Replace(lower, @"getutcdate\(\)",
+                    "(current_timestamp at time zone 'UTC')");
+                lower = Regex.Replace(lower, @"getdate\(\)", "current_timestamp");
+                lower = Regex.Replace(lower, @"isnull\(", "coalesce(");
+                lower = Regex.Replace(lower, @"\bdatalength\(", "octet_length(");
+                lower = Regex.Replace(lower, @"\blen\(", "length(");
+
+                sb.Append(lower);
+            }
+
+            string result = sb.ToString();
+
+            if (topLimit.HasValue)
+            {
+                // Append LIMIT n at the end (before any trailing semicolons/whitespace).
+                string trimmed = result.TrimEnd();
+                string trailing = result.Substring(trimmed.Length);
+                result = trimmed + " limit " + topLimit.Value + trailing;
+            }
 
             return result;
         }
