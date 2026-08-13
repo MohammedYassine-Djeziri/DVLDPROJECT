@@ -13,15 +13,19 @@ namespace DVLD_Project.Application.Forms
     public partial class ShowApplicationInfoForm : Form
     {
 
+
         public ShowApplicationInfoForm(int id , int passed_test)
         {
             InitializeComponent();
+            
             showApplicationDetails1.ID = id;
             showApplicationDetails1.PassedTest = passed_test;
+            //showApplicationDetails1.RefreshInfo();
         }
 
         private void ShowApplicationInfoForm_Load(object sender, EventArgs e)
         {
+           
             showApplicationDetails1.RefreshInfo();
         }
 

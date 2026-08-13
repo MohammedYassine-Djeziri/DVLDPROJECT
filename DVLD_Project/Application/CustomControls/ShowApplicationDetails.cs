@@ -16,9 +16,10 @@ namespace DVLD_Project.Application.CustomControls
     public partial class ShowApplicationDetails : UserControl
     {
         public int ID=-1;
+        public int PassedTest = 0;
         clsApplication MyApplication = clsApplication.GetEmptyApplication();
         clsLocalDrivingLicenseApp LDApp= clsLocalDrivingLicenseApp.GetEmptyLocalDrivingLicenseApplication();
-        public int PassedTest = 0;
+        
         public ShowApplicationDetails()
         {
             InitializeComponent();
@@ -41,6 +42,8 @@ namespace DVLD_Project.Application.CustomControls
 
         public void RefreshInfo()
         {
+
+            MessageBox.Show("ID: " + ID + " Passed Test: " + PassedTest);
             LDApp = clsLocalDrivingLicenseApp.FindLDLAppByLDLAppID(ID);
             MyApplication = clsApplication.FindApplicationByAppID(LDApp.ApplicationID);
             if (MyApplication.ApplicationID != -1)
@@ -93,6 +96,8 @@ namespace DVLD_Project.Application.CustomControls
                 lbl_LicenseClass.Text = "???";
             }
 
+            this.Refresh();
+
 
 
         }
@@ -101,7 +106,7 @@ namespace DVLD_Project.Application.CustomControls
         {
             LDApp = clsLocalDrivingLicenseApp.FindLDLAppByLDLAppID(ID);
             MyApplication = clsApplication.FindApplicationByAppID(LDApp.ApplicationID);
-            RefreshInfo();
+            //RefreshInfo();
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

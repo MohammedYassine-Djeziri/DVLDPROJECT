@@ -26,11 +26,12 @@ namespace DVLD_Project.InternationalLicense.CustomControls
 
         public void RefreshInfo()
         {
-            //MessageBox.Show(LicenseID.ToString());
+            
             MyInternationalLicense = clsInternationalLicense.FindLicenseByInterLicenseID(InterLicenseID);
+
             if (MyInternationalLicense.InternationalLicenseID != -1)
             {
-                //MessageBox.Show("I am in IF");
+                MessageBox.Show("I am in IF");
                 Person = clsPeoples.FindByPersonalID(clsDriver.FindDriverByDriverID(MyInternationalLicense.DriverID).PersonID);
 
                 lblInterLicID.Text = MyInternationalLicense.InternationalLicenseID.ToString();
@@ -47,7 +48,9 @@ namespace DVLD_Project.InternationalLicense.CustomControls
                 lblNatno.Text = Person.NationalNub;
 
                 lblIssueDate.Text = MyInternationalLicense.IssueDate.ToShortDateString();
+               // MessageBox.Show(MyInternationalLicense.LicenseID.ToString());
                 lblLicense.Text = MyInternationalLicense.LicenseID.ToString();
+                lblAppID.Text = MyInternationalLicense.ApplicationID.ToString();
                 if (Person.ImagePath != "")
                 {
                     if (File.Exists(Person.ImagePath))
@@ -87,6 +90,7 @@ namespace DVLD_Project.InternationalLicense.CustomControls
                 lblNatno.Text = "[???]";
                 lblIssueDate.Text = "[???]";
                 lblLicense.Text = "[???]";
+                lblAppID.Text = "[???]";
                 PctBoxImg.Image = Resources.Male_512;
                 
             }

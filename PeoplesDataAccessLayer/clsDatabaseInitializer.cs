@@ -21,7 +21,7 @@ namespace DataAccessLayer
         {
             try
             {
-                File.AppendAllText("output.txt", "we start EnsureDatabaseCreated\n");
+                
                 string databaseName = clsConnectionSettings.DatabaseName;
                 string provider = clsConnectionSettings.Provider;
                 bool isPg = clsConnectionSettings.IsPostgreSQL;
@@ -30,7 +30,7 @@ namespace DataAccessLayer
 
                 //write to the output.txt file to indicate that we are in the EnsureDatabaseCreated method
 
-                File.AppendAllText("output.txt", "we are in EnsureDatabaseCreated\n");
+                
 
 
                 //Console.WriteLine("we are in EnsureDatabaseCreated");
@@ -39,15 +39,15 @@ namespace DataAccessLayer
                 // 1. Open a server-only connection (no database) and check if the DB exists.
                 using (IDbConnection serverConn = CreateServerConnection(serverConnStr, isPg))
                 {
-                    File.AppendAllText("output.txt", "we are before serverConn.Open()\n");
+                  
                     //it's just a connection to the provider server, not to a specific database, so we can check if the database exists and create it if it doesn't
                     serverConn.Open();
-                    File.AppendAllText("output.txt", "we are after serverConn.Open()\n");
+                 
                     
                     bool dbExists = CheckDatabaseExists(serverConn, databaseName, isPg);
 
                     
-                    File.AppendAllText("output.txt", $"Database exists: {dbExists}\n");
+                   
                     if (!dbExists)
                     {
                         using (IDbCommand cmd = serverConn.CreateCommand())

@@ -44,18 +44,20 @@ namespace DVLD_Project.InternationalLicense.CustomControls
             {
                 //MessageBox.Show("I am in LicenseID");
                 lblLicenseID.Text = LicenseID.ToString();
-                if(ApplicationID!=-1) 
+                
+
+            }
+            if(ApplicationID!=-1) 
                 {
                     //MessageBox.Show("I am in AppID");
                     lblInterAppID.Text = ApplicationID.ToString();
-                    if (InterLicID!=-1)
+                    
+                }
+            if (InterLicID!=-1)
                     {
                         //MessageBox.Show("I am in InterLicID");
                         lblInterLicID.Text = InterLicID.ToString(); 
                     }
-                }
-
-            }
             
         }
 

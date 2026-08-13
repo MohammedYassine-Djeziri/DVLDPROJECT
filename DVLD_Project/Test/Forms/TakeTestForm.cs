@@ -23,6 +23,7 @@ namespace DVLD_Project.Test.Forms
         public TakeTestForm(int ldl_ID, int app_ID, int appointment_ID, int Trial , int test_type)
         {
             InitializeComponent();
+            MessageBox.Show("TakeTestForm constructor called ");
             TestType_ID = test_type;
             MyApplication = clsApplication.FindApplicationByAppID(app_ID);
             LDLApp = clsLocalDrivingLicenseApp.FindLDLAppByLDLAppID(ldl_ID);
@@ -50,7 +51,7 @@ namespace DVLD_Project.Test.Forms
             this.Close();
         }
 
-        private void TakeVisionTestForm_Load(object sender, EventArgs e)
+        private void TakeTestForm_Load(object sender, EventArgs e)
         {
             lbl_TestType.Text = clsTestTypes.GetTestNameFromTestTypeID(TestType_ID);
             if (TestType_ID == 1)

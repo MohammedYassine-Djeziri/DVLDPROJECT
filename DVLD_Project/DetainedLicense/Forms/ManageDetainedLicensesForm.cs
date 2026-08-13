@@ -200,13 +200,13 @@ namespace DVLD_Project.DetainedLicense.Forms
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
-            if(clsLicenses.IsLicenseDetained(Convert.ToInt32(dataGridView1.CurrentRow.Cells[1].Value)))
+            if(dataGridView1.CurrentRow.Cells[3].Value.ToString() == "True")
             {
-                releaseDetainedLicenseToolStripMenuItem.Enabled = true;    
+                releaseDetainedLicenseToolStripMenuItem.Enabled = false;    
             }
             else
             {
-                releaseDetainedLicenseToolStripMenuItem.Enabled = false;
+                releaseDetainedLicenseToolStripMenuItem.Enabled = true;
             }
         }
 

@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace DVLDBusinessLayer
 {
@@ -27,14 +28,15 @@ namespace DVLDBusinessLayer
         clsInternationalLicense(int Inter_license_ID, int driver_id,int license_id ,  int app_ID, DateTime dateI, DateTime dateE,
                          int user_id, bool is_active )
         {
-            Mode = enMode.Update;
-            InternationalLicenseID = Inter_license_ID;  
-            ApplicationID = app_ID;
-            IssueDate = dateI;
-            ExpirationDate = dateE;
-            DriverID = driver_id;
-            UserID = user_id;
-            IsActive = is_active;
+            this.Mode = enMode.Update;
+            this.InternationalLicenseID = Inter_license_ID;  
+            this.ApplicationID = app_ID;
+            this.LicenseID = license_id;
+            this.IssueDate = dateI;
+            this.ExpirationDate = dateE;
+            this.DriverID = driver_id;
+            this.UserID = user_id;
+            this.IsActive = is_active;
 
         }
 
@@ -117,6 +119,8 @@ namespace DVLDBusinessLayer
             if (clsSqlInternationalLicense.FindLicenseByInternationalLicenseID(inter_licence_id, ref driver_id, ref license_ID,
              ref app_ID, ref dateI, ref dateE, ref user_id, ref is_active))
             {
+                //File.AppendAllText("output.txt" , inter_licence_id.ToString() + "|" + driver_id.ToString() + "|" + license_ID.ToString() + "|" + app_ID.ToString() + "|" + dateI.ToString() + "|" + dateE.ToString() + "|" + user_id.ToString() + "|" + is_active.ToString() + "\n");
+
                 return new clsInternationalLicense(inter_licence_id, driver_id, license_ID
                     , app_ID, dateI, dateE, user_id, is_active);
             }

@@ -30,7 +30,7 @@ namespace DVLD_Project.TestAppointment.Forms
             MyApplication = clsApplication.FindApplicationByLDLID(ldl_id);
         }
 
-        private void VisionTestForm_Load(object sender, EventArgs e)
+        private void TestForm_Load(object sender, EventArgs e)
 
         {
             dataGridView1.DataSource = clsTestAppointment.ListTestsAppointment(LDLID, TestTypeID);
@@ -47,6 +47,7 @@ namespace DVLD_Project.TestAppointment.Forms
             }
             dataGridView1.DataSource = clsTestAppointment.ListTestsAppointment(LDLID, TestTypeID);
             showApplicationDetails1.ID= LDLID;
+            showApplicationDetails1.PassedTest = TestTypeID - 1;
             showApplicationDetails1.RefreshInfo();
 
 
@@ -76,7 +77,7 @@ namespace DVLD_Project.TestAppointment.Forms
 
             else if (clsTestAppointment.IsAlreadyWinInTestType(LDLID , TestTypeID))
             {
-                MessageBox.Show("You already win the test");
+                MessageBox.Show("You already get the test");
             }
 
             else

@@ -46,9 +46,10 @@ namespace DVLD_Project.InternationalLicense.Forms
                 clsLicenses MyLicense = clsLicenses.FindLicenseByLicenseID(obj);
                 if (MyLicense.LicenseClassID == 3)
                 {
-                    if (clsInternationalLicense.IsDriverAlreadyHaveInternationalLicense(MyLicense.DriverID) && (MyInterLicense.ExpirationDate > DateTime.Now))
+                 
+                    if (clsInternationalLicense.IsDriverAlreadyHaveInternationalLicense(MyLicense.DriverID) && MyInterLicense != null && MyInterLicense.InternationalLicenseID != -1 && (MyInterLicense.ExpirationDate > DateTime.Now))
                     {
-                        MessageBox.Show("Person Already have a active International License with Id = " + MyInterLicense.InternationalLicenseID);
+                        MessageBox.Show("Person Already have a active International License with Id = " + MyInterLicense.InternationalLicenseID , "warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                     else
                     {
@@ -57,11 +58,16 @@ namespace DVLD_Project.InternationalLicense.Forms
 
                     }
                 }
+                else
+                {
+                    //show an err with warning that only class 3 license can issue international license
+                    MessageBox.Show("Only Class 3 License can issue International License" , "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
 
             }
             else
             {
-                
+                MessageBox.Show("Invalid License ID" , "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -91,16 +97,20 @@ namespace DVLD_Project.InternationalLicense.Forms
                     MyInterLicense.UserID = clsCurrentUser.CurrentUser.UserID;
                     MyInterLicense.ExpirationDate = DateTime.Now.AddYears(1);
                     MyInterLicense.Save();
-                    //MessageBox.Show(MyInterLicense.InternationalLicenseID.ToString());
+                    MessageBox.Show(MyInterLicense.InternationalLicenseID.ToString());
+                    
+                    interLicAppInfo1.LicenseID = LicenseID;
+                    interLicAppInfo1.ApplicationID = MyApplication.ApplicationID;
                     interLicAppInfo1.InterLicID = MyInterLicense.InternationalLicenseID;
                     interLicAppInfo1.RefreshInfo();
                     btnIssue.Enabled = false;
                     linkLabel1.Enabled = true;
                     linkLabel2.Enabled = true;
+                    this.Refresh();
                 }
                 else
                 {
-                    MessageBox.Show("You can't with an active license!");
+                    MessageBox.Show("You have an inactive license!", "warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             

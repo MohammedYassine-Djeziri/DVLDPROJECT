@@ -351,6 +351,8 @@ namespace DVLD_Project.Global.Forms
             this.localDrivingLicenseApplicationsToolStripMenuItem.Name = "localDrivingLicenseApplicationsToolStripMenuItem";
             this.localDrivingLicenseApplicationsToolStripMenuItem.Size = new System.Drawing.Size(544, 44);
             this.localDrivingLicenseApplicationsToolStripMenuItem.Text = "Local Driving License Applications";
+            //changing text color to black
+            this.localDrivingLicenseApplicationsToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
             this.localDrivingLicenseApplicationsToolStripMenuItem.Click += new System.EventHandler(this.localDrivingLicenseApplicationsToolStripMenuItem_Click);
             // 
             // localDrivingLicenseApplicationsToolStripMenuItem1

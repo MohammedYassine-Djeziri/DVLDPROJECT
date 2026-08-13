@@ -146,6 +146,7 @@ namespace DVLD_Project.InternationalLicense.Forms
             this.label1.Size = new System.Drawing.Size(911, 72);
             this.label1.TabIndex = 8;
             this.label1.Text = "International Licences Applications";
+            this.label1.ForeColor = System.Drawing.Color.Black;
             // 
             // pictureBox2
             // 

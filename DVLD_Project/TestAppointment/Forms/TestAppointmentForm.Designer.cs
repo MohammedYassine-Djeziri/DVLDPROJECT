@@ -189,8 +189,8 @@ namespace DVLD_Project.TestAppointment.Forms
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "VisionTestAppointmentForm";
-            this.Text = "VisionTestForm";
-            this.Load += new System.EventHandler(this.VisionTestForm_Load);
+            this.Text = "TestForm";
+            this.Load += new System.EventHandler(this.TestForm_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

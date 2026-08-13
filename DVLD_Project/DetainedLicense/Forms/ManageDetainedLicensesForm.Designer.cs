@@ -126,6 +126,7 @@ namespace DVLD_Project.DetainedLicense.Forms
             this.label1.Size = new System.Drawing.Size(586, 72);
             this.label1.TabIndex = 16;
             this.label1.Text = "List Detained Licences";
+            this.label1.ForeColor = System.Drawing.Color.Black;
             // 
             // button2
             // 

@@ -136,9 +136,9 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
                 }
                 else
                 {
-                    {
-                        MessageBox.Show("We get an error");
-                    }
+                    
+                        MessageBox.Show("can't cancel application because it has already completed or cancelled");
+                    
                 }
             }
 
@@ -321,11 +321,11 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
                     {
                         clsPeoples person = clsPeoples.FindPersonByNationalNumber(Convert.ToString(dataGridView1.CurrentRow.Cells[2].Value));
 
-                        MessageBox.Show("id= " + person.PerID.ToString() + "No : " + person.NationalNub);
+                       
                         
                         clsDriver TempDriver = clsDriver.FindDriverExistByPersonID(person.PerID);
 
-                        MessageBox.Show("id= " + TempDriver.DriverID);
+                       
 
                         if (TempDriver.DriverID == -1)
                         {

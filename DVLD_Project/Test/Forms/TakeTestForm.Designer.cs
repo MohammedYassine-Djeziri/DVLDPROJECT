@@ -418,7 +418,7 @@ namespace DVLD_Project.Test.Forms
             this.btn_Save.UseVisualStyleBackColor = false;
             this.btn_Save.Click += new System.EventHandler(this.btn_Save_Click);
             // 
-            // TakeVisionTestForm
+            // TakeTestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -454,9 +454,9 @@ namespace DVLD_Project.Test.Forms
             this.Controls.Add(this.label2);
             this.Controls.Add(this.lbl_TestType);
             this.Controls.Add(this.pictureBox1);
-            this.Name = "TakeVisionTestForm";
-            this.Text = "TakeVisionTestForm";
-            this.Load += new System.EventHandler(this.TakeVisionTestForm_Load);
+            this.Name = "TakeTestForm";
+            this.Text = "TakeTestForm";
+            this.Load += new System.EventHandler(this.TakeTestForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox16)).EndInit();
