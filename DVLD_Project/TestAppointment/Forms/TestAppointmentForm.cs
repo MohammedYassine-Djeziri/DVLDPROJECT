@@ -72,7 +72,7 @@ namespace DVLD_Project.TestAppointment.Forms
         {
             if(clsTestAppointment.HasAppointment(LDLID, TestTypeID))
             {
-                MessageBox.Show("You have already appointment");
+                MessageBox.Show("You already have a scheduled appointment for this test type");
             }
 
             else if (clsTestAppointment.IsAlreadyWinInTestType(LDLID , TestTypeID))
@@ -86,7 +86,6 @@ namespace DVLD_Project.TestAppointment.Forms
                     , -1, (dataGridView1.Rows.Count)  , TestTypeID);
                 frm.Size = new Size(500, 600);
                 frm.ShowDialog();
-                MessageBox.Show("fuck me");
                 dataGridView1.DataSource = null;
                dataGridView1.DataSource = clsTestAppointment.ListTestsAppointment(LDLID, TestTypeID);
                 

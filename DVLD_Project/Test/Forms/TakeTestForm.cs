@@ -23,7 +23,6 @@ namespace DVLD_Project.Test.Forms
         public TakeTestForm(int ldl_ID, int app_ID, int appointment_ID, int Trial , int test_type)
         {
             InitializeComponent();
-            MessageBox.Show("TakeTestForm constructor called ");
             TestType_ID = test_type;
             MyApplication = clsApplication.FindApplicationByAppID(app_ID);
             LDLApp = clsLocalDrivingLicenseApp.FindLDLAppByLDLAppID(ldl_ID);
@@ -74,7 +73,7 @@ namespace DVLD_Project.Test.Forms
         {
             if( (!Pass_RB.Checked) && (!Fail_RB.Checked))
             {
-                MessageBox.Show("Enter Result!");
+                MessageBox.Show("Please Set The Test Result");
             }
 
 

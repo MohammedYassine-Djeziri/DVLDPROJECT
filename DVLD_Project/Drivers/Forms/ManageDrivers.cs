@@ -24,7 +24,6 @@ namespace DVLD_Project.Drivers.Forms
             comboBox1.SelectedIndex = 0;
             List = clsDriver.ListDrivers().DefaultView;
             dataGridView1.DataSource = List;
-            //MessageBox.Show(dataGridView1.Columns[0].Name);
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -58,12 +57,20 @@ namespace DVLD_Project.Drivers.Forms
                 {
                     if (!(int.TryParse(textBox1.Text, out int value)))
                     {
-                        MessageBox.Show("Wrong ID");
+                        MessageBox.Show("Please enter a valid Driver ID", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         textBox1.Text = string.Empty;
                     }
                     else
                     {
-                        List.RowFilter = $"DriverID = '{Convert.ToInt32(textBox1.Text)}' ";
+                       try
+                        {
+                            List.RowFilter = $"DriverID = '{Convert.ToInt32(textBox1.Text)}' ";
+                            
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("An error occurred while filtering the data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
 
 
@@ -73,12 +80,19 @@ namespace DVLD_Project.Drivers.Forms
                 {
                     if (!(int.TryParse(textBox1.Text, out int value)))
                     {
-                        MessageBox.Show("Wrong ID");
+                        MessageBox.Show("Please enter a valid Person ID", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         textBox1.Text = string.Empty;
                     }
                     else
                     {
-                        List.RowFilter = $" PersonID = '{Convert.ToInt32(textBox1.Text)}' ";
+                        try
+                        {
+                            List.RowFilter = $"PersonID = '{Convert.ToInt32(textBox1.Text)}' ";
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("An error occurred while filtering the data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
 
 
@@ -86,21 +100,31 @@ namespace DVLD_Project.Drivers.Forms
 
                 else if (comboBox1.SelectedIndex == 3)
                 {
-
-                    List.RowFilter = $"NationalNo like '{textBox1.Text}%'";
+                    try
+                    {
+                        List.RowFilter = $"FullName like '{textBox1.Text}%'";
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("An error occurred while filtering the data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
 
                 else if (comboBox1.SelectedIndex == 4)
                 {
 
-                    List.RowFilter = $"FullName like '{textBox1.Text}%'";
+                   try
+                    {
+                        List.RowFilter = $"NationalNub like '{textBox1.Text}%'";
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("An error occurred while filtering the data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
 
-                else if (comboBox1.SelectedIndex == 5)
-                {
-                    // impossible case
 
-                }
 
 
 

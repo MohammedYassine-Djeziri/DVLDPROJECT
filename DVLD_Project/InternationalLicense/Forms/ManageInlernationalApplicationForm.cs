@@ -37,7 +37,7 @@ namespace DVLD_Project.InternationalLicense.Forms
                 {
                     if (!(int.TryParse(textBox1.Text, out int value)))
                     {
-                        MessageBox.Show("Id not exist");
+                        MessageBox.Show("Please enter a valid Application ID", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         textBox1.Text = string.Empty;
                     }
                     else
@@ -53,7 +53,7 @@ namespace DVLD_Project.InternationalLicense.Forms
                 {
                     if (!(int.TryParse(textBox1.Text, out int value)))
                     {
-                        MessageBox.Show("Id not exist");
+                        MessageBox.Show("Please enter a valid Driver ID", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         textBox1.Text = string.Empty;
                     }
                     else

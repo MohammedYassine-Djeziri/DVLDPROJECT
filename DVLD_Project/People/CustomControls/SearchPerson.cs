@@ -51,7 +51,7 @@ namespace DVLD_Project.People.CustomControls
             }
             else
             {
-                MessageBox.Show("No event handler is attached to the OnFilterCompleted event.");
+                MessageBox.Show("Internal Error: OnFilterCompleted is null");
             }
         }
         

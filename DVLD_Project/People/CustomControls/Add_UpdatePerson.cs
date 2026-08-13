@@ -185,7 +185,7 @@ namespace DVLD_Project.People.CustomControls
 
             else
             {
-                MessageBox.Show("Information not Enough", "Error",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please fill in all required fields.", "Error",MessageBoxButtons.OK, MessageBoxIcon.Error);
                 
             }
 

@@ -25,18 +25,15 @@ namespace DVLD_Project.License.CustomControls
             //MyLicense = clsLicenses.FindLicenseByLicenseID(LicenseID);
             //MyDriver = clsDriver.FindDriverByDriverID(MyLicense.DriverID);
             //Person = clsPeoples.FindByPersonalID(MyDriver.PersonID);
-            ////MessageBox.Show(MyLicense.LicenseID.ToString());
-            ////MessageBox.Show(MyDriver.PersonID.ToString());
+
             InitializeComponent();
         }
 
         public void RefreshInfo()
         {
-            //MessageBox.Show(LicenseID.ToString());
             MyLicense = clsLicenses.FindLicenseByLicenseID(LicenseID);
             if (MyLicense.LicenseID != -1)
             {
-                //MessageBox.Show("I am in IF");
                 MyDriver = clsDriver.FindDriverByDriverID(MyLicense.DriverID);
                 Person = clsPeoples.FindByPersonalID(MyDriver.PersonID);
 
@@ -94,7 +91,6 @@ namespace DVLD_Project.License.CustomControls
             }
             else
             {
-                //MessageBox.Show("I am in ELSE");
                 lblBirthDay.Text = "[???]";
                 lbldriverID.Text = "[???]";
                 lblGender.Text = "[???]";

@@ -39,29 +39,7 @@ namespace DVLD_Project.User.Forms
 
         private void btn_LOGIN_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show(DateTime.Now.AddYears(-1).ToShortDateString());
-            //just a test for the admin user to login without checking the database
-            //MessageBox.Show(UserName.Text + " " + Password.Text);
-            // if (UserName.Text == "admin"|| Password.Text == "admin")
-            // {
-            //     //clsCurrentUser.CurrentUser = new clsUsers("admin", "admin", -1, true);
-            //     Size size = new Size();
-            //     size.Width = 1400;
-            //     size.Height = 900;
-            //     this.Hide();
-            //     if (frm != null)
-            //     {
-            //         frm.Size = size;
-            //         frm.Show();
-            //     }
-            //     else
-            //     {
-            //         MainMenu frm2 = new MainMenu(333, 444, this);
-            //         frm2.Size = size;
-            //         frm2.Show();
-            //     }
-            // }
-            // else{
+            
             clsCurrentUser.CurrentUser=clsUsers.FindByUserNamePass(UserName.Text, Password.Text);
             if(clsCurrentUser.CurrentUser == null )
             {
@@ -122,7 +100,7 @@ namespace DVLD_Project.User.Forms
 
                 
             }
-            //}
+            
         }
         
         private void LogInScreen_Load(object sender, EventArgs e)

@@ -100,7 +100,7 @@ namespace DVLD_Project.DetainedLicense.Forms
 
                 if (!(int.TryParse(TBNotes.Text, out int value)))
                 {
-                    MessageBox.Show("you can not enter characters");
+                    MessageBox.Show("Please enter a valid number for the fine fees", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     TBNotes.Text = string.Empty;
                 }
 

@@ -31,7 +31,6 @@ namespace DVLD_Project.InternationalLicense.CustomControls
 
             if (MyInternationalLicense.InternationalLicenseID != -1)
             {
-                MessageBox.Show("I am in IF");
                 Person = clsPeoples.FindByPersonalID(clsDriver.FindDriverByDriverID(MyInternationalLicense.DriverID).PersonID);
 
                 lblInterLicID.Text = MyInternationalLicense.InternationalLicenseID.ToString();
@@ -48,7 +47,6 @@ namespace DVLD_Project.InternationalLicense.CustomControls
                 lblNatno.Text = Person.NationalNub;
 
                 lblIssueDate.Text = MyInternationalLicense.IssueDate.ToShortDateString();
-               // MessageBox.Show(MyInternationalLicense.LicenseID.ToString());
                 lblLicense.Text = MyInternationalLicense.LicenseID.ToString();
                 lblAppID.Text = MyInternationalLicense.ApplicationID.ToString();
                 if (Person.ImagePath != "")
@@ -78,7 +76,6 @@ namespace DVLD_Project.InternationalLicense.CustomControls
             }
             else
             {
-                //MessageBox.Show("I am in ELSE");
                 lblInterLicID.Text = "[???]";
                 lblBirthDay.Text = "[???]";
                 lbldriverID.Text = "[???]";

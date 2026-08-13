@@ -52,7 +52,7 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
                 {
                     if (!(int.TryParse(textBox1.Text, out int value)))
                     {
-                        MessageBox.Show("Id not exist");
+                        MessageBox.Show("Please enter a valid number for LDLAppID.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         textBox1.Text = string.Empty;
                     }
                     else
@@ -159,7 +159,7 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
                     }
                     else
                     {
-                        MessageBox.Show("We got error");
+                        MessageBox.Show("can't delete application because it has already completed or cancelled");
                     }
                 }
 
@@ -333,7 +333,7 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
                             TempDriver.UserID = clsCurrentUser.CurrentUser.UserID;
                             TempDriver.PersonID = person.PerID;
                             TempDriver.Save();
-                            MessageBox.Show("i have -1 driver id");
+                            MessageBox.Show("Driver has been created");
                         }
 
                         clsLocalDrivingLicenseApp MyLDLapp = clsLocalDrivingLicenseApp.FindLDLAppByLDLAppID(Convert.ToInt32(dataGridView1.CurrentRow.Cells[0].Value));
@@ -351,7 +351,6 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
                         License.UserID = clsCurrentUser.CurrentUser.UserID;
                         License.Save();
                         TempApplication2.ChangeStatus(3);
-                        MessageBox.Show(TempApplication2.ApplicationStatus.ToString());
                         MessageBox.Show("License has been created");
                         List = clsApplication.ListLDLApplication().DefaultView;
                         dataGridView1.DataSource = List;
@@ -377,8 +376,6 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
 
         private void ShowPersonLicenseHistoryToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(clsDriver.FindDriverExistByPersonID(clsPeoples.FindPersonByNationalNumber(Convert.ToString(dataGridView1.CurrentRow.Cells[2].Value)).PerID).DriverID.ToString());
-
             LicenseHistory frm = new LicenseHistory(clsDriver.FindDriverExistByPersonID(clsPeoples.FindPersonByNationalNumber(Convert.ToString(dataGridView1.CurrentRow.Cells[2].Value)).PerID).DriverID);
             
             frm.Size = new Size(1100, 750);

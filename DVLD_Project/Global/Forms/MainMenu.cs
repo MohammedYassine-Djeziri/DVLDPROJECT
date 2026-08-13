@@ -59,7 +59,6 @@ namespace DVLD_Project.Global.Forms
         {
             lbltime.Text = DateTime.Now.ToString();
             pictureBox1.ImageLocation = clsCurrentUser.CurrentUser.Person.ImagePath;
-            //MessageBox.Show(clsCurrentUser.CurrentUser.UserName, clsCurrentUser.CurrentUser.Person.ImagePath);
             lblUserName.Text=clsCurrentUser.CurrentUser.UserName;
         }
 

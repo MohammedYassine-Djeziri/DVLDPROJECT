@@ -57,7 +57,7 @@ namespace DVLD_Project.People.Forms
             {
                 if (!(clsPeoples.DeletePerson((int)dataGridView1.CurrentRow.Cells[0].Value)))
                 {
-                    MessageBox.Show("You can't delete this person", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Failed to delete person", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 }
                 else
                 {

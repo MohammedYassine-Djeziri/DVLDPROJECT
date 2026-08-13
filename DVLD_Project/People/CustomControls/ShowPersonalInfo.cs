@@ -114,7 +114,7 @@ namespace DVLD_Project.People.CustomControls
             }
             else
             {
-                MessageBox.Show("You can't edit Unknown person!");
+                MessageBox.Show("Person Not Found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

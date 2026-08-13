@@ -40,7 +40,6 @@ namespace DVLD_Project.User.Forms
 
         private void findPerson1_OnSearchCompleted_1(int obj)
         {
-            //MessageBox.Show("hi");
             PerID = obj;
             showPersonalInfo1.Person_ID = PerID;
             showPersonalInfo1.RefreshInfo();
@@ -76,7 +75,7 @@ namespace DVLD_Project.User.Forms
             
             else
             {
-                MessageBox.Show("Person ID UnKnown!");
+                MessageBox.Show("Person ID is Required!");
             }
         }
 

@@ -76,17 +76,23 @@ namespace DVLD_Project.DetainedLicense.Forms
             {
                 if (comboBox1.SelectedIndex == 1)
                 {
-                 
-
+                    
                     if (!(int.TryParse(textBox1.Text, out int value)))
                     {
-                        MessageBox.Show("Wrong ID");
+                        MessageBox.Show("Please enter a valid Detained ID", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         textBox1.Text = string.Empty;
                     }
                     else
                     {
-                        MessageBox.Show("HELLO");
-                        List.RowFilter = $"D.ID = '{Convert.ToInt32(textBox1.Text)}' ";
+                       try
+                        {
+                            List.RowFilter = $"D.ID = '{Convert.ToInt32(textBox1.Text)}' ";
+                                                    }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("An error occurred while filtering the data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        
                     }
 
 
@@ -98,14 +104,10 @@ namespace DVLD_Project.DetainedLicense.Forms
 
                     if (!(int.TryParse(textBox1.Text, out int value)))
                     {
-                        MessageBox.Show("Wrong ID");
+                        MessageBox.Show("Wrong input");
                         textBox1.Text = string.Empty;
                     }
-                    else
-                    {
-                        MessageBox.Show("HELLO");
-                        List.RowFilter = $"D.ID = '{Convert.ToInt32(textBox1.Text)}' ";
-                    }
+                   
 
 
                 }
@@ -114,12 +116,19 @@ namespace DVLD_Project.DetainedLicense.Forms
                 {
                     if (!(int.TryParse(textBox1.Text, out int value)))
                     {
-                        MessageBox.Show("Wrong ID");
+                        MessageBox.Show("Please enter a valid License ID", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         textBox1.Text = string.Empty;
                     }
                     else
                     {
-                        List.RowFilter = $" [Release App.ID] = '{Convert.ToInt32(textBox1.Text)}' ";
+                        try
+                        {
+                            List.RowFilter = $" [Release App.ID] = '{Convert.ToInt32(textBox1.Text)}' ";
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("An error occurred while filtering the data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
 
 
@@ -127,14 +136,26 @@ namespace DVLD_Project.DetainedLicense.Forms
 
                 else if (comboBox1.SelectedIndex == 3)
                 {
-
-                    List.RowFilter = $"N.No like '{textBox1.Text}%'";
+                    try
+                    {
+                        List.RowFilter = $" [N.No] like '{textBox1.Text}%'";
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("An error occurred while filtering the data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
 
                 else if (comboBox1.SelectedIndex == 4)
                 {
-
-                    List.RowFilter = $" [Full Name] like '{textBox1.Text}%'";
+                    try
+                    {
+                        List.RowFilter = $" [Full Name] like '{textBox1.Text}%'";
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("An error occurred while filtering the data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
 
                 dataGridView1.DataSource = List;

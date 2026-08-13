@@ -20,8 +20,6 @@ namespace DVLD_Project.LocalDrivingLicense.Forms
         {
 
             LicenseID = LicID;
-            MessageBox.Show("license id in form == " + LicenseID.ToString());
-
             InitializeComponent();
         }
 

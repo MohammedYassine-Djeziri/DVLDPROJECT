@@ -56,7 +56,7 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
         {
             if(Application.IsLicenseClassAlreadyUsed(CB_LicenseClass.SelectedIndex+1))
             {
-                MessageBox.Show("License Class Already Active Please Enter another License Class" , "Error" ,MessageBoxButtons.OK
+                MessageBox.Show("License Class Already Active Please Select another License Class" , "Error" ,MessageBoxButtons.OK
                     , MessageBoxIcon.Exclamation);
             }
             else
@@ -86,7 +86,7 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
             }
             else
             {
-                MessageBox.Show("Enter a Person");
+                MessageBox.Show("Enter a valid Personal ID or Add a new Person", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

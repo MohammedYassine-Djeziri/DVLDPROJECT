@@ -24,7 +24,6 @@ namespace DVLD_Project.TestAppointment.Forms
         public TakeTestAppointment(int ldl_ID ,int app_ID , int appointment_ID , int Trial , int test_type)
         {
             TestType_ID=test_type;
-            //MessageBox.Show(ldl_ID.ToString()+"  "+app_ID.ToString() + "  " + appointment_ID.ToString() + "  " + Trial.ToString());
             InitializeComponent();
             MyApplication = clsApplication.FindApplicationByAppID(app_ID);
             LDLApp=clsLocalDrivingLicenseApp.FindLDLAppByLDLAppID(ldl_ID);

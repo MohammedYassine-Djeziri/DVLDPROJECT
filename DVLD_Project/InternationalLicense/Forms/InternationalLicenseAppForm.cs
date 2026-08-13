@@ -37,7 +37,6 @@ namespace DVLD_Project.InternationalLicense.Forms
             btnIssue.Enabled = false;
             linkLabel1.Enabled = false;
             linkLabel2.Enabled = false;
-            //MessageBox.Show((-1).ToString());
             interLicAppInfo1.InterLicID = -1;
             interLicAppInfo1.RefreshInfo();
             if (obj != -1)
@@ -97,7 +96,6 @@ namespace DVLD_Project.InternationalLicense.Forms
                     MyInterLicense.UserID = clsCurrentUser.CurrentUser.UserID;
                     MyInterLicense.ExpirationDate = DateTime.Now.AddYears(1);
                     MyInterLicense.Save();
-                    MessageBox.Show(MyInterLicense.InternationalLicenseID.ToString());
                     
                     interLicAppInfo1.LicenseID = LicenseID;
                     interLicAppInfo1.ApplicationID = MyApplication.ApplicationID;

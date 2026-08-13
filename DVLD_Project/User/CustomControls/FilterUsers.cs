@@ -81,7 +81,7 @@ namespace DVLD_Project.User.CustomControls
                 {
                     if (!(int.TryParse(textBox1.Text, out int value)))
                     {
-                        MessageBox.Show("Wrong ID");
+                        MessageBox.Show("Wrong User ID");
                         textBox1.Text = string.Empty;
                     }
                     else
@@ -96,7 +96,7 @@ namespace DVLD_Project.User.CustomControls
                 {
                     if (!(int.TryParse(textBox1.Text, out int value)))
                     {
-                        MessageBox.Show("Wrong ID");
+                        MessageBox.Show("Wrong Person ID");
                         textBox1.Text = string.Empty;
                     }
                     else

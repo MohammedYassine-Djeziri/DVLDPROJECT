@@ -59,7 +59,7 @@ namespace DVLD_Project.People.CustomControls
             {
                 if (!(int.TryParse(textBox1.Text, out int value)))
                 {
-                    MessageBox.Show("Id not exist");
+                    MessageBox.Show("Please enter a valid Personal ID", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     textBox1.Text = string.Empty;
                 }
                 else
@@ -120,7 +120,6 @@ namespace DVLD_Project.People.CustomControls
         private void DoSomething(int P)
         {
             Person = clsPeoples.FindByPersonalID(P);
-            //MessageBox.Show(P.ToString());
         }
 
         private void FindPerson_Load(object sender, EventArgs e)

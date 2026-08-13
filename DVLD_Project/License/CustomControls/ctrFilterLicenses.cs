@@ -75,7 +75,7 @@ namespace DVLD_Project.License.CustomControls
         {
             if (!(int.TryParse(textBox1.Text, out int value)))
             {
-                MessageBox.Show("Id not exist");
+                MessageBox.Show("Please enter a valid License ID", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 textBox1.Text = string.Empty;
             }
             

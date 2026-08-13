@@ -43,7 +43,6 @@ namespace DVLD_Project.Application.CustomControls
         public void RefreshInfo()
         {
 
-            MessageBox.Show("ID: " + ID + " Passed Test: " + PassedTest);
             LDApp = clsLocalDrivingLicenseApp.FindLDLAppByLDLAppID(ID);
             MyApplication = clsApplication.FindApplicationByAppID(LDApp.ApplicationID);
             if (MyApplication.ApplicationID != -1)

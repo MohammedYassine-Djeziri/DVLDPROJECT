@@ -140,10 +140,7 @@ namespace DVLD_Project.People.Forms
                 PctBoxImg.ImageLocation = (openFileDialog1.FileName);
                 linklbl_Remove_Img.Visible = true;
                 Person.ImagePath = openFileDialog1.FileName;
-                //string temp = Person.ImagePath;
-                //File.Delete(@"C:\ImageCopy\a8b15373-86de-4a24-a97d-712afebf488c.png");
-                //File.Delete(@temp);
-                //File.Copy(openFileDialog1.FileName, temp);
+
 
             }
         }
@@ -152,9 +149,7 @@ namespace DVLD_Project.People.Forms
         {
             PctBoxImg.ImageLocation = null;
             openFileDialog1.FileName = "";
-            // System.Threading.Thread.Sleep(1000); // Sleep for 1 second
             Person.LastImg = Person.ImagePath;
-            //File.Delete((@Person.ImagePath));
             Person.ImagePath = "";
             if (CB_GENDER.SelectedIndex == 1)
             {
@@ -190,14 +185,6 @@ namespace DVLD_Project.People.Forms
                 Person.DateOfBirth = dateTimePicker1.Value;
                 Person.Gender = CB_GENDER.SelectedIndex;
                 Person.Address = TB_ADDRESS.Text;
-                //if (/*openFileDialog1.FileName != "" &&*/ openFileDialog1.FileName != "openFileDialog1")
-                //{
-                //    Person.ImagePath = openFileDialog1.FileName.ToString();
-
-
-
-
-                //}
 
                 if (Person.Mode == clsPeoples.EnMode.New)
                 {
@@ -213,11 +200,9 @@ namespace DVLD_Project.People.Forms
                 Person.Save();
                 PersonID = Person.PerID;
 
-                //File.Delete((@Person.ImagePath));
 
                 Lbl_Add_Edit.Text = "Update Person";
-                //MessageBox.Show(openFileDialog1.FileName);
-                //File.Copy(openFileDialog1.FileName, @"C:\ImageCopy\New Text Document.txt");
+
             }
 
             else

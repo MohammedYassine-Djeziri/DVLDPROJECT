@@ -17,7 +17,6 @@ namespace DVLD_Project.InternationalLicense.Forms
 
         public ShowInternationalLicenseForm(int interLicenseID)
         {
-            MessageBox.Show(interLicenseID.ToString());
             InterLicenseID = interLicenseID;
             InitializeComponent();
             
