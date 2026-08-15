@@ -35,7 +35,6 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showApplicationDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sssToolStripMenuItem = new System.Windows.Forms.ToolStripSeparator();
             this.editApplicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteApplicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aToolStripMenuItem = new System.Windows.Forms.ToolStripSeparator();
@@ -94,7 +93,6 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showApplicationDetailsToolStripMenuItem,
-            this.sssToolStripMenuItem,
             this.editApplicationToolStripMenuItem,
             this.deleteApplicationToolStripMenuItem,
             this.aToolStripMenuItem,
@@ -120,12 +118,6 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
             this.showApplicationDetailsToolStripMenuItem.Text = "Show Application Details ";
             this.showApplicationDetailsToolStripMenuItem.Click += new System.EventHandler(this.showApplicationDetailsToolStripMenuItem_Click);
             // 
-            // sssToolStripMenuItem
-            // 
-            this.sssToolStripMenuItem.Name = "sssToolStripMenuItem";
-            this.sssToolStripMenuItem.Size = new System.Drawing.Size(530, 6);
-            this.sssToolStripMenuItem.Click += new System.EventHandler(this.sssToolStripMenuItem_Click);
-            // 
             // editApplicationToolStripMenuItem
             // 
             this.editApplicationToolStripMenuItem.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -133,6 +125,7 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
             this.editApplicationToolStripMenuItem.Name = "editApplicationToolStripMenuItem";
             this.editApplicationToolStripMenuItem.Size = new System.Drawing.Size(533, 46);
             this.editApplicationToolStripMenuItem.Text = "Edit Application";
+            this.editApplicationToolStripMenuItem.Click += new System.EventHandler(this.editApplicationToolStripMenuItem_Click);
             // 
             // deleteApplicationToolStripMenuItem
             // 
@@ -336,7 +329,6 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem showApplicationDetailsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator sssToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editApplicationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteApplicationToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator aToolStripMenuItem;

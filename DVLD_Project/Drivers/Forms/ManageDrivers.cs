@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DVLD_Project.People.Forms;
 
 namespace DVLD_Project.Drivers.Forms
 {
@@ -150,14 +151,7 @@ namespace DVLD_Project.Drivers.Forms
             frm.ShowDialog();
         }
 
-        private void addNewPersonToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Size size = new Size(900, 500);
-            Add_Update_PersonForm frm = new Add_Update_PersonForm(-1);
-            frm.Size = size;
-            frm.ShowDialog();
-            dataGridView1.DataSource = clsDriver.ListDrivers();
-        }
+
 
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -192,7 +186,7 @@ namespace DVLD_Project.Drivers.Forms
             MessageBox.Show("This feature will be available in the next version of the system", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void sendSMSMessageToolStripMenuItem_Click(object sender, EventArgs e)
+        private void phoneCallToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("This feature will be available in the next version of the system", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }

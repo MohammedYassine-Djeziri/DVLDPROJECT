@@ -91,7 +91,7 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
             this.tabPage1.Location = new System.Drawing.Point(8, 58);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1786, 863);
+            this.tabPage1.Size = new System.Drawing.Size(1886, 863);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Personal Info";
             // 
@@ -153,7 +153,7 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
             this.tabPage2.Location = new System.Drawing.Point(8, 58);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1786, 863);
+            this.tabPage2.Size = new System.Drawing.Size(1886, 863);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Login Info";
             this.tabPage2.UseVisualStyleBackColor = true;

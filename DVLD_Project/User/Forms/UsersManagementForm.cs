@@ -34,24 +34,9 @@ namespace DVLD_Project.User.Forms
             dataGridView1.DataSource = List;
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
 
-        }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Add_Update_UserForm form = new Add_Update_UserForm(-1);
-            form.ShowDialog();
-            List = clsUsers.LisUsers().DefaultView;
-            dataGridView1.DataSource = List;
-            this.Refresh();
-        }
-
-        private void addNewPersonToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
+        
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -72,9 +57,10 @@ namespace DVLD_Project.User.Forms
             }
         }
 
-        private void addNewPersonToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void addNewPersonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Add_Update_UserForm form = new Add_Update_UserForm(-1);
+            form.Size = new Size(1000, 800);
             form.ShowDialog();
             List = clsUsers.LisUsers().DefaultView;
             dataGridView1.DataSource = List;
@@ -83,7 +69,7 @@ namespace DVLD_Project.User.Forms
 
         private void showDetailsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Size size = new Size(1772, 901);
+            Size size = new Size(900, 700);
             ShowUserInfo frm = new ShowUserInfo((int)dataGridView1.CurrentRow.Cells[0].Value);
             frm.Size = size;
             frm.ShowDialog();
@@ -91,7 +77,7 @@ namespace DVLD_Project.User.Forms
 
         private void changePasswordToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Size size = new Size(975, 700);
+            Size size = new Size(1000, 800);
             UpdateUserPasswordForm frm = new UpdateUserPasswordForm((int)dataGridView1.CurrentRow.Cells[0].Value);
             frm.Size = size;
             frm.ShowDialog();
@@ -99,7 +85,7 @@ namespace DVLD_Project.User.Forms
 
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Size size = new Size(900, 600);
+            Size size = new Size(1000, 800);
             Add_Update_UserForm frm = new Add_Update_UserForm((int)dataGridView1.CurrentRow.Cells[0].Value);
             frm.Size = size;
             frm.ShowDialog();

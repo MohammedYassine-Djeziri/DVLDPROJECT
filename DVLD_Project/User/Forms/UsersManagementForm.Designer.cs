@@ -73,7 +73,7 @@ namespace DVLD_Project.User.Forms
             this.button1.Size = new System.Drawing.Size(143, 123);
             this.button1.TabIndex = 6;
             this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.addNewPersonToolStripMenuItem_Click);
             // 
             // filterUsers1
             // 
@@ -140,7 +140,7 @@ namespace DVLD_Project.User.Forms
             this.addNewPersonToolStripMenuItem.Name = "addNewPersonToolStripMenuItem";
             this.addNewPersonToolStripMenuItem.Size = new System.Drawing.Size(290, 40);
             this.addNewPersonToolStripMenuItem.Text = "Add New User";
-            this.addNewPersonToolStripMenuItem.Click += new System.EventHandler(this.addNewPersonToolStripMenuItem_Click_1);
+            this.addNewPersonToolStripMenuItem.Click += new System.EventHandler(this.addNewPersonToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 

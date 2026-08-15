@@ -28,6 +28,7 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
         private void button1_Click_1(object sender, EventArgs e)
         {
             NewLocalDrivingLicenseApplication frm = new NewLocalDrivingLicenseApplication();
+            frm.Size = new Size(1000, 700);
             frm.ShowDialog();
             List = clsApplication.ListLDLApplication().DefaultView;
             dataGridView1.DataSource = List;
@@ -37,11 +38,6 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
         {
             comboBox1.SelectedIndex = 0;
             dataGridView1.DataSource = List;
-        }
-
-        private void sssToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -149,7 +145,7 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
 
         private void deleteApplicationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Convert.ToString(dataGridView1.CurrentRow.Cells[6].Value) == "New")
+            if (Convert.ToString(dataGridView1.CurrentRow.Cells[6].Value) == "New"  || Convert.ToString(dataGridView1.CurrentRow.Cells[6].Value) == "Cancelled")
             {
                 if (MessageBox.Show("Are you Sure that you want to delete this application?", "???", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
@@ -376,10 +372,25 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
 
         private void ShowPersonLicenseHistoryToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            LicenseHistory frm = new LicenseHistory(clsDriver.FindDriverExistByPersonID(clsPeoples.FindPersonByNationalNumber(Convert.ToString(dataGridView1.CurrentRow.Cells[2].Value)).PerID).DriverID);
-            
-            frm.Size = new Size(1100, 750);
-            frm.ShowDialog();
+            int driverID = clsDriver.FindDriverExistByPersonID(clsPeoples.FindPersonByNationalNumber(Convert.ToString(dataGridView1.CurrentRow.Cells[2].Value)).PerID).DriverID;
+
+            if (driverID != -1)
+            {
+                LicenseHistory frm = new LicenseHistory(driverID);
+                frm.Size = new Size(1100, 750);
+                frm.ShowDialog();
+            }
+
+            else
+            {
+                
+                MessageBox.Show("Person has no License History , He is not a driver yet" , "No License History", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+        }
+        private void editApplicationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("It will be implemented in the future.", "Edit Application", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
