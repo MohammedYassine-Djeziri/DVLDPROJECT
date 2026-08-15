@@ -36,18 +36,16 @@ namespace DVLD_Project.User.Forms
             // 
             this.userInformation1.Location = new System.Drawing.Point(37, 12);
             this.userInformation1.Name = "userInformation1";
-            this.userInformation1.Size = new System.Drawing.Size(1724, 814);
             this.userInformation1.TabIndex = 0;
             // 
             // ShowUserInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1817, 882);
             this.Controls.Add(this.userInformation1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "ShowUserInfo";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ShowUserInfo";
             this.Load += new System.EventHandler(this.ShowUserInfo_Load);
             this.ResumeLayout(false);

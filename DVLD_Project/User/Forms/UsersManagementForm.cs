@@ -69,9 +69,8 @@ namespace DVLD_Project.User.Forms
 
         private void showDetailsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Size size = new Size(900, 700);
             ShowUserInfo frm = new ShowUserInfo((int)dataGridView1.CurrentRow.Cells[0].Value);
-            frm.Size = size;
+            frm.Size = new Size(900, 600);
             frm.ShowDialog();
         }
 
@@ -92,6 +91,16 @@ namespace DVLD_Project.User.Forms
             List = clsUsers.LisUsers().DefaultView;
             dataGridView1.DataSource = List;
             this.Refresh();
+        }
+
+        private void sendEmailToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("This feature will be available in the next version of the system", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void phoneCallToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("This feature will be available in the next version of the system", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

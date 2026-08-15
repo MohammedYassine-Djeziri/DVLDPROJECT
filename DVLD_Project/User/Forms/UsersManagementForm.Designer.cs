@@ -49,7 +49,7 @@ namespace DVLD_Project.User.Forms
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panel1
+            // panel1 for the logo 
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Controls.Add(this.button1);
@@ -109,7 +109,6 @@ namespace DVLD_Project.User.Forms
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 82;
             this.dataGridView1.RowTemplate.Height = 33;
-            this.dataGridView1.Size = new System.Drawing.Size(1993, 698);
             this.dataGridView1.TabIndex = 4;
             // 
             // contextMenuStrip1
@@ -172,6 +171,7 @@ namespace DVLD_Project.User.Forms
             this.sendEmailToolStripMenuItem.Name = "sendEmailToolStripMenuItem";
             this.sendEmailToolStripMenuItem.Size = new System.Drawing.Size(290, 40);
             this.sendEmailToolStripMenuItem.Text = "Send Email";
+            this.sendEmailToolStripMenuItem.Click += new System.EventHandler(this.sendEmailToolStripMenuItem_Click);
             // 
             // phoneCallToolStripMenuItem
             // 
@@ -179,12 +179,12 @@ namespace DVLD_Project.User.Forms
             this.phoneCallToolStripMenuItem.Name = "phoneCallToolStripMenuItem";
             this.phoneCallToolStripMenuItem.Size = new System.Drawing.Size(290, 40);
             this.phoneCallToolStripMenuItem.Text = "Phone Call";
+            this.phoneCallToolStripMenuItem.Click += new System.EventHandler(this.phoneCallToolStripMenuItem_Click);
             // 
             // UsersManagementForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1993, 1233);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.panel1);
             this.Name = "UsersManagementForm";

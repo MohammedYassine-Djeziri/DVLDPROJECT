@@ -46,7 +46,6 @@ namespace DVLD_Project.User.CustomControls
             this.showPersonalInfo1.Location = new System.Drawing.Point(3, 3);
             this.showPersonalInfo1.Name = "showPersonalInfo1";
             this.showPersonalInfo1.Person_ID = -1;
-            this.showPersonalInfo1.Size = new System.Drawing.Size(1718, 611);
             this.showPersonalInfo1.TabIndex = 0;
             // 
             // groupBox1
@@ -132,7 +131,7 @@ namespace DVLD_Project.User.CustomControls
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.showPersonalInfo1);
             this.Name = "UserInformation";
-            this.Size = new System.Drawing.Size(1724, 814);
+            this.Size = new System.Drawing.Size(1700, 800);
             this.Load += new System.EventHandler(this.UserInformation_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
