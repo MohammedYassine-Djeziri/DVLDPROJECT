@@ -40,6 +40,7 @@ namespace DVLD_Project.People.Forms
             Add_Update_PersonForm frm= new Add_Update_PersonForm(-1);
             frm.Size = size;
             frm.ShowDialog();
+            dataGridView1.DataSource = clsPeoples.ListPeoples();
         }
 
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
@@ -48,6 +49,8 @@ namespace DVLD_Project.People.Forms
             Add_Update_PersonForm frm = new Add_Update_PersonForm((int)dataGridView1.CurrentRow.Cells[0].Value);
             frm.Size = size;
             frm.ShowDialog();
+            dataGridView1.DataSource = clsPeoples.ListPeoples();
+
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -83,6 +86,7 @@ namespace DVLD_Project.People.Forms
             Add_Update_PersonForm frm = new Add_Update_PersonForm(-1);
             frm.Size= size;
             frm.ShowDialog();
+            dataGridView1.DataSource = clsPeoples.ListPeoples();
         }
 
         private void searchPerson1_OnFilterCompleted(DataView List)

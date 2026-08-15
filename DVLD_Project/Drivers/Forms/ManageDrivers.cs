@@ -141,5 +141,60 @@ namespace DVLD_Project.Drivers.Forms
         {
 
         }
+
+        private void showDetailsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Size size = new Size(900, 500);
+            PersonInfo frm = new PersonInfo((int)dataGridView1.CurrentRow.Cells[1].Value);
+            frm.Size = size;
+            frm.ShowDialog();
+        }
+
+        private void addNewPersonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Size size = new Size(900, 500);
+            Add_Update_PersonForm frm = new Add_Update_PersonForm(-1);
+            frm.Size = size;
+            frm.ShowDialog();
+            dataGridView1.DataSource = clsDriver.ListDrivers();
+        }
+
+        private void editToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Size size = new Size(900, 500);
+            Add_Update_PersonForm frm = new Add_Update_PersonForm((int)dataGridView1.CurrentRow.Cells[1].Value);
+            frm.Size = size;
+            frm.ShowDialog();
+            dataGridView1.DataSource = clsDriver.ListDrivers();
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure that you went to delete this person?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                == DialogResult.Yes)
+            {
+                if (!(clsPeoples.DeletePerson((int)dataGridView1.CurrentRow.Cells[1].Value)))
+                {
+                    MessageBox.Show("Failed to delete person", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                }
+                else
+                {
+                    MessageBox.Show("Person Deleted Succefully", "Delete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    List = clsDriver.ListDrivers().DefaultView;
+                    dataGridView1.DataSource = List;
+                    this.Refresh();
+                }
+            }
+        }
+
+        private void sendEmailToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("This feature will be available in the next version of the system", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void sendSMSMessageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("This feature will be available in the next version of the system", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }

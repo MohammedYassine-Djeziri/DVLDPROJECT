@@ -277,18 +277,18 @@
     <Compile Include="People\Forms\PersonInfo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="People\Forms\UpdatePersonForm.Designer.cs">
+    <!-- <Compile Include="People\Forms\UpdatePersonForm.Designer.cs">
       <DependentUpon>UpdatePersonForm.cs</DependentUpon>
     </Compile>
     <Compile Include="People\Forms\UpdatePersonForm.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="People\CustomControls\Add_UpdatePerson.Designer.cs">
+    </Compile> -->
+    <!-- <Compile Include="People\CustomControls\Add_UpdatePerson.Designer.cs">
       <DependentUpon>Add_UpdatePerson.cs</DependentUpon>
-    </Compile>
-    <Compile Include="People\CustomControls\Add_UpdatePerson.cs">
+    </Compile> -->
+    <!-- <Compile Include="People\CustomControls\Add_UpdatePerson.cs">
       <SubType>UserControl</SubType>
-    </Compile>
+    </Compile> -->
     <Compile Include="People\CustomControls\FindPerson.Designer.cs">
       <DependentUpon>FindPerson.cs</DependentUpon>
     </Compile>
@@ -495,12 +495,12 @@
     <EmbeddedResource Include="People\Forms\PersonInfo.resx">
       <DependentUpon>PersonInfo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="People\Forms\UpdatePersonForm.resx">
+    <!-- <EmbeddedResource Include="People\Forms\UpdatePersonForm.resx">
       <DependentUpon>UpdatePersonForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="People\CustomControls\Add_UpdatePerson.resx">
+    </EmbeddedResource> -->
+    <!-- <EmbeddedResource Include="People\CustomControls\Add_UpdatePerson.resx">
       <DependentUpon>Add_UpdatePerson.cs</DependentUpon>
-    </EmbeddedResource>
+    </EmbeddedResource> -->
     <EmbeddedResource Include="People\CustomControls\FindPerson.resx">
       <DependentUpon>FindPerson.cs</DependentUpon>
     </EmbeddedResource>

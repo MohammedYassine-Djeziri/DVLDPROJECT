@@ -33,7 +33,7 @@ namespace DVLD_Project.People.Forms
         {
             Person = clsPeoples.FindByPersonalID(PersonID);
 
-            if (Person != null)
+            if (Person.PerID != -1 && Person.Mode == clsPeoples.EnMode.Update)
             {
                 Lbl_Add_Edit.Text = "Update Person";
                 lblPerID.Text = PersonID.ToString();
@@ -92,7 +92,6 @@ namespace DVLD_Project.People.Forms
             {
                 CB_COUNTRY.Items.Add(dt.Rows[i][1]);
             }
-
             this.RefreshInfo();
         }
 
@@ -111,7 +110,7 @@ namespace DVLD_Project.People.Forms
 
         private void TBNATNUB_Validating(object sender, CancelEventArgs e)
         {
-            if (clsPeoples.IsNationalNumberExists(TBNATNUB.Text))
+            if (clsPeoples.IsNationalNumberExists(TBNATNUB.Text) && Person.NationalNub.ToLower() != TBNATNUB.Text.ToLower())
             {
                 e.Cancel = true;
                 TBNATNUB.Focus();

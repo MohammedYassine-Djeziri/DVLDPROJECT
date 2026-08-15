@@ -155,20 +155,18 @@ namespace DVLDBusinessLayer
             }
         }
 
-
-        public static void FindByNationalNumber(string nationalNumber)
-        {
-
-        }
-
         public static clsPeoples GetEmptyPerson()
         {
-            return new clsPeoples(-1 , "", "", "", "", "", "", "", -1, DateTime.Now.AddYears(-19), -1, "", "");
+            clsPeoples P=  new clsPeoples(-1 , "", "", "", "", "", "", "", -1, DateTime.Now.AddYears(-19), -1, "", "");
+            P.Mode = EnMode.New;
+            return P;
         }
 
         public static clsPeoples GetEmptyPerson2()
         {
-            return new clsPeoples( "", "", "", "", "", "", "", -1, DateTime.Now.AddYears(-19), -1, "", "");
+            clsPeoples P = new clsPeoples("", "", "", "", "", "", "", -1, DateTime.Now.AddYears(-19), -1, "", "");
+            P.Mode = EnMode.New;
+            return P;
         }
 
         public static clsPeoples FindByPersonalID(int PerID)

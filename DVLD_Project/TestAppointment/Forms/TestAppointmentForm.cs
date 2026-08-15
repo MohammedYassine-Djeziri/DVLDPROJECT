@@ -87,7 +87,7 @@ namespace DVLD_Project.TestAppointment.Forms
                 frm.Size = new Size(500, 600);
                 frm.ShowDialog();
                 dataGridView1.DataSource = null;
-               dataGridView1.DataSource = clsTestAppointment.ListTestsAppointment(LDLID, TestTypeID);
+                dataGridView1.DataSource = clsTestAppointment.ListTestsAppointment(LDLID, TestTypeID);
                 
                 dataGridView1.RefreshEdit();
                 dataGridView1.Refresh();

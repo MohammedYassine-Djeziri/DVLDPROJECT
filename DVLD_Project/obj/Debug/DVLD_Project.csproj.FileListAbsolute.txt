@@ -49,8 +49,6 @@
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.People.Forms.Add_Update_PersonForm.resources
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.People.Forms.PeopleForm.resources
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.People.Forms.PersonInfo.resources
-/home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.People.Forms.UpdatePersonForm.resources
-/home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.People.CustomControls.Add_UpdatePerson.resources
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.People.CustomControls.FindPerson.resources
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.People.CustomControls.SearchPerson.resources
 /home/user/Downloads/DVLD/DVLD_Project/obj/Debug/DVLD_Project.People.CustomControls.ShowPersonalInfo.resources

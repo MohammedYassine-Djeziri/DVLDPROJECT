@@ -71,6 +71,7 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
             this.label1.Size = new System.Drawing.Size(888, 72);
             this.label1.TabIndex = 1;
             this.label1.Text = "Local Driving Licence Applications";
+            this.label1.ForeColor = System.Drawing.Color.Black;
             // 
             // dataGridView1
             // 
