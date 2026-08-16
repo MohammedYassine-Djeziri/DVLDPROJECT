@@ -53,7 +53,11 @@ namespace DVLD_Project.User.Forms
                     string UserNameShortcut = "UserName";
                     string UserNameValue = UserName.Text;
                     string PasswordShortcut = "Password";
-                    string PasswordValue = Password.Text;
+                    // Store the stored hash (never the plain-text password)
+                    // so "Remember me" can re-log-in without keeping the
+                    // real password around. CurrentUser.Password holds the
+                    // salted hash returned by the login verification.
+                    string PasswordValue = clsCurrentUser.CurrentUser.Password;
 
 
                     try

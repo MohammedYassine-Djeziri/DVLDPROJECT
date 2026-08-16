@@ -72,6 +72,43 @@ namespace DataAccessLayer
             return IsExist;
         }
 
+        // Look up a user by user name only (no password comparison in SQL).
+        // Used by the login flow: the plain-text password is verified in
+        // the business layer against the stored salted hash, never in SQL.
+        public static bool FindUserByUserName(string username, ref string pass, ref int UserID, ref int PerID, ref bool IsActive)
+        {
+            bool IsExist = false;
+            var connection = clsDatabaseFactory.CreateConnection();
+            string q = clsDatabaseFactory.GetQuery(
+                "select * from Users where Users.UserName=@UserName;",
+                "select * from users where users.username=@UserName;");
+            connection.Open();
+            var cmd = clsDatabaseFactory.CreateCommand(q, connection);
+            clsDatabaseFactory.AddParam(cmd, "@UserName", username);
+            try
+            {
+                IDataReader r = cmd.ExecuteReader();
+                if (r.Read())
+                {
+                    UserID = Convert.ToInt32(r[0]);
+                    PerID = Convert.ToInt32(r[1]);
+                    username = r[2].ToString();
+                    pass = r[3].ToString();
+                    IsActive = Convert.ToBoolean(r[4]);
+                    IsExist = true;
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return IsExist;
+        }
+
+
         public static bool FindUserByUserID(ref string username, ref string pass, int UserID, ref int PerID, ref bool IsActive)
         {
             bool IsExist = false;

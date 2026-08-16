@@ -55,7 +55,7 @@ BEGIN
         [UserID]   INT IDENTITY(1,1) NOT NULL,
         [PersonID] INT               NOT NULL,
         [UserName] NVARCHAR(20)       NOT NULL,
-        [Password] NVARCHAR(20)       NOT NULL,
+        [Password] NVARCHAR(150)       NOT NULL,
         [IsActive] BIT               NOT NULL,
         CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED ([UserID]),
         CONSTRAINT [FK_Users_People] FOREIGN KEY ([PersonID])
@@ -1264,7 +1264,7 @@ BEGIN
         DECLARE @AdminPersonID INT = SCOPE_IDENTITY();
 
         INSERT INTO [dbo].[Users] ([PersonID],[UserName],[Password],[IsActive])
-        VALUES (@AdminPersonID, N'admin', N'admin', 1);
+        VALUES (@AdminPersonID, N'admin', N'100000:W+dWEtXTf0oDDQHZL7gZYQ==:lQYh63+rffXaydBlYACjjVHGIMZnYmzKXfUxhFnv1xQ=', 1);
     END
 END
 GO

@@ -30,7 +30,11 @@ namespace DVLD_Project.User.Forms
 
         private void TBCurrentPassword_Validating(object sender, CancelEventArgs e)
         {
-            if (TBCurrentPassword.Text != MyUser.Password)
+            // MyUser.Password holds the stored salted hash. Because each hash
+            // uses a random salt, we cannot hash the typed text and compare
+            // strings; we must VERIFY the typed password against the stored
+            // hash using clsUsers.VerifyPassword (constant-time, PBKDF2).
+            if (!clsUsers.VerifyPassword(TBCurrentPassword.Text, MyUser.Password))
             {
                 //btnSave.Enabled = false;
                 e.Cancel = true;
@@ -86,8 +90,13 @@ namespace DVLD_Project.User.Forms
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if(TBCurrentPassword.Text==MyUser.Password &&  TB_Pass.Text!=""&&(TB_PassConf.Text== TB_Pass.Text))
+            // Verify the current password against the stored hash, then
+            // make sure the new password + confirmation are valid.
+            if (clsUsers.VerifyPassword(TBCurrentPassword.Text, MyUser.Password)
+                && TB_Pass.Text != "" && TB_PassConf.Text == TB_Pass.Text)
             {
+                // Assign the NEW plain-text password; clsUsers.Save() will
+                // hash it (PBKDF2, fresh salt) before sending it to the DAL.
                 MyUser.Password = TB_Pass.Text;
                 MyUser.Save();
                 MessageBox.Show("Password Updated Successfully");
