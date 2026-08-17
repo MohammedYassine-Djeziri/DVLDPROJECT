@@ -25,10 +25,15 @@ namespace DVLD_Project.Global.Forms
 
         private Form ActiveForm=null;
 
-        LogInScreen frm = null;
-        public MainMenu(int i , int j , LogInScreen fr_m  )
+        /// <summary>
+        /// Set to true when the user chooses "Sign out". Read by the login
+        /// screen after this dialog closes to decide whether to re-show the
+        /// login form (sign-out) or exit the application (window closed).
+        /// </summary>
+        public bool SignOutRequested = false;
+
+        public MainMenu(int i , int j)
         {
-            frm = fr_m;
             
             this.Size = new Size(i, j);
             InitializeComponent();
@@ -59,6 +64,7 @@ namespace DVLD_Project.Global.Forms
         {
             lbltime.Text = DateTime.Now.ToString();
             pictureBox1.ImageLocation = clsCurrentUser.CurrentUser.Person.ImagePath;
+            //MessageBox.Show(clsCurrentUser.CurrentUser.UserName, clsCurrentUser.CurrentUser.Person.ImagePath);
             lblUserName.Text=clsCurrentUser.CurrentUser.UserName;
         }
 
@@ -79,15 +85,15 @@ namespace DVLD_Project.Global.Forms
 
         private void signOutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            //Form form = new LogInScreen(this);
-            Size size = new Size();
-            size.Width = 755;
-            size.Height = 580;
-            frm.Size = size;
-            frm.frm = this;
-            frm.ShowDialog();
-            //this.Close();
+            // Just close this dialog. The login screen (which is blocked inside
+            // ShowDialog) regains control and re-shows itself for a new session.
+            // We must NOT call ShowDialog() on the login form from here while we
+            // are ourselves displayed modally, and we must NOT Hide() ourselves
+            // and stay alive (that left MainMenu in a modal state and caused
+            // "Form that is already displayed modally cannot be displayed as a
+            // modal dialog box" on the next login).
+            SignOutRequested = true;
+            this.Close();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -244,7 +250,12 @@ namespace DVLD_Project.Global.Forms
 
         private void MainMenu_FormClosing(object sender, FormClosingEventArgs e)
         {
-            frm.Close();
+            // The login form's lifecycle is now managed by LogInScreen after
+            // this dialog returns (see btn_LOGIN_Click). Previously this handler
+            // called frm.Close() while we were still inside our own modal
+            // ShowDialog, which caused re-entrancy issues; closing the login
+            // form is now done by the login screen itself when SignOutRequested
+            // is false.
         }
     }
 }

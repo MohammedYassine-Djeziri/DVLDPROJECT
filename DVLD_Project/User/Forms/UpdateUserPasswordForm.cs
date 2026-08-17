@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+//access to registry
+using Microsoft.Win32;
 
 namespace DVLD_Project.User.Forms
 {
@@ -100,6 +102,8 @@ namespace DVLD_Project.User.Forms
                 MyUser.Password = TB_Pass.Text;
                 MyUser.Save();
                 MessageBox.Show("Password Updated Successfully");
+                Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\LogInInfo", "Password", MyUser.Password, Microsoft.Win32.RegistryValueKind.String);
+                this.Close();
             }
             else
             {

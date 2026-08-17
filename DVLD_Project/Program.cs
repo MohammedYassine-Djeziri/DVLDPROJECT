@@ -28,7 +28,7 @@ namespace DVLD_Project
 
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
-            Form form = new LogInScreen(null);
+            Form form = new LogInScreen();
             Size size = new Size();
             size.Width = 755;
             size.Height = 580;
