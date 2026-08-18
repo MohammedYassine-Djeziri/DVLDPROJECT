@@ -4,73 +4,16 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace DataAccessLayer
 {
     public class clsSqlUsers
     {
-        public static bool IsUserExists(string username, string pass)
-        {
-            bool IsExist = false;
-            var connection = clsDatabaseFactory.CreateConnection();
-            // Dual version: SQL Server bit needs = 1; PostgreSQL boolean needs = TRUE.
-            // (T-SQL has no 'true' literal -> 'Users.IsActive = true' fails on SQL Server;
-            //  PostgreSQL does not support 'boolean = integer' -> '= 1' fails on PG.)
-            string q = clsDatabaseFactory.GetQuery(
-                "select * from Users where Users.IsActive = 1 and Users.Password=@pass  and Users.UserName=@UserName;",
-                "select * from users where users.isactive = TRUE and users.password=@pass  and users.username=@UserName;");
-            connection.Open();
-            var cmd = clsDatabaseFactory.CreateCommand(q, connection);
-            clsDatabaseFactory.AddParam(cmd, "@UserName", username);
-            clsDatabaseFactory.AddParam(cmd, "@pass", pass);
-            try
-            {
-                IDataReader r = cmd.ExecuteReader();
-                if (r.Read())
-                {
-                    IsExist = true;
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-            finally { connection.Close(); }
-            return IsExist;
-        }
+       
 
 
-        public static bool FindUserByUserNameAndPassword(string username, string pass, ref int UserID, ref int PerID, ref bool IsActive)
-        {
-            bool IsExist = false;
-            var connection = clsDatabaseFactory.CreateConnection();
-            // Dual version: SQL Server bit needs = 1; PostgreSQL boolean needs = TRUE.
-            string q = clsDatabaseFactory.GetQuery(
-                "select * from Users where Users.IsActive = 1 and Users.Password=@pass  and Users.UserName=@UserName;",
-                "select * from users where users.isactive = TRUE and users.password=@pass  and users.username=@UserName;");
-            connection.Open();
-            var cmd = clsDatabaseFactory.CreateCommand(q, connection);
-            clsDatabaseFactory.AddParam(cmd, "@UserName", username);
-            clsDatabaseFactory.AddParam(cmd, "@pass", pass);
-            try
-            {
-                IDataReader r = cmd.ExecuteReader();
-                if (r.Read())
-                {
-                    UserID = Convert.ToInt32(r[0]);
-                    PerID = Convert.ToInt32(r[1]);
-                    IsActive = Convert.ToBoolean(r[4]);
-                    IsExist = true;
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-            finally
-            {
-                connection.Close();
-            }
-            return IsExist;
-        }
+        
 
         // Look up a user by user name only (no password comparison in SQL).
         // Used by the login flow: the plain-text password is verified in
