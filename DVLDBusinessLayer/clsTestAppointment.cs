@@ -26,35 +26,36 @@ namespace DVLDBusinessLayer
         clsTestAppointment(int testAppointmentID, int testTypeID, int LDLID, DateTime date,
             float fees, int user_id, bool is_locked, int retake_app_id)
         {
-            Mode= enMode.Update;
-            TestAppointmentID = testAppointmentID;
-            TestTypeID = testTypeID;
-            LocalDrivingLicenseAppID = LDLID;
-            Fees = fees;
-            UserID = user_id;
-            IsLocked = is_locked;
-            AppointmentDate = date;
-            RetakeTestApplicationID = retake_app_id;
+            this.Mode= enMode.Update;
+            this.TestAppointmentID = testAppointmentID;
+            this.TestTypeID = testTypeID;
+            this.LocalDrivingLicenseAppID = LDLID;
+            this.Fees = fees;
+            this.UserID = user_id;
+            this.IsLocked = is_locked;
+            this.AppointmentDate = date;
+            this.RetakeTestApplicationID = retake_app_id;
         }
 
         clsTestAppointment( int testTypeID, int LDLID, DateTime date,
             float fees, int user_id, bool is_locked, int retake_app_id)
         {
-            Mode= enMode.New;
-            TestTypeID = testTypeID;
-            LocalDrivingLicenseAppID = LDLID;
-            Fees = fees;
-            UserID = user_id;
-            IsLocked = is_locked;
-            AppointmentDate = date;
-            RetakeTestApplicationID = retake_app_id;
+            this.Mode= enMode.New;
+            this.TestTypeID = testTypeID;
+            this.LocalDrivingLicenseAppID = LDLID;
+            this.Fees = fees;
+            this.UserID = user_id;
+            this.IsLocked = is_locked;
+            this.AppointmentDate = date;
+            this.RetakeTestApplicationID = retake_app_id;
+            this.TestAppointmentID = -1;
 
         }
 
 
         public static clsTestAppointment GetEmptyTestAppointment()
         {
-            clsTestAppointment TestAppointment = new clsTestAppointment(-1,-1, -1, DateTime.Now, 0, -1, false, -1);
+            clsTestAppointment TestAppointment = new clsTestAppointment(-1, -1, DateTime.Now, 0, -1, false, -1);
             TestAppointment.Mode = enMode.New;
             return TestAppointment;
         }

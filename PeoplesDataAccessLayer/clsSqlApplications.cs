@@ -158,7 +158,7 @@ namespace DataAccessLayer
                 " END AS \"FullName\",applicationdate,  (select  count(testappointments.testtypeid ) " +
                 "from tests join testappointments  on tests.testappointmentid = testappointments.testappointmentid where " +
                 "testappointments.localdrivinglicenseapplicationid=localdrivinglicenseapplications.localdrivinglicenseapplicationid " +
-                "and tests.testresult=1) AS \"Passed Test\" , case  when applications.applicationstatus = 1 then 'New' " +
+                "and tests.testresult = TRUE) AS \"Passed Test\" , case  when applications.applicationstatus = 1 then 'New' " +
                 "when applicationstatus  = 2 then 'Cancelled' else 'Completed' end AS \"Status\" " +
                 " from applications inner join people on  applications.applicantpersonid=people.personid " +
                 "inner join localdrivinglicenseapplications on localdrivinglicenseapplications.applicationid= applications.applicationid;");

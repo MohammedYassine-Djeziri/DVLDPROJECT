@@ -40,13 +40,14 @@ namespace DVLDBusinessLayer
             PersonID = person_ID;
             UserID = user_ID;
             CreatedDate = date;
+            this.DriverID = -1;
 
         }
 
 
         public static clsDriver GetEmptyDriver()
         {
-            clsDriver driver = new clsDriver(-1, -1,-1, DateTime.Now);
+            clsDriver driver = new clsDriver( -1,-1, DateTime.Now);
             driver.Mode = enMode.New;
             return driver;
         }

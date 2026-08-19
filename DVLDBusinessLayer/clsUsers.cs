@@ -129,11 +129,12 @@ namespace DVLDBusinessLayer
         
         public clsUsers(string username , string pass , int perID , bool Act) 
         {
-            Mode = EnMode.New;
-            Person = clsPeoples.FindByPersonalID(perID);
-            UserName = username;
-            Password = pass;
-            IsActive = Act;
+            this.Mode = EnMode.New;
+            this.Person = clsPeoples.FindByPersonalID(perID);
+            this.UserName = username;
+            this.Password = pass;
+            this.IsActive = Act;
+            this.UserID = -1;
             
         }
 
@@ -157,7 +158,7 @@ namespace DVLDBusinessLayer
 
         public static clsUsers GetEmptyUser() 
         {
-            return new clsUsers(-1 , "", "", -1, false); 
+            return new clsUsers( "", "", -1, false); 
         }
 
         public static clsUsers FindByUserNamePass(string username , string Pass) 

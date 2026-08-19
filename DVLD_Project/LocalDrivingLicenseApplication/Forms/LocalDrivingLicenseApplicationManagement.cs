@@ -228,15 +228,7 @@ namespace DVLD_Project.LocalDrivingLicenseApplication.Forms
 
                 if ((dataGridView1.CurrentRow.Cells[6].Value).ToString() == "Completed")
                 {
-                    //ShowLicenseToolStripMenuItem1.Enabled = true;
-                    //if (!clsLocalDrivingLicense.IsLicenseExistsByLDLAppID(Convert.ToInt32(dataGridView1.CurrentRow.Cells[0].Value)))
-                    //{
-                    //    IssueDrivingLicenseFirstTimeToolStripMenuItem.Enabled = true;
-                    //}
-                    //else
-                    //{
-                    //    IssueDrivingLicenseFirstTimeToolStripMenuItem.Enabled = false;
-                    //}
+                   
                     cancelApplicationToolStripMenuItem.Enabled = false;
                     deleteApplicationToolStripMenuItem .Enabled = false;
                     ScheduleTestsMenuItem.Enabled = false;

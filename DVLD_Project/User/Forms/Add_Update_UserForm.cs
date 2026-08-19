@@ -149,6 +149,7 @@ namespace DVLD_Project.User.Forms
         {
             if (MyUser.Person != null && TBUserName.Text != "" && TB_Pass.Text != "" && TB_PassConf.Text != "")
             {
+                
                 MyUser.Password= TB_Pass.Text;
                 MyUser.IsActive = checkBox1.Checked;
                 MyUser.UserName= TBUserName.Text;

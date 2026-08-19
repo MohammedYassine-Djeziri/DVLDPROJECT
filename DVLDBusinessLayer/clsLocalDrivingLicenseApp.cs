@@ -19,21 +19,22 @@ namespace DVLDBusinessLayer
         public clsLocalDrivingLicenseApp(int localDrivingLicenseAppID, int applicationID, int licenseClassID)
         {
             this.Mode = EnMode.Update;
-            LocalDrivingLicenseAppID = localDrivingLicenseAppID;
-            ApplicationID = applicationID;
-            LicenseClassID = licenseClassID;
+            this.LocalDrivingLicenseAppID = localDrivingLicenseAppID;
+            this.ApplicationID = applicationID;
+            this.LicenseClassID = licenseClassID;
         }
 
         clsLocalDrivingLicenseApp(int applicationID, int licenseClassID)
         {
             this.Mode = EnMode.New;
-            ApplicationID = applicationID;
-            LicenseClassID = licenseClassID;
+            this.ApplicationID = applicationID;
+            this.LicenseClassID = licenseClassID;
+            this.LocalDrivingLicenseAppID = -1;
         }
 
         public static clsLocalDrivingLicenseApp GetEmptyLocalDrivingLicenseApplication()
         {
-            clsLocalDrivingLicenseApp Local = new clsLocalDrivingLicenseApp(-1 , -1, -1);
+            clsLocalDrivingLicenseApp Local = new clsLocalDrivingLicenseApp( -1, -1);
             Local.Mode = EnMode.New;
             return Local;
         }

@@ -50,11 +50,12 @@ namespace DVLDBusinessLayer
             ApplicationFees = applicationFees;
             UserId = userId;
             LastStatusDate = lastStatusDate;
+            this.ApplicationID = -1;
         }
 
         public static clsApplication GetEmptyApplication()
         {
-            clsApplication App = new clsApplication(-1, -1, DateTime.Now, -1, -1, -1, -1, DateTime.Now);
+            clsApplication App = new clsApplication( -1, DateTime.Now, -1, -1, -1, -1, DateTime.Now);
             App.Mode=EnMode.New;
             return App;
         }

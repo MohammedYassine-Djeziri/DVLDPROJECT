@@ -65,7 +65,6 @@
     <Compile Include="clsSqlTest.cs" />
     <Compile Include="clsSqlTestAppointment.cs" />
     <Compile Include="clsSqlLicenseClasses.cs" />
-    <Compile Include="clsSqlLocalDrivingLicense.cs" />
     <Compile Include="clsSqlLocalDrivingLicenseApp.cs" />
     <Compile Include="clsSqlApplications.cs" />
     <Compile Include="clsSqlPeoples.cs" />

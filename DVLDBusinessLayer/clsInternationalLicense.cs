@@ -51,13 +51,14 @@ namespace DVLDBusinessLayer
             DriverID = driver_id;
             UserID = user_id;
             IsActive = is_active;
+            this.InternationalLicenseID = -1;
 
         }
 
 
         public static clsInternationalLicense GetEmptyInternationalLicense()
         {
-            clsInternationalLicense license = new clsInternationalLicense(-1 ,-1, -1, -1, DateTime.Now, DateTime.Now, -1, false);
+            clsInternationalLicense license = new clsInternationalLicense(-1, -1, -1, DateTime.Now, DateTime.Now, -1, false);
             license.Mode = enMode.New;
             return license;
         }

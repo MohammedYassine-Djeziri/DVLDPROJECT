@@ -135,6 +135,8 @@ namespace DataAccessLayer
             bool IsAdded = false;
             var connection = clsDatabaseFactory.CreateConnection();
 
+            File.AppendAllText("output.txt", "hello from AddNewUser\n");
+
             // INSERT with SCOPE_IDENTITY → explicit PG RETURNING version
             string q = clsDatabaseFactory.GetQuery(
                 "INSERT INTO [dbo].[Users] ([PersonID],[UserName],[Password],[IsActive])VALUES(@perID,@UserName,@Pass,@Active)"

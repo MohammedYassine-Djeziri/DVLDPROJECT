@@ -40,7 +40,7 @@ namespace DVLD_Project.DetainedLicense.Forms
                     lblLicID.Text = obj.ToString();
                     LicenseID = obj;
                     clsLicenses MyLicense = clsLicenses.FindLicenseByLicenseID(LicenseID);
-                    if (clsLicenses.IsLicenseDetained(MyLicense.LicenseID))
+                    if (MyLicense.IsActive && clsLicenses.IsLicenseDetained(MyLicense.LicenseID))
                     {
                         lbl_UserName.Text = clsCurrentUser.CurrentUser.UserName;
                         btnIssue.Enabled = true;
@@ -56,7 +56,7 @@ namespace DVLD_Project.DetainedLicense.Forms
 
                     else
                     {
-                        MessageBox.Show("License is not detained");
+                        MessageBox.Show("License is not detained or not active", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
 

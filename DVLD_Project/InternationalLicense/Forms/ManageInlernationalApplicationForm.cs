@@ -78,6 +78,7 @@ namespace DVLD_Project.InternationalLicense.Forms
         private void button1_Click(object sender, EventArgs e)
         {
             InternationalLicenseAppForm frm = new InternationalLicenseAppForm();
+            frm.Size = new Size(1000, 850);
             frm.ShowDialog();
             List = clsInternationalLicense.ListInternationalLicenses().DefaultView;
             dataGridView1.DataSource = List;
@@ -86,7 +87,7 @@ namespace DVLD_Project.InternationalLicense.Forms
         private void showApplicationDetailsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PersonInfo frm = new PersonInfo(clsDriver.FindDriverByDriverID(Convert.ToInt32(dataGridView1.CurrentRow.Cells[3].Value)).PersonID);
-            frm.Size = new Size(900, 900);
+            frm.Size = new Size(900, 600);
             frm.ShowDialog();
             
         }
@@ -101,7 +102,7 @@ namespace DVLD_Project.InternationalLicense.Forms
         private void ShowLicenseToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             Form frm = new ShowInternationalLicenseForm(Convert.ToInt32(dataGridView1.CurrentRow.Cells[0].Value));
-            frm.Size = new Size(900, 900);
+            frm.Size = new Size(900, 600);
             frm.ShowDialog();
         }
 

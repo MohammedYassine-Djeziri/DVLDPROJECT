@@ -176,7 +176,7 @@ namespace DVLD_Project.Global.Forms
         {
             InternationalLicenseAppForm frm = new InternationalLicenseAppForm();
 
-            frm.Size = new Size(1000, 950);
+            frm.Size = new Size(1000, 850);
             frm.ShowDialog();
         }
 

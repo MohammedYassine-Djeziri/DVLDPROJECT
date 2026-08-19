@@ -34,6 +34,7 @@ namespace DVLDBusinessLayer
             this.UserID = user_id;
             this.TestResult = result;
             this.Notes = note;
+            this.TestID = -1;
         }
 
         public void AddNewTest()
@@ -43,7 +44,7 @@ namespace DVLDBusinessLayer
 
         public static clsTest GetEmptyTest()
         {
-            clsTest Test = new clsTest(-1, -1, -1, false, "");
+            clsTest Test = new clsTest(-1, -1, false, "");
             Test.Mode= enMode.New;
             return Test;
         }

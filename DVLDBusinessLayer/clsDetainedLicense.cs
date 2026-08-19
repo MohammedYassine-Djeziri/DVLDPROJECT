@@ -53,13 +53,13 @@ namespace DVLDBusinessLayer
             DetainedUserID = det_user_id;
             FineFees = fees;
             IsReleased = is_released;
+            this.DetainedID = -1;
 
         }
 
         public static clsDetainedLicense GetEmptyLicense()
         {
             clsDetainedLicense detained_license = new clsDetainedLicense(-1, -1, DateTime.Now, DateTime.Now, 0,-1 , -1, false);
-            detained_license.Mode = enMode.New;
             return detained_license;
         }
 

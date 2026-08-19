@@ -125,7 +125,7 @@ namespace DVLD_Project.InternationalLicense.Forms
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Form frm = new ShowInternationalLicenseForm(clsInternationalLicense.FindLicenseByLicenseID(LicenseID).InternationalLicenseID);
-            frm.Size = new Size(900, 900);
+            frm.Size = new Size(900, 600);
             frm.ShowDialog();
         }
     }

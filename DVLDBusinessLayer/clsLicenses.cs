@@ -62,13 +62,14 @@ namespace DVLDBusinessLayer
             IsActive = is_active;
             IssueReason = isssue_reason;
             PaidFees = fees;
+            this.LicenseID = -1;
 
         }
 
 
         public static clsLicenses GetEmptyLicense()
         {
-            clsLicenses license = new clsLicenses(-1, -1,-1 , DateTime.Now, DateTime.Now,0, -1,  false, -1, -1, "");
+            clsLicenses license = new clsLicenses( -1,-1 , DateTime.Now, DateTime.Now,0, -1,  false, -1, -1, "");
             license.Mode = enMode.New;
             return license;
         }
