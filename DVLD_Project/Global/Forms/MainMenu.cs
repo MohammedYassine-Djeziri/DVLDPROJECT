@@ -154,13 +154,14 @@ namespace DVLD_Project.Global.Forms
         private void localLicenceToolStripMenuItem_Click(object sender, EventArgs e)
         {
             NewLocalDrivingLicenseApplication frm = new NewLocalDrivingLicenseApplication();
+            frm.Size = new Size(1100, 850);
             frm.ShowDialog();
         }
 
         private void localDrivingLicenseApplicationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LocalDrivingLicenseApplicationManagement frm = new LocalDrivingLicenseApplicationManagement();
-            frm.Size = new Size(1100, 700);
+            frm.Size = new Size(1100, 850);
             frm.ShowDialog();
         }
 
@@ -183,7 +184,7 @@ namespace DVLD_Project.Global.Forms
         private void localDrivingLicenseApplicationsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             ManageInlernationalApplicationForm frm = new ManageInlernationalApplicationForm();
-            frm.Size = new Size(1100, 700);
+            frm.Size = new Size(1100, 800);
             frm.ShowDialog();
         }
 
@@ -244,7 +245,7 @@ namespace DVLD_Project.Global.Forms
         private void retakeTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LocalDrivingLicenseApplicationManagement frm = new LocalDrivingLicenseApplicationManagement();
-            frm.Size = new Size(1100, 700);
+            frm.Size = new Size(1100, 850);
             frm.ShowDialog();
         }
 
