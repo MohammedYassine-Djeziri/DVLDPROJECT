@@ -1,5 +1,0 @@
-/home/user/Downloads/DVLD/ClsUtil/bin/Debug/ClsUtil.dll
-/home/user/Downloads/DVLD/ClsUtil/bin/Debug/ClsUtil.pdb
-/home/user/Downloads/DVLD/ClsUtil/obj/Debug/ClsUtil.csproj.CoreCompileInputs.cache
-/home/user/Downloads/DVLD/ClsUtil/obj/Debug/ClsUtil.dll
-/home/user/Downloads/DVLD/ClsUtil/obj/Debug/ClsUtil.pdb

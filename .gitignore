@@ -4,6 +4,7 @@ obj/
 *.user
 *.suo
 *.cache
+.vs/
 *.vs/
 *.DotSettings
 *.sln.docstates
@@ -40,6 +41,7 @@ TestResults/
 *.trx
 
 # Image copies (runtime generated)
+ImageCopy/
 DVLD_Project/ImageCopy/
 
 # Logs
