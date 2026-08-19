@@ -729,6 +729,30 @@ SELECT 'Zambia' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Z
 INSERT INTO countries (countryname)
 SELECT 'Zimbabwe' WHERE NOT EXISTS (SELECT 1 FROM countries WHERE countryname = 'Zimbabwe');
 
+-- LicenseClasses
+INSERT INTO licenseclasses (licenseclassid, classname, classdescription, minimumallowedage, defaultvaliditylength, classfees)
+SELECT 1, 'Class 1 - Small Motorcycle', 'It allows the driver to drive small motorcycles, It is suitable for motorcycles with small capacity and limited power.', 18, 5, 15.0000
+WHERE NOT EXISTS (SELECT 1 FROM licenseclasses WHERE licenseclassid = 1);
+INSERT INTO licenseclasses (licenseclassid, classname, classdescription, minimumallowedage, defaultvaliditylength, classfees)
+SELECT 2, 'Class 2 - Heavy Motorcycle License', 'Heavy Motorcycle License (Large Motorcycle License)', 21, 5, 30.0000
+WHERE NOT EXISTS (SELECT 1 FROM licenseclasses WHERE licenseclassid = 2);
+INSERT INTO licenseclasses (licenseclassid, classname, classdescription, minimumallowedage, defaultvaliditylength, classfees)
+SELECT 3, 'Class 3 - Ordinary driving license', 'Ordinary driving license (car licence)', 18, 10, 20.0000
+WHERE NOT EXISTS (SELECT 1 FROM licenseclasses WHERE licenseclassid = 3);
+INSERT INTO licenseclasses (licenseclassid, classname, classdescription, minimumallowedage, defaultvaliditylength, classfees)
+SELECT 4, 'Class 4 - Commercial', 'Commercial driving license (taxi/limousine)', 21, 10, 200.0000
+WHERE NOT EXISTS (SELECT 1 FROM licenseclasses WHERE licenseclassid = 4);
+INSERT INTO licenseclasses (licenseclassid, classname, classdescription, minimumallowedage, defaultvaliditylength, classfees)
+SELECT 5, 'Class 5 - Agricultural', 'Agricultural and work vehicles used in farming or construction, (tractors / tillage machinery)', 21, 10, 50.0000
+WHERE NOT EXISTS (SELECT 1 FROM licenseclasses WHERE licenseclassid = 5);
+INSERT INTO licenseclasses (licenseclassid, classname, classdescription, minimumallowedage, defaultvaliditylength, classfees)
+SELECT 6, 'Class 6 - Small and medium bus', 'Small and medium bus license', 21, 10, 250.0000
+WHERE NOT EXISTS (SELECT 1 FROM licenseclasses WHERE licenseclassid = 6);
+INSERT INTO licenseclasses (licenseclassid, classname, classdescription, minimumallowedage, defaultvaliditylength, classfees)
+SELECT 7, 'Class 7 - Truck and heavy vehicle', 'Truck and heavy vehicle license', 21, 10, 300.0000
+WHERE NOT EXISTS (SELECT 1 FROM licenseclasses WHERE licenseclassid = 7);
+
+
 -- ApplicationTypes
 INSERT INTO applicationtypes (applicationtypetitle, applicationfees)
 SELECT 'New Local Driving License Service', 15

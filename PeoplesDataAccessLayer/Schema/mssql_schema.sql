@@ -1229,6 +1229,26 @@ IF NOT EXISTS (SELECT 1 FROM [dbo].[Countries] WHERE [CountryName] = N'Zimbabwe'
     INSERT INTO [dbo].[Countries] ([CountryName]) VALUES (N'Zimbabwe');
 GO
 
+-- LicenseClasses
+SET IDENTITY_INSERT [dbo].[LicenseClasses] ON;
+IF NOT EXISTS (SELECT 1 FROM [dbo].[LicenseClasses] WHERE [LicenseClassID] = 1)
+    INSERT INTO [dbo].[LicenseClasses] ([LicenseClassID],[ClassName],[ClassDescription],[MinimumAllowedAge],[DefaultValidityLength],[ClassFees]) VALUES (1, N'Class 1 - Small Motorcycle', N'It allows the driver to drive small motorcycles, It is suitable for motorcycles with small capacity and limited power.', 18, 5, 15.0000);
+IF NOT EXISTS (SELECT 1 FROM [dbo].[LicenseClasses] WHERE [LicenseClassID] = 2)
+    INSERT INTO [dbo].[LicenseClasses] ([LicenseClassID],[ClassName],[ClassDescription],[MinimumAllowedAge],[DefaultValidityLength],[ClassFees]) VALUES (2, N'Class 2 - Heavy Motorcycle License', N'Heavy Motorcycle License (Large Motorcycle License)', 21, 5, 30.0000);
+IF NOT EXISTS (SELECT 1 FROM [dbo].[LicenseClasses] WHERE [LicenseClassID] = 3)
+    INSERT INTO [dbo].[LicenseClasses] ([LicenseClassID],[ClassName],[ClassDescription],[MinimumAllowedAge],[DefaultValidityLength],[ClassFees]) VALUES (3, N'Class 3 - Ordinary driving license', N'Ordinary driving license (car licence)', 18, 10, 20.0000);
+IF NOT EXISTS (SELECT 1 FROM [dbo].[LicenseClasses] WHERE [LicenseClassID] = 4)
+    INSERT INTO [dbo].[LicenseClasses] ([LicenseClassID],[ClassName],[ClassDescription],[MinimumAllowedAge],[DefaultValidityLength],[ClassFees]) VALUES (4, N'Class 4 - Commercial', N'Commercial driving license (taxi/limousine)', 21, 10, 200.0000);
+IF NOT EXISTS (SELECT 1 FROM [dbo].[LicenseClasses] WHERE [LicenseClassID] = 5)
+    INSERT INTO [dbo].[LicenseClasses] ([LicenseClassID],[ClassName],[ClassDescription],[MinimumAllowedAge],[DefaultValidityLength],[ClassFees]) VALUES (5, N'Class 5 - Agricultural', N'Agricultural and work vehicles used in farming or construction, (tractors / tillage machinery)', 21, 10, 50.0000);
+IF NOT EXISTS (SELECT 1 FROM [dbo].[LicenseClasses] WHERE [LicenseClassID] = 6)
+    INSERT INTO [dbo].[LicenseClasses] ([LicenseClassID],[ClassName],[ClassDescription],[MinimumAllowedAge],[DefaultValidityLength],[ClassFees]) VALUES (6, N'Class 6 - Small and medium bus', N'Small and medium bus license', 21, 10, 250.0000);
+IF NOT EXISTS (SELECT 1 FROM [dbo].[LicenseClasses] WHERE [LicenseClassID] = 7)
+    INSERT INTO [dbo].[LicenseClasses] ([LicenseClassID],[ClassName],[ClassDescription],[MinimumAllowedAge],[DefaultValidityLength],[ClassFees]) VALUES (7, N'Class 7 - Truck and heavy vehicle', N'Truck and heavy vehicle license', 21, 10, 300.0000);
+SET IDENTITY_INSERT [dbo].[LicenseClasses] OFF;
+GO
+
+
 -- ApplicationTypes
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ApplicationTypes] WHERE [ApplicationTypeTitle] = N'New Local Driving License Service')
     INSERT INTO [dbo].[ApplicationTypes] ([ApplicationTypeTitle],[ApplicationFees]) VALUES (N'New Local Driving License Service', 15);
