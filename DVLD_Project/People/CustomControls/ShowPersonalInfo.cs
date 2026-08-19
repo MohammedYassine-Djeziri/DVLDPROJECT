@@ -59,7 +59,6 @@ namespace DVLD_Project.People.CustomControls
                 }
                 else
                 {
-                    MessageBox.Show("PersonId= "+ PersonID + " has no image path", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     if (Person.Gender == 1)
                     {
                         PctBoxImg.Image = Resources.Female_512;
@@ -72,7 +71,6 @@ namespace DVLD_Project.People.CustomControls
                     }
                     else
                     {
-                        MessageBox.Show("hello");
                         PctBoxImg.Image = Resources._19477_1;
                     }
                 }
