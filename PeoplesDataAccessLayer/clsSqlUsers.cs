@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace DataAccessLayer
 {
@@ -134,8 +133,6 @@ namespace DataAccessLayer
         {
             bool IsAdded = false;
             var connection = clsDatabaseFactory.CreateConnection();
-
-            File.AppendAllText("output.txt", "hello from AddNewUser\n");
 
             // INSERT with SCOPE_IDENTITY → explicit PG RETURNING version
             string q = clsDatabaseFactory.GetQuery(

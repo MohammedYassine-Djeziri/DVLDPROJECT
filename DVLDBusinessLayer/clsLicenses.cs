@@ -101,10 +101,6 @@ namespace DVLDBusinessLayer
             else if (code == 3) return "Replacement for Lost";
             else return "Replacement for damaged";
         }
-        public static DataTable ListLicenses()
-        {
-            return null;
-        }
 
 
         public static clsLicenses FindLicenseByLicenseID(int license_ID)
@@ -159,12 +155,6 @@ namespace DVLDBusinessLayer
         public static DataTable ListLicensesByDriverID(int driverID)
         {
             return clsSqlLicenses.ListLicensesByDriverID(driverID);
-        }
-
-
-        public static DataTable ListLicensesByLicenseID(int licenseID)
-        {
-            return clsSqlLicenses.ListLicensesByDriverID(licenseID);
         }
 
 

@@ -247,10 +247,6 @@ SELECT setval(pg_get_serial_sequence('tests', 'testid'),
               (SELECT COALESCE(MAX(testid), 0) + 1 FROM tests), false);
 SELECT setval(pg_get_serial_sequence('detainedlicenses', 'detainid'),
               (SELECT COALESCE(MAX(detainid), 0) + 1 FROM detainedlicenses), false);
-SELECT setval(pg_get_serial_sequence('sysdiagrams', 'diagram_id'),
-              (SELECT COALESCE(MAX(diagram_id), 0) + 1 FROM sysdiagrams), false);
-SELECT setval(pg_get_serial_sequence('sysdiagrams', 'diagram_id'),
-              (SELECT COALESCE(MAX(diagram_id), 0) + 1 FROM sysdiagrams), false);
 SELECT setval(pg_get_serial_sequence('internationallicenses', 'internationallicenseid'),
               (SELECT COALESCE(MAX(internationallicenseid), 0) + 1 FROM internationallicenses), false);
 

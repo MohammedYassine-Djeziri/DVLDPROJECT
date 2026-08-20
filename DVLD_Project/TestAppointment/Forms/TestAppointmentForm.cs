@@ -18,7 +18,6 @@ namespace DVLD_Project.TestAppointment.Forms
         int LDLID = -1;
         int TestTypeID=-1;
 
-        //clsTestAppointment TestAppointment = clsTestAppointment.GetEmptyTestAppointment();
         clsApplication MyApplication = clsApplication.GetEmptyApplication();
         clsLocalDrivingLicenseApp LDLApp = clsLocalDrivingLicenseApp.GetEmptyLocalDrivingLicenseApplication();
         public TestAppointmentForm(int ldl_id, int test_type_id)

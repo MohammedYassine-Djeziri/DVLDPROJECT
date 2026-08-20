@@ -26,10 +26,6 @@ namespace DVLD_Project.License.CustomControls
             {
                 handler(LicenseID);
             }
-            //if (OnSearchCompleted != null)
-            //{
-            //    SearchCompleted(Person.PerID);
-            //}
         }
 
         

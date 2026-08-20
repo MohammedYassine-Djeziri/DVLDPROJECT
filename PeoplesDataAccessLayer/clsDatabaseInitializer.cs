@@ -28,12 +28,12 @@ namespace DataAccessLayer
                 string serverConnStr = clsConnectionSettings.ServerConnectionString;
                 string dbConnStr = clsConnectionSettings.ConnectionString;
 
-                //write to the output.txt file to indicate that we are in the EnsureDatabaseCreated method
+
 
                 
 
 
-                //Console.WriteLine("we are in EnsureDatabaseCreated");
+
 
 
                 // 1. Open a server-only connection (no database) and check if the DB exists.

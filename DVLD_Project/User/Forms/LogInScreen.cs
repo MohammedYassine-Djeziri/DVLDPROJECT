@@ -62,9 +62,6 @@ namespace DVLD_Project.User.Forms
                         // Write the value to the Registry
                         Registry.SetValue(keyPath, UserNameShortcut, UserNameValue, RegistryValueKind.String);
                         Registry.SetValue(keyPath, PasswordShortcut, PasswordValue, RegistryValueKind.String);
-
-
-                        //Console.WriteLine($"Value {valueName} successfully written to the Registry.");
                     }
                     catch (Exception ex)
                     {

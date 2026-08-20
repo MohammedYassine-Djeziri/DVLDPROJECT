@@ -178,7 +178,6 @@ namespace DVLDBusinessLayer
             if (clsSqlPeoples.FindByPersonalID(PerID, ref NatNub, ref FN, ref SN, ref TN, ref LN, ref Phn, ref Em,
                 ref Nat, ref date, ref gender, ref Addr, ref Img))
             {
-                File.AppendAllText("output.txt", gender + "\n");
                 return new clsPeoples(PerID, NatNub, FN, SN, TN, LN, Phn, Em, Nat, date, gender, Addr, Img);
             }
             else

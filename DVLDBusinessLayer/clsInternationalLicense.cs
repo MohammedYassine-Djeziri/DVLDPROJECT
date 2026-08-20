@@ -120,8 +120,6 @@ namespace DVLDBusinessLayer
             if (clsSqlInternationalLicense.FindLicenseByInternationalLicenseID(inter_licence_id, ref driver_id, ref license_ID,
              ref app_ID, ref dateI, ref dateE, ref user_id, ref is_active))
             {
-                //File.AppendAllText("output.txt" , inter_licence_id.ToString() + "|" + driver_id.ToString() + "|" + license_ID.ToString() + "|" + app_ID.ToString() + "|" + dateI.ToString() + "|" + dateE.ToString() + "|" + user_id.ToString() + "|" + is_active.ToString() + "\n");
-
                 return new clsInternationalLicense(inter_licence_id, driver_id, license_ID
                     , app_ID, dateI, dateE, user_id, is_active);
             }

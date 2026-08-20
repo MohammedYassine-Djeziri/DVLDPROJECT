@@ -127,36 +127,5 @@ namespace DVLDBusinessLayer
         {
             return clsSqlDetainedLicense.ListDetainedLicenses();
         }
-
-
-
-
-        //public static bool IsLicenseHasCreatedFirstTime(int AppID)
-        //{
-        //    return clsSqlLicenses.IsLicenseHasCreatedFirstTime(AppID);
-        //}
-
-        //public static int GetLicenseIDByAppID(int appID)
-        //{
-        //    return clsSqlLicenses.GetLicenseIDByAppID(appID);
-        //}
-
-
-        //public static DataTable ListLicensesByDriverID(int driverID)
-        //{
-        //    return clsSqlLicenses.ListLicensesByDriverID(driverID);
-        //}
-
-
-        //public static DataTable ListLicensesByLicenseID(int licenseID)
-        //{
-        //    return clsSqlLicenses.ListLicensesByDriverID(licenseID);
-        //}
-
-
-        //public static bool IsLicenseDetained(int licenseID)
-        //{
-        //    return clsSqlLicenses.IsLicenseDetained(licenseID);
-        //}
     }
 }

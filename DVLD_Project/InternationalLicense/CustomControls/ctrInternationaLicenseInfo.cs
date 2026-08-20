@@ -36,7 +36,7 @@ namespace DVLD_Project.InternationalLicense.CustomControls
                 lblInterLicID.Text = MyInternationalLicense.InternationalLicenseID.ToString();
                 lblBirthDay.Text = Person.DateOfBirth.ToShortDateString();
                 lbldriverID.Text = MyInternationalLicense.DriverID.ToString();
-                lblGender.Text = clsPeoples.GetGenderFromCode(Person.PerID);
+                lblGender.Text = clsPeoples.GetGenderFromCode(Person.Gender);
                 lblIsActive.Text = "No";
                 if (MyInternationalLicense.IsActive)
                 {

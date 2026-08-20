@@ -1,98 +1,148 @@
-# DVLD - Driving & Vehicle License Department
+# DVLD — Driving & Vehicle License Department
 
-A Windows Forms application for managing driving licenses, license applications, tests, international licenses, detained licenses, and related operations.
+A desktop application for managing the full back-office workflow of a driving & vehicle
+licensing authority: registering people, creating local & international driving-license
+applications, scheduling and grading vision / written / practical tests, issuing and
+renewing licenses, detaining and releasing licenses, and managing the application types,
+test types and license classes that drive fees and rules.
 
-## Project Structure
+It is a **3-tier Windows Forms (.NET Framework 4.8)** application written in C#, with a
+**provider-agnostic data access layer** that can run against **Microsoft SQL Server *or***
+**PostgreSQL** from the *same* binaries — you pick the database by editing one line in a
+`.env` file. On first launch the app **creates the database and all tables/seed data itself**,
+so there is no manual schema setup.
 
-```
-DVLD/
-├── DVLD_Project/              # Windows Forms UI
-│   ├── Applications/          # License application forms
-│   ├── People/                # People management forms
-│   ├── Users/                 # User management & login forms
-│   └── Global/                # Global utilities (current user, etc.)
-├── DVLDBusinessLayer/         # Business logic layer
-├── PeoplesDataAccessLayer/    # Data access layer (SQL Server / PostgreSQL)
-└── ClsUtil/                   # Utility library
-```
+> For the full architecture, design decisions, data model and code walkthrough see
+> **[ARCHITECTURE.md](./ARCHITECTURE.md)**. This README is the short "what + how to run" guide.
 
-## Prerequisites
-
-- **.NET Framework 4.8** (or Mono on Linux)
-- **SQL Server** or **PostgreSQL** with the `DVLD_DataBase` database
-- **Visual Studio 2022** or **VS Code** (optional)
-
-## Setup
-
-### 1. Clone the repository
-
-```bash
-git clone <repo-url>
-```
-
-### 2. Open the folder
-
-```bash
-cd DVLDPROJECT
-```
-
-### 3. Configure the database connection
-
-Edit the `.env` file at the project root with your database credentials:
-
-```env
-# Valid providers: mssql, postgresql
-DB_PROVIDER=mssql
-DB_SERVER=.
-DB_NAME=DVLD_DataBase
-DB_USER=sa
-DB_PASSWORD=sa123456
-```
-
-**To use PostgreSQL**, change the provider:
-```env
-DB_PROVIDER=postgresql
-DB_SERVER=localhost
-DB_NAME=DVLD_DataBase
-DB_USER=postgres
-DB_PASSWORD=your_password
-```
-
-The connection string is assembled automatically at runtime based on the provider:
-- **mssql** → `Server={DB_SERVER};Database={DB_NAME};User Id={DB_USER};Password={DB_PASSWORD};`
-- **postgresql** → `Host={DB_SERVER};Database={DB_NAME};Username={DB_USER};Password={DB_PASSWORD};`
-
-**Automatic database creation:** On first run, the application automatically creates the database and all required tables (including seed/lookup data) from the `.env` configuration. You only need a running SQL Server or PostgreSQL instance with the credentials specified in `.env` – no manual schema setup is required.  The process is idempotent; subsequent runs will detect that the database already exists and skip creation.
-
-### 4. Build the project
-
-```bash
-# Using MSBuild:
-msbuild DVLD_Project/DVLD_Project.sln /p:Configuration=Debug
-
-# Or open DVLD_Project.sln in Visual Studio
-```
-
-### 5. Run the application
-
-```bash
-mono DVLD_Project/bin/Debug/DVLD_Project.exe
-```
-
-Or press **F5** in Visual Studio.
+---
 
 ## Features
 
-- People management (CRUD)
-- User management with login/logout
-- Local driving license applications
-- International license applications
-- License renewal, replacement for damaged/lost licenses
-- Detain and release licenses
-- Test appointments and results
-- Application type management
-- License history tracking
+- **People** — full CRUD of applicants (national number, name, DOB, gender, nationality,
+  address, phone, email, photo); duplicate national numbers rejected.
+- **Users** — staff accounts linked to a Person; CRUD, activate/deactivate, change password;
+  login uses a salted **PBKDF2** hash; "Remember me" stores the *hash* (never the plain
+  password) in the Windows registry.
+- **Drivers** — auto-created the first time a person is issued any license.
+- **Local Driving License Applications** — the core flow: create an application for a person +
+  license class, then pass Vision → Written → Practical tests (with retakes); issue the
+  license when all three pass.
+- **International Licenses** — issue from an existing Class 3 (ordinary) license; one active
+  per driver; valid 1 year.
+- **License services** — renew, or replace a lost/damaged license.
+- **Detained licenses** — detain (with a fine) and release.
+- **Lookups** — manage Application Types, Test Types and License Classes (fees, rules).
+- **License history** — view every license (local + international) for a driver/person.
+
+---
+
+## Tech stack (one-liner)
+
+C# / WinForms / .NET Framework 4.8 · ADO.NET (no ORM) · `System.Data.SqlClient` (SQL Server)
+or **Npgsql 4.1.10** (PostgreSQL, shipped as `lib/Npgsql.dll`) · embedded SQL schema scripts
+· `.env` config · PBKDF2 auth · runs on Windows natively or under **Wine** on Linux.
+
+---
+
+## Prerequisites
+
+- **.NET Framework 4.8** targeting pack (to build). On Linux, `msbuild` works thanks to the
+  `Microsoft.NETFramework.ReferenceAssemblies` NuGet referenced by every project.
+- **Visual Studio 2022** (easiest) or VS Code + `msbuild` for command-line builds.
+- **SQL Server** (Express is fine) **or** **PostgreSQL** — a reachable server is all you need;
+  the app creates the database and schema itself on first run.
+- **Wine** — only required to *run* the built `WinExe` on Linux (a .NET Framework 4.8 Windows
+  Forms binary does not run natively on Linux). Install from your package manager, e.g.
+  `sudo pacman -S wine` (Arch/CachyOS) or `sudo apt install wine` (Debian/Ubuntu).
+
+---
+
+## Setup & running
+
+### 1. Clone
+
+```bash
+git clone <repo-url>
+cd DVLD
+```
+
+### 2. Configure the database — `.env` (repo root)
+
+The project supports both providers. The development database is **PostgreSQL**; the repo's
+own `.env` looks like this:
+
+```env
+# Valid providers: mssql, postgresql
+DB_PROVIDER=postgresql
+DB_SERVER=localhost
+DB_NAME=DVLD2
+DB_USER=postgres
+DB_PASSWORD=sa123456
+```
+
+To use SQL Server instead, change one line and the credentials:
+
+```env
+DB_PROVIDER=mssql            # "." or "(local)" also work for DB_SERVER
+DB_SERVER=localhost
+DB_NAME=DVLD_DataBase
+DB_USER=SA
+DB_PASSWORD=YourStrongP@ssw0rd
+```
+
+The connection string is built at runtime from these values and the `.env` file is found
+automatically (searched from the app's folder up to 6 levels, so one root `.env` serves
+every build output). See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full reference.
+
+> ⚠️ `.env` holds credentials and is **git-ignored** — keep your local copy out of source
+> control.
+
+### 3. Build
+
+```bash
+# Command line (restores + builds; verified with dotnet on Linux):
+dotnet build DVLD_Project/DVLD_Project.sln -c Debug
+
+# Or open DVLD_Project/DVLD_Project.sln in Visual Studio and press Ctrl+Shift+B.
+```
+
+Build outputs:
+
+```
+ClsUtil/bin/Debug/ClsUtil.dll
+PeoplesDataAccessLayer/bin/Debug/PeoplesDataAccessLayer.dll   (+ Npgsql deps)
+DVLDBusinessLayer/bin/Debug/DVLDBusinessLayer.dll
+DVLD_Project/bin/Debug/DVLD_Project.exe
+```
+
+### 4. Run
+
+```bash
+# Linux — run the .NET Framework WinExe under Wine:
+wine DVLD_Project/bin/Debug/DVLD_Project.exe
+
+# Windows — double-click the exe, or:
+DVLD_Project/bin/Debug/DVLD_Project.exe
+```
+
+On first launch the app connects to the server, **creates the database if it doesn't exist**,
+and runs the matching embedded schema script (tables + seed data: ~200 countries, 6
+application types, 3 test types, 7 license classes, a default admin user). This is
+idempotent, so later runs are no-ops. If the database can't be initialized, a dialog box
+reports the error and the app exits.
+
+### 5. Log in
+
+On first launch, log in with the **default admin user** seeded by the schema script (see the
+`-- Default Admin User` block at the end of `PeoplesDataAccessLayer/Schema/mssql_schema.sql`
+or `postgresql_schema.sql`). After login you land on the **MainMenu**, which holds every
+feature behind its left sidebar / context menus.
+
+---
 
 ## License
 
-This project is for educational purposes.
+This project is provided **for educational purposes**. No specific open-source license is
+declared; treat it as source-available for learning. The bundled `lib/Npgsql.dll` is Npgsql
+(its own license applies — see `lib/npgsql_extracted/Npgsql.nuspec`).
