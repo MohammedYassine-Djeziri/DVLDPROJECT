@@ -54,7 +54,7 @@ or **Npgsql 4.1.10** (PostgreSQL, shipped as `lib/Npgsql.dll`) · embedded SQL s
   the app creates the database and schema itself on first run.
 - **Wine** — only required to *run* the built `WinExe` on Linux (a .NET Framework 4.8 Windows
   Forms binary does not run natively on Linux). Install from your package manager, e.g.
-  `sudo pacman -S wine` (Arch/CachyOS) or `sudo apt install wine` (Debian/Ubuntu).
+  `sudo pacman -S wine` (Arch) or `sudo apt install wine` (Debian/Ubuntu).
 
 ---
 
@@ -100,16 +100,41 @@ every build output). See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full refer
 
 ### 3. Build
 
+#### Linux (command line — `dotnet` CLI)
+
+This is a **.NET Framework 4.8** solution built from the old-style (non-SDK)
+`*.csproj` format, so on Linux you build it with **`dotnet restore` + `dotnet msbuild`**
+(not `dotnet build`, which is for SDK-style projects). The
+`Microsoft.NETFramework.ReferenceAssemblies` NuGet package referenced by every
+project supplies the .NET Framework 4.8 reference assemblies, so no Mono or
+Windows SDK is needed — only the .NET SDK (the `dotnet` command) installed on
+your distro.
+
 ```bash
-# Command line (restores + builds; verified with dotnet on Linux):
-dotnet build DVLD_Project/DVLD_Project.sln -c Debug
+# From the repo root. Restore NuGet packages for all projects:
+dotnet restore DVLD_Project/DVLD_Project.sln
 
-# Or open DVLD_Project/DVLD_Project.sln in Visual Studio and press Ctrl+Shift+B.
+# Build the whole solution (Debug). Produces the exe + all dependency DLLs:
+dotnet msbuild DVLD_Project/DVLD_Project.sln -t:Build -p:Configuration=Debug -nologo
+
+# For a Release build instead, use:
+# dotnet msbuild DVLD_Project/DVLD_Project.sln -t:Build -p:Configuration=Release -nologo
 ```
 
-Build outputs:
+> `dotnet msbuild` accepts the same flags as `msbuild`/`MSBuild.exe`. `-nologo`
+> just suppresses the banner; `-p:Configuration=Debug|Release` selects the
+> configuration. You can also target a single project, e.g.
+> `dotnet msbuild DVLD_DataAccessLayer/DVLD_DataAccessLayer.csproj -t:Build`.
 
-```
+#### Windows (Visual Studio)
+
+Open `DVLD_Project/DVLD_Project.sln` in **Visual Studio 2022** and press
+`Ctrl+Shift+B` (or build from the IDE Build menu). The .NET Framework 4.8
+targeting pack must be installed.
+
+Build outputs (Debug):
+
+```bash
 ClsUtil/bin/Debug/ClsUtil.dll
 DVLD_DataAccessLayer/bin/Debug/DVLD_DataAccessLayer.dll   (+ Npgsql deps)
 DVLDBusinessLayer/bin/Debug/DVLDBusinessLayer.dll
@@ -134,7 +159,7 @@ reports the error and the app exits.
 
 ### 5. Log in
 
-On first launch, log in with the **default admin user** seeded by the schema script (see the
+On first launch, log in with the **default admin user(username = admin , password = 1234)** seeded by the schema script (see the
 `-- Default Admin User` block at the end of `DVLD_DataAccessLayer/Schema/mssql_schema.sql`
 or `postgresql_schema.sql`). After login you land on the **MainMenu**, which holds every
 feature behind its left sidebar / context menus.
