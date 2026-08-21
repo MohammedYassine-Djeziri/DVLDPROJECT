@@ -48,9 +48,19 @@ or **Npgsql 4.1.10** (PostgreSQL, shipped as `lib/Npgsql.dll`) · embedded SQL s
 
 ## Prerequisites
 
-- **.NET Framework 4.8** targeting pack (to build). On Linux, `msbuild` works thanks to the
-  `Microsoft.NETFramework.ReferenceAssemblies` NuGet referenced by every project.
-- **Visual Studio 2022** (easiest) or VS Code + `msbuild` for command-line builds.
+- **.NET SDK** (the `dotnet` CLI) — required on Linux to run `dotnet restore` and
+  `dotnet msbuild` (the SDK ships its own MSBuild + NuGet). No Mono and no .NET Framework
+  4.8 Developer Pack are needed: every project references the
+  `Microsoft.NETFramework.ReferenceAssemblies` NuGet package, which supplies the net4.8
+  reference assemblies at build time — that's why `dotnet restore` must run *before*
+  `dotnet msbuild`. Install per-distro:
+  - Arch / CachyOS: `sudo pacman -S dotnet-sdk` (or pin a channel: `dotnet-sdk-8.0`)
+  - Debian / Ubuntu: `sudo apt install -y dotnet-sdk-8.0`
+  - Fedora / RHEL: `sudo dnf install -y dotnet-sdk-8.0`
+  - any distro (no package): `curl -fsSL https://dot.net/v1/dotnet-install.sh | bash -s -- --channel 8.0`
+  Verify with `dotnet --info`.
+- **Visual Studio 2022** (Windows, easiest) with the **.NET Framework 4.8 targeting pack**
+  installed — or just use the `dotnet` CLI above for command-line / Linux builds.
 - **SQL Server** (Express is fine) **or** **PostgreSQL** — a reachable server is all you need;
   the app creates the database and schema itself on first run.
 - **Wine** — only required to *run* the built `WinExe` on Linux (a .NET Framework 4.8 Windows
@@ -111,6 +121,9 @@ every build output). See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full refer
 ### 3. Build
 
 #### Linux (command line — `dotnet` CLI)
+
+> **Prerequisite:** the **.NET SDK** (`dotnet` CLI) must be installed — see
+> [Prerequisites](#prerequisites) for per-distro install commands.
 
 This is a **.NET Framework 4.8** solution built from the old-style (non-SDK)
 `*.csproj` format, so on Linux you build it with **`dotnet restore` + `dotnet msbuild`**
