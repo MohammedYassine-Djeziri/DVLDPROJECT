@@ -528,39 +528,6 @@ modal dialogs (`ShowDialog`) instead.
 - **"Remember me" via the registry.** Convenient on Windows; stores the hash only. Cost:
   Windows-only and registry-coupled.
 
----
-
-## Known issues / rough edges
-
-These are things a reviewer should be aware of; most are inherent to the educational nature
-of the project:
-
-- **No DB migrations.** `EnsureDatabaseCreated` only *creates* a missing database. If the DB
-  already exists but is on an older schema, the new schema SQL is still run but only the
-  `IF NOT EXISTS` parts apply — existing columns/constraints are **not** altered. Changing
-  the schema requires dropping/recreating the DB or migrating by hand.
-- **Empty `catch` blocks in many DAL methods.** Errors are silently swallowed (a method just
-  returns `-1` / `false` / an empty `DataTable`). This makes debugging connection/query
-  failures harder (the original `ArgumentOutOfRangeException` crash in the New-LDL form was
-  caused by exactly this — `ListLicenseClasses` failed silently and the combo box was empty).
-  A `dotnet build` confirms the scale: ~70 `CS0168 "variable 'ex' is declared but never
-  used"` warnings, almost all from these `catch (Exception ex) { }` blocks. Consider at least
-  logging `ex` (or `throw;` while debugging) in these blocks.
-- **Finders return an "empty" object (not null) for most entities.** Callers must check
-  `Id == -1` rather than `== null`. `clsUsers` is an exception (returns `null`).
-- **No transactions.** Multi-step workflows (issue license → create driver → create license →
-  close application) are not wrapped in a transaction.
-- **No input validation layer.** Validation is ad-hoc inside each form's click handler.
-- **The `AutoConvertToPg` alias regex is fragile** for `CASE`-based aliases; the codebase
-  correctly routes those to the explicit dual overload. Keep it that way.
-- **Constraint-name typo** `Licsense` in `LocalDrivingLicenseApplications` FK names — present
-  and identical in both schemas, so harmless but cosmetic.
-- **`ClsUtil` is a tiny shared utility library** — currently it exposes just one helper,
-  `ClsUtil.IsValidEmail(string)` (a regex validator) used by the Add/Update Person form.
-  It's the right place to grow shared cross-layer helpers.
-- **Hard-coded `SelectedIndex` values** in a few forms (e.g. the New-LDL form selects license
-  class index 2 on load). This couples the UI to row order; it crashes if the table is empty
-  (the seed data you just shipped for `LicenseClasses` is what makes this safe).
 
 ---
 
@@ -605,9 +572,9 @@ PostgreSQL example (matches the dev setup):
 # Valid providers: mssql, postgresql
 DB_PROVIDER=postgresql
 DB_SERVER=localhost
-DB_NAME=DVLD2
+DB_NAME=DVLD
 DB_USER=postgres
-DB_PASSWORD=sa123456
+DB_PASSWORD=password
 ```
 
 SQL Server example:
@@ -615,9 +582,9 @@ SQL Server example:
 ```env
 DB_PROVIDER=mssql
 DB_SERVER=localhost      # "." or "(local)" also work for a local SQL Server
-DB_NAME=DVLD_DataBase
-DB_USER=SA
-DB_PASSWORD=YourStrongP@ssw0rd
+DB_NAME=DVLD
+DB_USER=sa
+DB_PASSWORD=password
 ```
 
 The connection string is assembled at runtime:

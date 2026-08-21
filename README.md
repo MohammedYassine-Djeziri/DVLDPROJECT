@@ -9,8 +9,9 @@ test types and license classes that drive fees and rules.
 It is a **3-tier Windows Forms (.NET Framework 4.8)** application written in C#, with a
 **provider-agnostic data access layer** that can run against **Microsoft SQL Server *or***
 **PostgreSQL** from the *same* binaries — you pick the database by editing one line in a
-`.env` file. On first launch the app **creates the database and all tables/seed data itself**,
-so there is no manual schema setup.
+`.env` file. On first launch the app **creates all tables/seed data** inside the (pre-existing,
+empty) database named in `.env`, so there is no manual schema setup — but the
+database itself must already exist and be empty (see step 2).
 
 > For the full architecture, design decisions, data model and code walkthrough see
 > **[ARCHITECTURE.md](./ARCHITECTURE.md)**. This README is the short "what + how to run" guide.
@@ -76,9 +77,9 @@ own `.env` looks like this:
 # Valid providers: mssql, postgresql
 DB_PROVIDER=postgresql
 DB_SERVER=localhost
-DB_NAME=DVLD2
+DB_NAME=DVLD
 DB_USER=postgres
-DB_PASSWORD=sa123456
+DB_PASSWORD=password
 ```
 
 To use SQL Server instead, change one line and the credentials:
@@ -86,10 +87,19 @@ To use SQL Server instead, change one line and the credentials:
 ```env
 DB_PROVIDER=mssql            # "." or "(local)" also work for DB_SERVER
 DB_SERVER=localhost
-DB_NAME=DVLD_DataBase
-DB_USER=SA
-DB_PASSWORD=YourStrongP@ssw0rd
+DB_NAME=DVLD
+DB_USER=sa
+DB_PASSWORD=password
 ```
+
+> ⚠️ **Pre-create the database.** The database named by `DB_NAME` must
+> **already exist** on the server and be **empty** (no tables in it) before you run
+> the app. The app does **not** create the database for you — it connects to the
+> existing database you point `DB_NAME` at and creates the schema / tables / seed
+> data inside it. If a database with that name doesn't exist yet, create it manually
+> first, e.g. for PostgreSQL: `createdb DVLD2`; for SQL Server run
+> `CREATE DATABASE DVLD_DataBase;` in your query tool. Re-running the app is safe
+> (the schema script uses `IF NOT EXISTS`, so it won't duplicate data).`
 
 The connection string is built at runtime from these values and the `.env` file is found
 automatically (searched from the app's folder up to 6 levels, so one root `.env` serves
@@ -151,7 +161,7 @@ wine DVLD_Project/bin/Debug/DVLD_Project.exe
 DVLD_Project/bin/Debug/DVLD_Project.exe
 ```
 
-On first launch the app connects to the server, **creates the database if it doesn't exist**,
+On first launch the app connects to the existing, empty database named in `.env`,
 and runs the matching embedded schema script (tables + seed data: ~200 countries, 6
 application types, 3 test types, 7 license classes, a default admin user). This is
 idempotent, so later runs are no-ops. If the database can't be initialized, a dialog box
