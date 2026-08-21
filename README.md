@@ -111,7 +111,7 @@ Build outputs:
 
 ```
 ClsUtil/bin/Debug/ClsUtil.dll
-PeoplesDataAccessLayer/bin/Debug/PeoplesDataAccessLayer.dll   (+ Npgsql deps)
+DVLD_DataAccessLayer/bin/Debug/DVLD_DataAccessLayer.dll   (+ Npgsql deps)
 DVLDBusinessLayer/bin/Debug/DVLDBusinessLayer.dll
 DVLD_Project/bin/Debug/DVLD_Project.exe
 ```
@@ -135,7 +135,7 @@ reports the error and the app exits.
 ### 5. Log in
 
 On first launch, log in with the **default admin user** seeded by the schema script (see the
-`-- Default Admin User` block at the end of `PeoplesDataAccessLayer/Schema/mssql_schema.sql`
+`-- Default Admin User` block at the end of `DVLD_DataAccessLayer/Schema/mssql_schema.sql`
 or `postgresql_schema.sql`). After login you land on the **MainMenu**, which holds every
 feature behind its left sidebar / context menus.
 

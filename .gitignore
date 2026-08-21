@@ -50,5 +50,5 @@ DVLD_Project/ImageCopy/
 # Mono runtime crash dumps
 mono_crash.*
 DVLD_Project/output.txt
-PeoplesDataAccessLayer/PG_CONVERSION_GUIDE.md
-PeoplesDataAccessLayer/jsjs.md
+DVLD_DataAccessLayer/PG_CONVERSION_GUIDE.md
+DVLD_DataAccessLayer/jsjs.md

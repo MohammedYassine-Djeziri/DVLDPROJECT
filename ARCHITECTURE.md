@@ -99,7 +99,7 @@ one-directional dependency graph — lower layers never reference upper layers:
                  └───────────┬────────────┘
                              │ references
                  ┌───────────▼────────────┐
-                 │ PeoplesDataAccessLayer │   class library (DAL)
+                 │ DVLD_DataAccessLayer │   class library (DAL)
                  │  namespace:           │
                  │  DataAccessLayer      │
                  └───────────┬────────────┘
@@ -115,10 +115,10 @@ one-directional dependency graph — lower layers never reference upper layers:
 
 - `DVLD_Project` (UI) → references `DVLDBusinessLayer` only. It must *not* touch the DAL
   directly.
-- `DVLDBusinessLayer` (BLL) → references `PeoplesDataAccessLayer` (DAL). Each business
+- `DVLDBusinessLayer` (BLL) → references `DVLD_DataAccessLayer` (DAL). Each business
   class (`clsApplication`, `clsUsers`, ...) delegates every DB call to a matching DAL class
   (`clsSqlApplications`, `clsSqlUsers`, ...).
-- `PeoplesDataAccessLayer` (DAL) → references **no other project**; it only references the
+- `DVLD_DataAccessLayer` (DAL) → references **no other project**; it only references the
   raw `Npgsql.dll`. It exposes the provider-agnostic `clsDatabaseFactory` + `clsSql*`
   classes, all in the `DataAccessLayer` namespace.
 - `ClsUtil` → a separate utility library; effectively a placeholder for shared helpers.
@@ -178,7 +178,7 @@ DVLD/
 │   ├── clsPeoples.cs
 │   └── clsUsers.cs               # incl. PBKDF2 password hashing
 │
-├── PeoplesDataAccessLayer/       # ── Data access layer (class library) ──
+├── DVLD_DataAccessLayer/       # ── Data access layer (class library) ──
 │   ├── DVLD_DataAccessLayer.csproj
 │   ├── clsConnectionSettings.cs  # parses .env, builds connection strings, caches them
 │   ├── clsDatabaseFactory.cs     # provider-agnostic connection/command/param/query factory
@@ -378,7 +378,7 @@ method:
 - **The MSSQL string stays the "source of truth."** This keeps the existing SQL Server
   codebase working unchanged; PostgreSQL is an additive translation, never a rewrite.
 
-See `PeoplesDataAccessLayer/PG_CONVERSION_GUIDE.md` for the full rules and a concrete audit.
+See `DVLD_DataAccessLayer/PG_CONVERSION_GUIDE.md` for the full rules and a concrete audit.
 
 ---
 
@@ -692,7 +692,7 @@ dotnet build DVLD_Project/DVLD_Project.sln -c Debug
 # (equivalent with MSBuild: `msbuild DVLD_Project/DVLD_Project.sln /t:Restore /p:Configuration=Debug`)
 # → outputs:
 #   ClsUtil/bin/Debug/ClsUtil.dll
-#   PeoplesDataAccessLayer/bin/Debug/PeoplesDataAccessLayer.dll   (+ Npgsql deps)
+#   DVLD_DataAccessLayer/bin/Debug/DVLD_DataAccessLayer.dll   (+ Npgsql deps)
 #   DVLDBusinessLayer/bin/Debug/DVLDBusinessLayer.dll
 #   DVLD_Project/bin/Debug/DVLD_Project.exe
 #   (the custom CopyNpgsqlRuntimeDependencies target copies Npgsql's deps next to the exe)
