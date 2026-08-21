@@ -33,6 +33,10 @@ Thumbs.db
 # Build output
 *.exe
 *.dll
+# Vendored Npgsql binary - re-include despite *.dll above so a fresh
+# clone can build. Referenced via ../lib/Npgsql.dll in
+# DVLD_DataAccessLayer/DVLD_DataAccessLayer.csproj.
+!lib/Npgsql.dll
 *.pdb
 *.mdb
 
