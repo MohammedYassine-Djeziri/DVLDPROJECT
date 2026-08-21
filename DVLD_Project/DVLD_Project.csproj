@@ -573,7 +573,7 @@
       <Project>{f3057df9-e56e-490f-a2aa-f992f845b8aa}</Project>
       <Name>DVLD_BusinessLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PeoplesDataAccessLayer\DVLD_DataAccessLayer.csproj">
+    <ProjectReference Include="..\DVLD_DataAccessLayer\DVLD_DataAccessLayer.csproj">
       <Project>{df40c3f7-5be2-4052-8877-3be80229672c}</Project>
       <Name>DVLD_DataAccessLayer</Name>
     </ProjectReference>
@@ -891,17 +891,17 @@
        'System.Memory, Version=4.0.1.2' ... File not found." -->
   <Target Name="CopyNpgsqlRuntimeDependencies" AfterTargets="Build">
     <ItemGroup>
-      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\System.Memory.dll" />
-      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\System.Buffers.dll" />
-      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\System.Text.Json.dll" />
-      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\System.Text.Encodings.Web.dll" />
-      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\System.Runtime.CompilerServices.Unsafe.dll" />
-      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\Microsoft.Bcl.AsyncInterfaces.dll" />
-      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\System.Threading.Tasks.Extensions.dll" />
-      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\PeoplesDataAccessLayer\bin\$(Configuration)\System.ValueTuple.dll" />
+      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\DVLD_DataAccessLayer\bin\$(Configuration)\System.Memory.dll" />
+      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\DVLD_DataAccessLayer\bin\$(Configuration)\System.Buffers.dll" />
+      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\DVLD_DataAccessLayer\bin\$(Configuration)\System.Text.Json.dll" />
+      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\DVLD_DataAccessLayer\bin\$(Configuration)\System.Text.Encodings.Web.dll" />
+      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\DVLD_DataAccessLayer\bin\$(Configuration)\System.Runtime.CompilerServices.Unsafe.dll" />
+      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\DVLD_DataAccessLayer\bin\$(Configuration)\Microsoft.Bcl.AsyncInterfaces.dll" />
+      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\DVLD_DataAccessLayer\bin\$(Configuration)\System.Threading.Tasks.Extensions.dll" />
+      <NpgsqlRuntimeDeps Include="$(MSBuildThisFileDirectory)..\DVLD_DataAccessLayer\bin\$(Configuration)\System.ValueTuple.dll" />
       <!-- System.Numerics.Vectors is a framework facade (its nuspec declares
            frameworkAssembly=System.Numerics), so MSBuild marks it CopyLocal=false
-           and PeoplesDataAccessLayer\bin is NEVER populated with it. Pull it
+           and DVLD_DataAccessLayer\bin is NEVER populated with it. Pull it
            straight from the NuGet cache, otherwise the runtime loader throws:
            "Could not load file or assembly 'System.Numerics.Vectors,
            Version=4.1.4.0, PublicKeyToken=b03f5f7f11d50a3a' ... File not found." -->

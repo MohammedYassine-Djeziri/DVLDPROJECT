@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DVLD_Project", "DVLD_Projec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DVLD_BusinessLayer", "..\DVLDBusinessLayer\DVLD_BusinessLayer.csproj", "{F3057DF9-E56E-490F-A2AA-F992F845B8AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DVLD_DataAccessLayer", "..\PeoplesDataAccessLayer\DVLD_DataAccessLayer.csproj", "{DF40C3F7-5BE2-4052-8877-3BE80229672C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DVLD_DataAccessLayer", "..\DVLD_DataAccessLayer\DVLD_DataAccessLayer.csproj", "{DF40C3F7-5BE2-4052-8877-3BE80229672C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClsUtil", "..\ClsUtil\ClsUtil.csproj", "{0AF743E2-0AC8-46E1-B0D9-417CC4BD1174}"
 EndProject
