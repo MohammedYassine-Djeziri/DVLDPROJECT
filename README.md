@@ -249,9 +249,10 @@ exe's folder up to 6 levels), so no extra configuration is needed before running
 > ```bash
 > sudo apt-get install -y winetricks
 > rm -rf ~/.wine
-> WINEARCH=win32 WINEPREFIX=~/.wine wineboot
-> WINEARCH=win32 WINEPREFIX=~/.wine winetricks dotnet48
-> WINEPREFIX=~/.wine wine DVLD_Project/bin/Debug/DVLD_Project.exe
+> WINEARCH=win32 wineboot
+> winetricks dotnet48
+> wine DVLD_Project/bin/Debug/DVLD_Project.exe
+
 > ```
 >
 > This downloads the real .NET 4.8 installer — slower, but the most compatible.
