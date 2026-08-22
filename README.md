@@ -64,16 +64,16 @@ run before `dotnet msbuild`.
 
 ```bash
 # Arch / CachyOS
-sudo pacman -S dotnet-sdk          # or pin a channel: dotnet-sdk-8.0
+sudo pacman -S dotnet-sdk          # or pin a channel: dotnet-sdk-10.0
 
 # Debian / Ubuntu
-sudo apt install -y dotnet-sdk-8.0
+sudo apt install -y dotnet-sdk-10.0
 
 # Fedora / RHEL
-sudo dnf install -y dotnet-sdk-8.0
+sudo dnf install -y dotnet-sdk-10.0
 
 # Any distro (official Microsoft installer, no distro package needed)
-curl -fsSL https://dot.net/v1/dotnet-install.sh | bash -s -- --channel 8.0
+curl -fsSL https://dot.net/v1/dotnet-install.sh | bash -s -- --channel 10.0
 ```
 
 Verify (should print the SDK version):
