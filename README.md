@@ -193,15 +193,83 @@ DVLD_Project/bin/Debug/DVLD_Project.exe
 > at runtime, you skipped `dotnet restore` or built without it — re-run
 > `dotnet restore` then `dotnet msbuild`.
 
+> Compiling the WinForms `.resx` resources on Linux normally fails on some .NET
+> SDK versions (8.x) with `error MSB4216: Could not run the "GenerateResource"
+> task … task host with runtime "NET" and architecture "x86"`. The repo's
+> [`Directory.Build.props`](./Directory.Build.props) forces `GenerateResource`
+> to run in-process on Linux/macOS, so this is handled automatically — just make
+> sure that file is present at the repo root after `git pull`. Windows / Visual
+> Studio builds are unaffected (the override is gated to non-Windows).
+
 ### 8. Run
 
-```bash
-# Linux — run the .NET Framework WinExe under Wine:
-wine DVLD_Project/bin/Debug/DVLD_Project.exe
+#### Windows
 
-# Windows — double-click the exe, or:
+Double-click the exe, or:
+
+```bash
 DVLD_Project/bin/Debug/DVLD_Project.exe
 ```
+
+#### Linux (run under Wine)
+
+The built executable is a .NET Framework 4.8 Windows Forms binary, so it does not
+run natively on Linux — it must run under **Wine**. The app uses WinForms + Npgsql,
+so the most reliable setup on a fresh Debian/Ubuntu machine is **32-bit Wine +
+Wine Mono** (Wine Mono reimplements the .NET Framework 4.8 API and lets Wine load
+the managed exe and Npgsql). Run this once:
+
+```bash
+# 1. Enable 32-bit architecture
+sudo dpkg --add-architecture i386
+sudo apt-get update
+
+# 2. Install 32-bit Wine
+sudo apt-get install -y wine32:i386
+
+# 3. Reset the Wine prefix so it initializes clean
+rm -rf ~/.wine
+
+# 4. Download + install Wine Mono 9.0.0 (the .NET runtime Wine uses)
+wget "https://dl.winehq.org/wine/wine-mono/9.0.0/wine-mono-9.0.0-x86.msi"
+wine msiexec /i wine-mono-9.0.0-x86.msi
+rm -f wine-mono-9.0.0-x86.msi
+
+# 5. Run the app (from the repo root)
+wine DVLD_Project/bin/Debug/DVLD_Project.exe
+```
+
+The `.env` file at the repo root is found automatically (the app searches from the
+exe's folder up to 6 levels), so no extra configuration is needed before running.
+
+> **Fallback — real .NET Framework 4.8 in Wine.** WinForms under Wine Mono can be
+> flaky (rendering / some controls). If the app misbehaves, install the official
+> Microsoft .NET Framework 4.8 in a 32-bit Wine prefix instead:
+>
+> ```bash
+> sudo apt-get install -y winetricks
+> rm -rf ~/.wine
+> WINEARCH=win32 WINEPREFIX=~/.wine wineboot
+> WINEARCH=win32 WINEPREFIX=~/.wine winetricks dotnet48
+> WINEPREFIX=~/.wine wine DVLD_Project/bin/Debug/DVLD_Project.exe
+> ```
+>
+> This downloads the real .NET 4.8 installer — slower, but the most compatible.
+
+> **Runtime assembly conflicts under Mono.** The build copies .NET-Framework BCL
+> helper DLLs (`System.Memory`, `System.Buffers`, `System.Threading.Tasks.Extensions`,
+> …) next to the exe (the `CopyNpgsqlRuntimeDependencies` target in
+> `DVLD_Project/DVLD_Project.csproj`). Under Wine **Mono**, Mono already provides
+> those types, and having the .NET Framework versions beside the exe can occasionally
+> cause a `TypeLoadException` / assembly-load error *after* the app starts. If you
+> hit one, move those facades aside and let Mono provide them (keep `Npgsql.dll`):
+>
+> ```bash
+> cd DVLD_Project/bin/Debug
+> mkdir -p ../_facade_backup
+> mv System.Memory.dll System.Buffers.dll System.Threading.Tasks.Extensions.dll System.Runtime.CompilerServices.Unsafe.dll System.Numerics.Vectors.dll System.ValueTuple.dll Microsoft.Bcl.AsyncInterfaces.dll System.Text.Json.dll System.Text.Encodings.Web.dll ../_facade_backup/ 2>/dev/null
+> wine DVLD_Project.exe
+> ```
 
 On first launch the app connects to the empty database named in `.env` and runs the
 matching embedded schema script (tables + seed data: ~200 countries, 6 application
